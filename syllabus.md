@@ -1,7 +1,7 @@
 # CS5138: Malware Analysis
 
 ## Course Overview/Introduction
-Sherlock Holmes. The Hardy Boys. Nancy Drew. Veronica Mars. Temperance Brennan. Angela Lansbury. Columbo. [Nash Bridges](http://web.archive.org/web/19980116201338/http://www.thenetshow.com/). This is just a short list of the smartest, most astute detectives that the literary world has ever conjured. They are perceptive, daring, logical, persistent and clever. 
+Sherlock Holmes. The Hardy Boys. Nancy Drew. Veronica Mars. Temperance Brennan. Jessica Fletcher. Columbo. [Nash Bridges](http://web.archive.org/web/19980116201338/http://www.thenetshow.com/). This is just a short list of the smartest, most astute detectives that the literary world has ever conjured. They are perceptive, daring, logical, persistent and clever. 
 
 Are you sitting down? By the time you complete this course, you will be the Veronica Mars of malware, the Nancy Drew of the digital, the Temperance Brennan of the binary, the Columbo of cyberspace or the Angela Lansbury of, well, the LAN.
 
