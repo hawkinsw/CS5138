@@ -1,7 +1,7 @@
 # CS5138: Malware Analysis
 
 ## Course Overview/Introduction
-Sherlock Holmes. The Hardy Boys. Nancy Drew. Veronica Mars. Temperance Brennan. Jessica Fletcher. Columbo. [Nash Bridges](http://web.archive.org/web/19980116201338/http://www.thenetshow.com/). This is just a short list of the smartest, most astute detectives that the literary world has ever conjured. They are perceptive, daring, logical, persistent and clever. 
+Sherlock Holmes. The Hardy Boys. Nancy Drew. Veronica Mars. Temperance Brennan. Angela Lansbury. Columbo. [Nash Bridges](http://web.archive.org/web/19980116201338/http://www.thenetshow.com/). This is just a short list of the smartest, most astute detectives that the literary world has ever conjured. They are perceptive, daring, logical, persistent and clever. 
 
 Are you sitting down? By the time you complete this course, you will be the Veronica Mars of malware, the Nancy Drew of the digital, the Temperance Brennan of the binary, the Columbo of cyberspace or the Angela Lansbury of, well, the LAN.
 
@@ -35,6 +35,12 @@ Tuesday, Thursday
 
 (*Note*: Spring Break will interfere with the normal class schedule. When the University is closed, we will not have class -- obviously!) 
 
+Online:
+
+- Tuesday: [See course Canvas page -- no Zoombombing allowed](#)
+- Thursday: [See course Canvas page -- no Zoombombing allowed](#)
+
+In Person (_after_ January 24):
 SWIFT 516
 
 ## Class Leaders
@@ -49,13 +55,15 @@ he/him/his
 
 864-386-2286
 
-I am a geek. I love computers. 
+I am a geek. I love computers and puns, not necessarily in that order. I have a silly sense of humor. I am from Cincinnati and have lived in South Carolina; Washington, DC; Virginia; Illinois, and Toronto. I have traveled for work to three continents. I am a sucker for soft pretzels, big salads, coffee and wraps.
+
+I love Mercedes AMGs and I just bought my dream car, a Toyota Camry hybrid. Before the start of the semester I bought an aquarium. I enjoy baking -- pretty much anything, especially if it contains vanilla extract and/or cinnamon.
 
 I also love reading. I like non-fiction more than I like fiction but my favorite writer of all time is David Foster Wallace. I read the Wall Street Journal in print every day. 
 
-Of course, I love sports, too! My favorite basketball team is the Phoenix Suns. My favorite hockey team is the Washington Capitals. My favorite F1 driver is Fernando Alonso and my favorite NASCAR driver is Michael McDowell. 
+Of course, I love sports, too! My favorite basketball team is the Phoenix Suns. My favorite hockey team is the Washington Capitals. I don't follow the NFL too much but I do root for the Washington Football Team. My favorite F1 driver is Fernando Alonso and my favorite NASCAR driver is Michael McDowell. Sports are better on radio than they are on TV. 
 
-In high school I was a golfer and a basketball player. In college I got in to running and cycling. I have finished several half marathons, marathons and one half Ironman. I am currently training to be fit enough to teach my 8am Introduction to Computer Science course twice a week!
+In high school I was a golfer and a basketball player. In college I got in to running and cycling. I have finished several half marathons, marathons and one half Ironman. I am currently training to be fit enough to introduce a class of approximately 80 bright, eager students to programming in C++.    
 
 And, crosswords!
 
@@ -64,7 +72,7 @@ TBD
 
 ## Office Hours
 ### Scheduled
-Monday, 1:00pm - 2:00pm
+TBD
 
 820D Old Chemistry
 
@@ -89,6 +97,8 @@ If you have taken some combination of
 then you are adequately prepared to succeed in this course!
 
 ## Course Format
+(_Note_: Material in this section applies only after January 24th.)
+
 This is a blended course. Some of the students will be here in person and others will be attending remotely. There will likely be some technical difficulties as we get the mix correct, but I know that everything will work out. 
 
 Assessment of your performance will be done through quizzes, assignments and tests. You will benefit from attending the lectures. See Participation below for additional information about the attendance policy. 
@@ -210,7 +220,7 @@ The other half of your participation grade will be based on your work on "mini a
 If you _mostly_ complete the mini-assignments satisfactorily you will receive all the points for Mini-assignment Participation. If you _occasionally_ complete the mini assignments satisfactorily you will receive half the points for Mini-assignment Participation. If you _do not complete any_ mini assignments satisfactorily, you will receive no points for Mini-assignment Participation.  
 
 ### Tests
-There will be a midterm and final test. The tests are worth 20% of your final grade. Tests will be taken in class and will be open book (and open note). The midterm will be given on **Thursday, March 10th, 2022** and will cover material in Modules 1, 2, 3 and 4. The final will be given **Tuesday, April 26th** during the normal class time. 
+There will be a midterm and final test. The tests are worth 20% of your final grade. Tests will be taken in class and will be open book (and open note). The midterm will be given on **Thursday, March 10th, 2022** and will cover material in Modules 1, 2, 3 and 4. The final will be given **Tuesday, April 26th, 2022** during the normal class time. 
  
 ### Final Project
 There will be a final project. The project is worth 20% of your final grade. The theme of the final project will be the same for the undergraduate and graduate students, however the scope will be different. All final projects will be due on April 29th, 2022. There will be no late submissions accepted for final projects without prior authorization. 
