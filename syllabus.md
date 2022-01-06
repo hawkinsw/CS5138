@@ -208,7 +208,7 @@ Please check this course's Canvas page and GitHub repository every day. I will u
 Each module will have assigned readings. All reading assignments will be posted on Canvas. Readings will come from external sources or textbooks that you can access for free through the UC library.
 
 ### Assignments
-There will be 4 assignments throughout the semester. The assignments will be worth 40% of your final grade. For each day that you are late submitting an assignment, you will lose 10%. 
+There will be 4 assignments throughout the semester. The assignments will be worth 30% of your final grade. For each day that you are late submitting an assignment, you will lose 10%. 
 
 ### Participation
 Participation will count for 30% of your final grade. Half of your participation grade will be based on your in-class participation. You will receive full credit for in-class participation if you
