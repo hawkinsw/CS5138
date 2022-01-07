@@ -64,7 +64,7 @@ Spyware or InfoStealers spy on and steal sensitive data from a host/network. The
 
 See also _keyloggers_.
 
-#### Adware (scareware)
+#### Adware (Scareware)
 
 Adware and scareware are like Trojans because they are intentionally installed by a user but do not perform as advertised. 
 
