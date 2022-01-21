@@ -1,10 +1,35 @@
-## The Search Is On
+## The Hunt For Importober
 
 __getmainargs
 
-### Overall Structure
+### An Important Aside: Addresses on Disk Or Addresses in Memory
 
-Talk about virtual addressing first!
+Before beginning, it is very important to be clear that, in file formats that describe how files on disk are loaded in to memory (which is *exactly* what the PE file format does), there is a significant difference between a value that specifies the address of some bytes on disk and a value that specifies the address of some bytes once the contents of the file are loaded in memory at runtime. In a PE file, the former are called file pointers and the latter are called virtual addresses.  We can easily follow any pointer in a PE file that is specified as a file pointer statically -- just seek to that address in the file on disk! However, we cannot so easily follow any pointer in a PE file that is specified as a virtual address statically.
+
+There are many reasons you would like to be able to follow virtual address pointers statically. That is the whole point of static analysis! What we want, then is a way to convert between virtual addresses and file pointers. Such a conversion must be possible -- I mean, the whole point of the PE file format is to describe completely how to load a file on disk into memory! 
+
+The mapping is done by looking at the *sections* of a PE file. Sections are [[t]he basic unit of code or data within a PE or COFF file.](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#general-concepts) Each of the sections is described by a header. That header contains two address fields that are import for the conversion of virtual addresses to raw addresses, and vice versa. 
+
+1. `PointerToRawData`: This is the address of beginning of the contents of the section on disk. It is a file pointer.
+2. `VirtualAddress`: This is the beginning of the contents of the section when loaded in memory. It is a virtual address formatted as a *relative virtual address* ... see below!
+
+When we are deep in the weeds, it's easy to forget our ultimate goal: we want to convert a virtual address (we'll call the the virtual address we are trying to convert the *target virtual address*) to a file pointer (we'll call this address the *target file pointer*). 
+
+First things first ... virtual addresses stored in the PE file are *usually* relative to the image's base address. Virtual addresses that are stored on the disk relative to the image's base address are known as *relative virtual addresses*: [In an image file, this is the address of an item after it is loaded into memory, with the base address of the image file subtracted from it.](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#general-concepts). 
+
+You can find the image's base address by looking for that field `ImageBase` in the `IMAGE_OPTIONAL_HEADER`. If we are starting the virtual-address-to-file-pointer conversion with a target virtual address formatted as an RVA, the first thing that we have to do is convert that RVA to a virtual address by adding its value to the value of the field `ImageBase` in the `IMAGE_OPTIONAL_HEADER`. 
+
+With a target virtual address (no longer formatted as a RVA), we will need to examine all the PE file sections to see in which section the target virtual address will fall when the PE file is loaded in to memory. To find the *target section*, we want to find the section whose virtual address (`VirtualAddress` field in the section header data structure) is less than our target virtual address and (`VirtualAddress` + section size [`VirtualSize` in the section header data structure]) is greater than our target virtual address. 
+
+After finding the target section, we need to subtract that value in that section's header data structure's `VirtualAddress` field from the target virtual address. The result of that calculation is an offset into that section from its beginning. 
+
+The only remaining step is to find out where the target section begins on disk!
+
+That's easy to find -- its the value of `PointerToRawData` in the target section's header data structure!
+
+Upon adding the offset to the address of the beginning of the target section on disk, we will have a target file pointer equivalent to our target virtual address.
+
+I know! I'm tired just thinking about it. 
 
 ### IMAGE_DOS_HEADER
 ```
