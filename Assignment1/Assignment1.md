@@ -27,7 +27,13 @@ The source code for all the data structures referenced in the vapid algorithm ar
 ![Figure 1: A PE-32 file on disk and in memory. Refer to this figure when reading the steps of the conversion algorithm.](images/figure1.png)
 
 #### Sections
-The mapping of virtual addresses to file pointers is done by analyzing the *sections* of a PE file. Sections are [[t]he basic unit of code or data within a PE or COFF file.](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#general-concepts) Each section in a PE file is loaded into memory when the user executes the program described by that PE file. Some of the sections contain the program's code and some of the sections contain data that the program uses for computation. Some other parts of the code contain the data used to create visual elements that the program displays on the screen. Associated with each section is a section header. The section header contains metadata about each section. The most crucial elements of that metadata are the location and size of the contents of that section _on disk_ and the location to place the contents of the section _in memory_ when the program is loaded by the operating system.
+The mapping of virtual addresses to file pointers is done by analyzing the *sections* of a PE file. Sections are [[t]he basic unit of code or data within a PE or COFF file.](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#general-concepts) Each section in a PE file is loaded into memory when the user executes the program described by that PE file. Some of the sections contain the program's code and some of the sections contain data that the program uses for computation. Some other parts of the code contain the data used to create visual elements that the program displays on the screen. 
+
+Associated with each section is a section header. The array of section headers in a PE-32 file is located immediately after the PE-32 file's PE Header (`IMAGE_NT_HEADER`). The location of the PE-32 file's PE Header on disk can be found by looking at the `e_lfanew` file pointer field in the PE-32 file's `IMAGE_DOS_HEADER` that is located at the very beginning of the file. The `IMAGE_NT_HEADER` contains a signature, an `IMAGE_FILE_HEADER` and an `IMAGE_OPTIONAL_HEADER32`. The size of the signature and the `IMAGE_FILE_HEADER` are fixed -- 4 and 20 bytes, respectively. The size of the `IMAGE_OPTIONAL_HEADER32` is variable but can be found in the `SizeOfOptionalHeader` field of the `IMAGE_FILE_HEADER`. 
+
+There are a variable number of sections (and therefore section headers) in a PE-32 file. The number of sections and section headers in any PE-32 file can be found in the `NumberOfSections` field in the `IMAGE_FILE_HEADER`. 
+
+A section header (`IMAGE_SECTION_HEADER`) contains metadata about a section. The most crucial elements of that metadata are the location and size of the contents of that section _on disk_ and the location to place the contents of the section _in memory_ when the program is loaded by the operating system.
 
 It just so happens that those two fields are also important for converting between virtual addresses and file pointers, and vice versa. 
 
@@ -39,7 +45,7 @@ When you are deep in the weeds, it's easy to forget your ultimate goal. Take a s
 #### Virtual addresses or relative virtual addresses? Do you feel lucky? ... do you?
 First things first ... virtual addresses stored in the PE file are *usually* relative to some base address. Virtual addresses that are stored on the disk relative to the base address are known as *relative virtual addresses*: [In an image (_ed_: also known as a PE file), this is the address of an item after it is loaded into memory, with the base address of the image file subtracted from it.](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#general-concepts). 
 
-You can find the image's base address by looking for the field `ImageBase` in the `IMAGE_OPTIONAL_HEADER`. To convert a relative virtual address to a(n) "absolute" virtual address, add the value of the virtual address to the value of the field `ImageBase` in the `IMAGE_OPTIONAL_HEADER`. Note: Unless qualified with the word "relative", assume that "virtual address" means "absolute virtual address."
+You can find the image's base address by looking for the field `ImageBase` in the `IMAGE_OPTIONAL_HEADER` (see above for information about the location of this structure in a PE-32 file). To convert a relative virtual address to a(n) "absolute" virtual address, add the value of the virtual address to the value of the field `ImageBase` in the `IMAGE_OPTIONAL_HEADER`. Note: Unless qualified with the word "relative", assume that "virtual address" means "absolute virtual address."
 
 #### Finding the target section
 
