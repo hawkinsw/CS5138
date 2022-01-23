@@ -18,7 +18,7 @@ Unfortunately, there are many reasons you would like to be able to follow virtua
 
 Possible does not always mean easy. In fact, doing this conversion is time-consuming and error prone. Malware analysts are busy and tedious calculations waste valuable time. 
 
-Enter vapid, a tool for converting _v_irtual _a_ddresses to _p_ointers _i_nto _d_isk.
+Enter vapid, a tool for converting *v*irtual *a*ddresses to *p*ointers *i*nto *d*isk.
 
 ### The Vapid Algorithm
 
