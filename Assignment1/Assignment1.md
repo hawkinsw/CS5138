@@ -85,8 +85,8 @@ Should the user give `vapid` a valid file/path of a 32-bit PE file and a valid t
 For example:
 
 ```
-hawkinsw@borderland:~$ ./vapid sample.exe 0x4c5012
-0x4c5012 -> 0xc0612
+hawkinsw@borderland:~$ ./vapid sample.exe 0x4c5002
+0x4c5002 -> 0xc0602
 ``` 
 
 2. If the target virtual address _cannot_ be found in one of the 32-bit PE file's sections, `vapid` will print
