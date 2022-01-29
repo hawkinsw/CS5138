@@ -180,7 +180,7 @@ Program Headers:
 ```
 This output format can also be tricky to interpret. We'll dissect. The segment shown in the sample output is of type `LOAD` which specifies it is a segment whose contents will be loaded into memory from the file on disk. The segment's physical address is `0x000000000003c6f0` and its virtual address is `0x000000000003d6f0`. The data in the `PhysAddr` column is unspecified for ELF files destined to be run on Linux. On disk, this segment takes up `0x0000000000004920` bytes but in memory at runtime it takes up `0x0000000000004bf8` bytes. `RW` specifies the permissions of this segment in memory at runtime and indicates that it is readable and writable, but not executable. Finally, the `Align` indicates that the beginning of this segment in memory at runtime must be a multiple of `1000`. 
 
-Other output from `hexdump -l` looks different but is easier to interpret. It tells us which sections are in which segments. Record in `submission.txt` the name of the segment that contains `SECTION_USAGE`. I will refer to the segment that contains `SECTION_USAGE` as `SEGMENT_USAGE`.
+Other output from `readelf -l` looks different but is easier to interpret. It tells us which sections are in which segments. Record in `submission.txt` the name of the segment that contains `SECTION_USAGE`. I will refer to the segment that contains `SECTION_USAGE` as `SEGMENT_USAGE`.
 
 The final part of our analysis of the "Usage" string is to find out where and how it is used by the program when it is executing. `objdump` is really helpful in this respect. Open up the objdump and search for `PA_USAGE`. There might be a few places that the address occurs, but look for the one that looks like
 
@@ -224,7 +224,7 @@ Starting program: /home/kali/CS5138/MiniAssignmentExplore/binary --help
 [Thread debugging using libthread_db enabled]
 Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
 
-Breakpoint 1, 0x000055555556856a in ?? ()
+Breakpoint 1, XXXXXXX in ?? ()
 ```
 
 Now, let's ask `gdb` to show us the contents of memory where we have deduced "Usage" must be loaded. We will have to take ASLR into account. Issue the `x` command to `gdb`:
@@ -338,7 +338,7 @@ elf_machine_rela (skip_ifunc=<optimized out>, reloc_addr_arg=<optimized out>, ve
 463     ../sysdeps/x86_64/dl-machine.h: No such file or directory.
 ```
 
-`gdb` stopped -- the memory changed. The old value (46630) was replaced with the new value (140737351515616). Unhelpfully, `gdb` prints those values as decimals. If we convert 46630 to hexadecimal we should see something familiar! Use the knowledge that you built through this lab to print 46630 in hexadecimal (_Hint_: Remember the `p` command and the `x` parameter that we learned earlier!). 
+`gdb` stopped -- the memory changed. The old value (46630) was replaced with the new value (140737351515616). _Note_: Your "new value" will likely be different than the one listed here -- the loading process is dynamic, after all! Unhelpfully, `gdb` prints those values as decimals. If we convert 46630 to hexadecimal we should see something familiar! Use the knowledge that you built through this lab to print 46630 in hexadecimal (_Hint_: Remember the `p` command and the `x` parameter that we learned earlier!). 
 
 For our last trick, let's watch the program use this updated value (140737351515616 = 0x7ffff7d7fde0) to direct program control to the actual implementation of `puts`. 
 
@@ -352,7 +352,7 @@ Continuing.
 [Thread debugging using libthread_db enabled]
 Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
 
-Breakpoint 4, 0x000055555556856a in ?? ()
+Breakpoint 4, XXXXXXX in ?? ()
 ```
 
 Next, to make it easier to watch `gdb`'s progress, we will turn on a _display_:
@@ -360,12 +360,12 @@ Next, to make it easier to watch `gdb`'s progress, we will turn on a _display_:
 ```
 (gdb) display/i $rip
 1: x/i $rip
-=> 0x55555556856a:      lea    0xf9ff(%rip),%rdi        # 0x555555577f70
+=> XXXXX:      lea    0xf9ff(%rip),%rdi        # 0x555555577f70
 ```
 
 The `display` command tells `gdb` to print some user-specified output every time it pauses program execution. Here we are directing `gdb` to print the memory at `$rip` (the instruction pointer -- i.e., the address of the instruction that the CPU is currently executing) as if it were an instruction. 
 
-Issue a series of `stepi` commands until the `$rip` points to `0x7ffff7d7fde0`. `stepi` tells `gdb` to run the program for a single machine instruction and then stop! In `submission.txt`, record your interaction with `gdb` as you slowly progress toward `0x7ffff7d7fde0`. _Hint_: It shouldn't take too many invocations of `stepi`. 
+Issue a series of `stepi` commands until the `$rip` points to `0x7ffff7d7fde0` (again, your value may differ!). `stepi` tells `gdb` to run the program for a single machine instruction and then stop! In `submission.txt`, record your interaction with `gdb` as you slowly progress toward `0x7ffff7d7fde0`. _Hint_: It shouldn't take too many invocations of `stepi`. 
 
 ## Conclusion
 
