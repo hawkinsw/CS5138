@@ -243,11 +243,11 @@ In the second part of the Mini Assignment we will trace how that happens!
 
 Conceptually, the compiler builds up an indirection pattern like the own shown below:
 
-![](graphics/beforeloading.png)
+![A conceptual view of the memory space of the program before dynamic loading occurs.](graphics/beforeloading.png)
 
 The compiler cannot know a priori where the dynamic linker is going to put `puts` in memory (pun _not_ intended) when the program is executed. The compiler instead generates an indirection point for `puts` and _pretends_ that's where `puts` actually exists (shown in red in the figure above). Then, when it generates code for invocations of the `puts` function (shown in orange in the figure above), the code the compiler generates transfers program control to the indirection point. The indirection point consults a place in memory (shown in green in the figure above) that itself holds a pointer. Ultimately that green pointer will point directly to `puts`. At first, however, the green pointer targets the second half of the indirection point. The second half of the indirection point contains code to invoke the dynamic loader which will bring `puts` in to memory. Along the way, the dynamic loader also updates the green pointer so that future calls to `puts` go directly to its implementation. This process is known as resolution. Pretty cool!
 
-![](graphics/afterloading.png)
+![A conceptual view of the memory space of the program after dynamic loading resolves the call to `puts`.](graphics/afterloading.png)
 
 Here, unfortunately, there is a slight wrinkle. Most modern linkers include information in their output binary that directs the dynamic linker to _eagerly_ do this resolution process when the program starts rather than wait for the first invocation of the function. `binary` uses exactly this optimization. So, we will have to very cleverly use `gdb` to observe this resolution process because it happens so early. Remember (above) where I said that the `starti` command in `gdb` will stop the program _before_ the dynamic linker gets its first crack at execution? Now you should be able to see why this functionality is helpful!
 
