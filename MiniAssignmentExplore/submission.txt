@@ -1,0 +1,36 @@
+Submission For XXXXXXXXXX
+
+1. `binary`'s entry point:
+-
+
+2. `gdb`'s offset:
+-
+
+3. The two line numbers where a case-insensitive search for "usage" matched:
+-
+-
+
+4. The string `Usage` is in the ELF file at physical address:
+-
+
+5. The string `Usage` is in the ELF file in section:
+-
+
+6. The string `Usage` is in the ELF file in a section contained in segment:
+-
+
+7. The address of `Usage` is loaded into memory by the `lea` instruction at address:
+-
+
+8. The contents of memory where we expect "Usage" to exist at runtime are:
+-
+
+9. The address of the green pointer for the indirection point for `puts`:
+- 
+
+10. The address contained in the 8 bytes starting at the address of the green pointer for the indirection point for `puts` in the ELF file:
+- 
+
+11. The recording of repeated invocations of `stepi` in `gdb` to reach the first instruction of the implementation of `puts`:
+
+
