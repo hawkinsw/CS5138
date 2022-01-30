@@ -108,6 +108,8 @@ Your `vapid` tool will be assessed using Gradescope. In order for Gradescope gra
 2. In `vapid.zip` you may include a file named `build.sh` that Gradescope will execute (in a Linux-based container with root privileges and internet access) before grading your submission. If you build `vapid` using a compiled language, you may want to include steps for compilation in this file. If you build `vapid` in an interpreted language and rely on 3rd-party dependencies, you may want to include steps for downloading those dependencies in this file.
 3. Either as a result of executing your `build.sh` _or_ simply because you included such a program in your `vapid.zip` file, there must be an executable file named `vapid`. Again, Gradescope is picky -- capitalization and spelling matter.
 
+If you are submitting a binary-only solution and not relying on the `build.sh` mechanism to compile your code on Gradescope, please include your source code in a directory in `vapid.zip` named `source/`. 
+
 All submissions will be done through Gradescope but you must access Gradescope through Canvas. Find `Assignments` on the left-hand side of the site's Canvas page, then find `Assignment 1: vapid` and, finally, click `Load Assignment 1: vapid in a new window` and you will be directed to Gradescope where you can make your submission.
 
 ### Assessment
@@ -122,10 +124,10 @@ You are allowed an _unlimited_ number of submissions to Gradescope prior to the 
 
 You will earn the final ten points based upon the quality and readability of your code. I will be looking for the hallmarks of *decent* software engineering:
 
-1. All magic numbers are abstracted behind named constants
-2. Modular design with well documented functions and data structures
+1. All magic numbers are abstracted behind named constants (5 points)
+2. Modular design with well documented functions and data structures (3 points)
 
-etc. 
+etc (2 points). 
 
 ### Tips and tricks
 
