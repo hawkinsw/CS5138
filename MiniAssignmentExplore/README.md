@@ -7,6 +7,27 @@ In this Mini Assignment you will be directed to add bits of information in the `
 1. post your `submission.txt` using Canvas to the appropriate Assignment; and
 2. post your `binary.hex` and `binary.obj` files using Canvas to the appropriate Assignment (there are instructions for generating these files, don't worry!).
 
+### Get Set Up
+
+Throughout the Mini Assignment we are going to use the GDB debugger. Unfortunately, GDB may not be installed on your Kali virtual machine. Don't worry, it's easy to install! We will use APT, the Advanced Package Tool, for installation. First, we will update the system's metadata about installable packages. Do that with the `apt-get update` command:
+
+```
+┌──(kali㉿kali)-[~]
+└─$ sudo apt-get update
+[sudo] password for kali: 
+```
+
+The "sudo password for kali" is just the `kali` user's password -- `kali`. 
+
+Once we have used `apt-get update` to make sure that all our metadata is up to date, we can use `apt-get install` to actually install GDB:
+
+```
+┌──(kali㉿kali)-[~]
+└─$ sudo apt-get install gdb
+```
+
+Installation complete!
+
 ### An ASLR Digression
 
 Attackers are creative and they realized that they could rely on the location of certain instructions or data being constant in a program no matter how many times that program was executed. This aided their attacks, especially on Internet-facing software. The attackers could write exploits using hard-coded addresses of memory or vulnerable functions and they could rely on the fact that those locations would never change, even if the server was rebooted. What's more, the addresses of these points of weakness would be the same no matter whether the vulnerable software was running on Host A or Host B. 
@@ -17,7 +38,7 @@ How does this affect malware analysis? Many of the static ELF inspection utiliti
 
 Again, this is good for security but bad for debugging. 
 
-Fortunately for us, `gdb` disables ASLR on programs it is debugging by using the same value of `O` every time. Calculating that `O` is one of the tasks that we will have to complete during this lab. You will practice doing that later. For now, just realize the importance but also the pain of ASLR.
+Fortunately for us, GDB disables ASLR on programs it is debugging by using the same value of `O` every time. Calculating that `O` is one of the tasks that we will have to complete during this lab. You will practice doing that later. For now, just realize the importance but also the pain of ASLR.
 
 ## Our Goal
 
@@ -74,14 +95,23 @@ The most important thing we can find out about a program is where it starts! Not
 
 The result of the command is information from the ELF file's header. One of the fields is the program's entry point. Record in `submission.txt` the address of the program's entry point. I don't want to spoil the fun so I will refer to the program's entry point as `ENTRY_POINT` in the remainder of the lab. 
 
-Remember (above) how we discussed that ASLR randomizes the location that code is loaded in memory? And that `gdb` disables ASLR and always loads the code at a fixed offset? We have enough information now to be able to calculate that offset! How cool!
+Remember (above) how we discussed that ASLR randomizes the location that code is loaded in memory? And that GDB disables ASLR and always loads the code at a fixed offset? We have enough information now to be able to calculate that offset! How cool!
+
+We'll use GDB itself to perform that calculation. First, though, we need to take care of one more item of housekeeping. The *NIX operating systems have a primitive, but powerful, means for configuring access control to files. If you are interested in details about such things, feel free to read more at [Wikipedia](https://en.wikipedia.org/wiki/File-system_permissions#Traditional_Unix_permissions). For our purposes, we simply need to make sure that `binary` has the appropriate permissions to support debugging. GDB will not debug a program unless you (the owner of the file) have permission to execute it. To make sure that this is the case, we will change the file's "mode" using `chmod`:
+
+```
+┌──(kali㉿kali)-[~/CS5138/MiniAssignmentExplore]
+└─$ chmod u+x binary    
+```
+
+Great! Now we can use GDB to study `binary`.
 
 ```
 ┌──(kali㉿kali)-[~/CS5138/MiniAssignmentExplore]
 └─$ gdb binary  
 ```
 
-will launch `gdb`, the debugger. 
+will launch GDB, the debugger. 
 
 First, enter the command `starti`:
 
@@ -112,7 +142,7 @@ The output continues, but we have what we need. According to our earlier researc
 
 If we subtract `ENTRY_POINT` from `0x55555555fa10` then we will get the offset that `gdb` uses when it load programs! There are two ways to do this calculation _like a pro_:
 
-1. Use `gdb`: Use the `p/x` command (`(gdb) p/x 0x55555555fa10 - ENTRY_POINT`) (be sure that you actually use the entry point value you discovered!). `p/x` tells `gdb` to `p`rint the value in he`x`adecimal format. You *should* learn this command -- you will use it time and again as an analyst. 
+1. Use GDB: Use the `p/x` command (`(gdb) p/x 0x55555555fa10 - ENTRY_POINT`) (be sure that you actually use the entry point value you discovered!). `p/x` tells `gdb` to `p`rint the value in he`x`adecimal format. You *should* learn this command -- you will use it time and again as an analyst. 
 2. Use `bc`: (_Note_: You will have to install `bc` [`$ sudo apt-get install bc`] because it is inexplicably omitted from the base Kali distribution.) From the shell, use the `echo "obase=16;ibase=16;55555555FA10 - ENTRY_POINT;" | bc` command. Make sure that your hexadecimal numbers are all capitalized! 
 
 No matter whether you follow Step (1) or (2) for calculating the offset, record the result in `submission.txt`. Again, I will refer to this as `BASE_ADDRESS` to keep the secret alive!
@@ -193,14 +223,14 @@ Because I do not expect you to know yet what an `lea` instruction does, I'll tel
 
 Using the description earlier of the format of the `objdump` output, please record in `submission.txt` the address of this instruction. I will call this address `LEA_ADDRESS`. 
 
-Let's try to execute `binary` under `gdb` and stop the program's execution when the address of "Usage" is loaded into memory!
+Let's try to execute `binary` under GDB and stop the program's execution when the address of "Usage" is loaded into memory!
 
 ```
 ┌──(kali㉿kali)-[~/CS5138/MiniAssignmentExplore]
 └─$ gdb binary
 ```
 
-Although we could try to insert a breakpoint at the address you just discovered, it would fail. Why? Because that address is only valid at runtime when `binary` is executed on computers that do not include support for ASLR. Ours does. `gdb` helps by disabling it (remember?) and adjusts every address by `BASE_ADDRESS`. So, our breakpoint really goes at address `BASE_ADDRESS + LEA_ADDRESS`:
+Although we could try to insert a breakpoint at the address you just discovered, it would fail. Why? Because that address is only valid at runtime when `binary` is executed on computers that do not include support for ASLR. Ours does. GDB helps by disabling it (remember?) and adjusts every address by `BASE_ADDRESS`. So, our breakpoint really goes at address `BASE_ADDRESS + LEA_ADDRESS`:
 
 In `gdb`, issue the command:
 
@@ -215,9 +245,9 @@ Now, let's run the program and see what happens:
 (gdb) run --help
 ```
 
-We are doing something sneaky here. We are telling `gdb` to run the program as if we invoked it with the `--help` command line argument (`./binary --help`). This argument will make sure that we hit our breakpoint -- trust me!
+We are doing something sneaky here. We are telling GDB to run the program as if we invoked it with the `--help` command line argument (`./binary --help`). This argument will make sure that we hit our breakpoint -- trust me!
 
-`gdb` should pause the program when it hits the breakpoint:
+GDB should pause the program when it hits the breakpoint:
 
 ```
 Starting program: /home/kali/CS5138/MiniAssignmentExplore/binary --help
@@ -227,7 +257,7 @@ Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
 Breakpoint 1, XXXXXXX in ?? ()
 ```
 
-Now, let's ask `gdb` to show us the contents of memory where we have deduced "Usage" must be loaded. We will have to take ASLR into account. Issue the `x` command to `gdb`:
+Now, let's ask GDB to show us the contents of memory where we have deduced "Usage" must be loaded. We will have to take ASLR into account. Issue the `x` command to `gdb`:
 
 ```
 (gdb) x/8bc BASE_ADDRESS + PA_USAGE
@@ -249,7 +279,7 @@ The compiler cannot know a priori where the dynamic linker is going to put `puts
 
 ![A conceptual view of the memory space of the program after dynamic loading resolves the call to `puts`.](graphics/afterloading.png)
 
-Here, unfortunately, there is a slight wrinkle. Most modern linkers include information in their output binary that directs the dynamic linker to _eagerly_ do this resolution process when the program starts rather than wait for the first invocation of the function. `binary` uses exactly this optimization. So, we will have to very cleverly use `gdb` to observe this resolution process because it happens so early. Remember (above) where I said that the `starti` command in `gdb` will stop the program _before_ the dynamic linker gets its first crack at execution? Now you should be able to see why this functionality is helpful!
+Here, unfortunately, there is a slight wrinkle. Most modern linkers include information in their output binary that directs the dynamic linker to _eagerly_ do this resolution process when the program starts rather than wait for the first invocation of the function. `binary` uses exactly this optimization. So, we will have to very cleverly use GDB to observe this resolution process because it happens so early. Remember (above) where I said that the `starti` command in `gdb` will stop the program _before_ the dynamic linker gets its first crack at execution? Now you should be able to see why this functionality is helpful!
 
 When the linker stitches together the intermediate files that the compiler generated into a final executable, it leverages functionality of the ELF format to embed a _relocation_ that instructs the dynamic linker how to change to the green pointer. 
 
@@ -292,7 +322,7 @@ The output which I obscured with XXXX should confirm your previous calculations 
 
 Mark down `0xb620` -- we will need it later. There's no need to record this address in your `submission.txt` file.
 
-Now, let's observe the dynamic linker in action using `gdb`.
+Now, let's observe the dynamic linker in action using GDB.
 
 ```
 ┌──(kali㉿kali)-[~/CS5138/MiniAssignmentExplore]
@@ -309,7 +339,7 @@ Program stopped.
 0x00007ffff7fcd050 in _start () from /lib64/ld-linux-x86-64.so.2
 ```
 
-Note, again, that we are using `--help`. What we will do now is set a _watchpoint_. A watchpoint will tell `gdb` to pause program execution when the contents of memory at a certain location are changed. It's pretty cool functionality! We will use the `watch` command in `gdb`:
+Note, again, that we are using `--help`. What we will do now is set a _watchpoint_. A watchpoint will tell GDB to pause program execution when the contents of memory at a certain location are changed. It's pretty cool functionality! We will use the `watch` command in `gdb`:
 
 ```
 (gdb) watch (*(uint64_t*)(BASE_ADDRESS + PUTS_GREEN))
@@ -324,12 +354,12 @@ With a watchpoint set, we'll let `gdb` continue executing the program using the 
 (gdb) cont
 Continuing.
 
-Hardware watchpoint 2: (*(uint64_t*)(0x555555554000 + 0x41eb0))
+Hardware watchpoint 2: (*(uint64_t*)(XXXX + XXXXX))
 
 Old value = 46630
 New value = 140737351515616
 
-Hardware watchpoint 3: (*(uint64_t*)(0x555555554000 + 0x41eb0))
+Hardware watchpoint 3: (*(uint64_t*)(XXXX + XXXXX))
 
 Old value = 46630
 New value = 140737351515616
@@ -342,7 +372,7 @@ elf_machine_rela (skip_ifunc=<optimized out>, reloc_addr_arg=<optimized out>, ve
 
 For our last trick, let's watch the program use this updated value (140737351515616 = 0x7ffff7d7fde0) to direct program control to the actual implementation of `puts`. 
 
-Reach deep in your memory and set a breakpoint in `gdb` at the instruction where the address of "Usage" is loaded in memory. 
+Reach deep in your memory and set a breakpoint in GDB at the instruction where the address of "Usage" is loaded in memory. 
 
 Once you have done that, tell `gdb` to continue (again, using `cont`):
 
@@ -363,9 +393,9 @@ Next, to make it easier to watch `gdb`'s progress, we will turn on a _display_:
 => XXXXX:      lea    0xf9ff(%rip),%rdi        # 0x555555577f70
 ```
 
-The `display` command tells `gdb` to print some user-specified output every time it pauses program execution. Here we are directing `gdb` to print the memory at `$rip` (the instruction pointer -- i.e., the address of the instruction that the CPU is currently executing) as if it were an instruction. 
+Enabling a display using the `display` command tells `gdb` to print some user-specified output every time it pauses program execution. Here we are directing `gdb` to print the memory at `$rip` (the instruction pointer -- i.e., the address of the instruction that the CPU is currently executing) as if it were an instruction (the `i` parameter to `display`). 
 
-Issue a series of `stepi` commands until the `$rip` points to `0x7ffff7d7fde0` (again, your value may differ!). `stepi` tells `gdb` to run the program for a single machine instruction and then stop! In `submission.txt`, record your interaction with `gdb` as you slowly progress toward `0x7ffff7d7fde0`. _Hint_: It shouldn't take too many invocations of `stepi`. 
+Issue a series of `stepi` commands until the `$rip` points to `0x7ffff7d7fde0` (again, your value may differ!). `stepi` tells `gdb` to run the program for a single machine instruction and then stop! In `submission.txt`, record your interaction with `gdb` as you slowly progress toward your specific value of `0x7ffff7d7fde0`. _Hint_: It shouldn't take too many invocations of `stepi`. 
 
 ## Conclusion
 
