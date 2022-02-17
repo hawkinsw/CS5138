@@ -9,18 +9,32 @@
 #include <uapi/linux/icmpv6.h>
 #include <uapi/linux/ip.h>
 #include <uapi/linux/ipv6.h>
-#
+
+// The maximum length of the command line that we are
+// willing to capture and pass to the userspace.
+#define MAX_COMM_LENGTH 80
+#define MAX_COMM_LENGTH_TO_ALLOC 81
+
+// Some constants for possible IP versions.
+#define IPv4 4
+#define IPv6 6
+
 struct connect_evt {
-  int pid;
-  u64 ip_version; // familiy (IPv4 or IPv6)
+  u32 pid;
+  u64 ip_version; // family (IPv4 or IPv6)
   uint64_t daddr[2];
+  char comm[MAX_COMM_LENGTH_TO_ALLOC]; // make sure that we always have
+                                       // a null byte at the end!
 };
+
+// Declare tcp_connect_event as the name of the kernel/userspace
+// communication buffer.
 BPF_PERF_OUTPUT(tcp_connect_event);
 
-static inline int do_sys_enter_connect(void *ctx, int pid,
+static inline int do_sys_enter_connect(void *ctx, int pid, char *comm,
                                        struct sockaddr *pdaddr) {
   struct connect_evt evt = {};
-  struct sockaddr daddr;
+  struct sockaddr daddr = {};
 
   evt.pid = pid;
 
@@ -28,24 +42,49 @@ static inline int do_sys_enter_connect(void *ctx, int pid,
     return 0;
   }
 
+	// Copy out the proper bytes depending on whether we have an IPv4
+	// or IP6 connection. While we are at it, also set the ip_version
+	// field of the connect_evt data structure.
   if (daddr.sa_family == AF_INET) {
     struct sockaddr_in *daddr_in = (struct sockaddr_in *)&daddr;
     memcpy(&evt.daddr, &daddr_in->sin_addr, sizeof(struct in_addr));
-    evt.ip_version = 4;
+    evt.ip_version = IPv4;
   } else if (daddr.sa_family == AF_INET6) {
     struct sockaddr_in6 *daddr_in6 = (struct sockaddr_in6 *)&daddr;
     memcpy(&evt.daddr, &daddr_in6->sin6_addr, sizeof(struct in6_addr));
-    evt.ip_version = 6;
+    evt.ip_version = IPv6;
   } else {
+		// It is possible that we saw a connect to a host with neither
+		// and IPv4 or IPv6 connection. Just return 0 in that case.
     return 0;
   }
 
+	// We know that we are going to send a tcp_connect_event, so we'll
+	// spend the time doing the memcpy here.
+  memcpy(&evt.comm, comm, sizeof(char) * MAX_COMM_LENGTH);
+
+	// Now, finally push the event to the kernel/userspace communication
+	// buffer.
   tcp_connect_event.perf_submit(ctx, &evt, sizeof(struct connect_evt));
 
   return 0;
 }
 
 TRACEPOINT_PROBE(syscalls, sys_enter_connect) {
-  int pid = bpf_get_current_pid_tgid();
-  return do_sys_enter_connect(args, pid, (struct sockaddr *)args->uservaddr);
+  // The PID is in the lower 32 bytes of the 64-bit integer.
+  uint64_t tgid_pid = bpf_get_current_pid_tgid();
+  uint32_t pid = (tgid_pid << 32) >> 32;
+
+  // Let's make some space to store the command line of the program
+  // that made the connect system call. Then, let's get that command
+  // line.
+  char executable_path[MAX_COMM_LENGTH] = {
+      ' ',
+  };
+  bpf_get_current_comm(executable_path, MAX_COMM_LENGTH * sizeof(char));
+
+  // Now, pass that forward to the do_sys_enter_connect function
+  // to do the real work.
+  return do_sys_enter_connect(args, pid, executable_path,
+                              (struct sockaddr *)args->uservaddr);
 }
