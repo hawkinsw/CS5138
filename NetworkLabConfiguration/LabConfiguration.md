@@ -22,7 +22,7 @@ It is assumed that you have installed a Kali and an Ubuntu guest on the same phy
 
 Begin by opening up VirtualBox. Select the Kali VM and then open its settings. 
 
-![TODO](./images/virtualboxbasicinterface.png)
+![TODO](./images/virtualboxbasicinterface-kali.png)
 
 Click on _Network_ in the left-hand pane.
 
@@ -36,7 +36,11 @@ Click on _Adapter 2_. Check the box labeled _Enable Network Adapter_. Select _In
 
 Press _OK_. 
 
-Next, select the analysis VM and then click _Settings_. As before, click on _Network_ in the left-hand pane. Select _Internal Network_ in the drop-down next to the _Attached to:_ for _Adapter 1_. In _Name:_, enter "analysis". Press _OK_.
+Next, select the analysis VM and then click _Settings_. 
+
+![TODO](./images/virtualboxbasicinterface.png)
+
+As before, click on _Network_ in the left-hand pane. Select _Internal Network_ in the drop-down next to the _Attached to:_ for _Adapter 1_. In _Name:_, enter "analysis". Press _OK_.
 
 ![TODO](./images/virtualboxanalysisnetworkanalysis.png)
 
