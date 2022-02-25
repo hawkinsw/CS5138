@@ -1,6 +1,6 @@
 ## Malware Mini Assignment: Secret Searcher
 
-In this assignment you will use your newfound network analysis powers to analyze the network behavior of an unknown application named `secretsearcher`. The copy of the malware that your threat intelligence team has isolated is included in this folder. Your team has captured two versions -- one that works on the x86 platform (`secretsearcher`) and one that works on the ARM platform (`secretsearchera`). I will refer to both `secretsearcher` and `secretsearchera` as simply `secretsearcher`, but if you are doing your analysis on an ARM-based platform, you should always use `secretsearchera` and *not* `secretsearcher`. 
+In this assignment you will use your new found network analysis powers to analyze the network behavior of an unknown application named `secretsearcher`. The copy of the malware that your threat intelligence team has isolated is included in this folder. Your team has captured two versions -- one that works on the x86 platform (`secretsearcher`) and one that works on the ARM platform (`secretsearchera`). I will refer to both `secretsearcher` and `secretsearchera` as simply `secretsearcher`, but if you are doing your analysis on an ARM-based platform, you should always use `secretsearchera` and *not* `secretsearcher`. 
 
 `secretsearcher` has landed on your network thanks to a zero-day vulnerability. Your threat intelligence analysts have told you that the application performs some type of web search but they couldn't figure out which search engine it uses (Google, Bing, Duck Duck Go, etc.). Nor could they figure out the query that it makes on the search engine.
 
@@ -68,16 +68,16 @@ HTTPS provides end-to-end security for HTTP connections. In other words, the cli
 
 The client contains a list of Certificate Authorities -- authenticators that they implicitly trust. These Certificate Authorities are big corporate enterprises with strict protocols in place for ensuring that they grant [legitimacy under only the strictest circumstances](https://www.verisign.com/en_US/website-presence/online/ssl-certificates/index.xhtml). When the client connects to a web server it uses that list of authorities to guarantee that the server to which it connected is legitimate. This is the opposite of what we normally think of in authentication. Normally it is the *client* proving to the *server* that they are legitimate. In HTTPS it is the other way around. For a more in-depth introduction to HTTPS, watch [this video](https://www.youtube.com/watch?v=d2GmcPYWm5k) or read the associated [FAQ](https://https.cio.gov/faq/).
 
-Note that in a *real* HTTPS connection there is only one (1) secure handshake -- between the client and the authoritative webserver. Based on the description above, we can enumerate the steps in the typical HTTPS connection process:
+Note that in a *real* HTTPS connection there is only one (1) secure handshake -- between the client and the authoritative web server. Based on the description above, we can enumerate the steps in the typical HTTPS connection process:
 
 1. The client connects to `cnn.com`.
 2. The web server that is authoritative for `cnn.com` responds.
 3. The client checks its Certificate Authorities to ensure that the response was from the legitimate server.
 4. The client establishes an HTTPS connection.
 
-![A conceptual view of the components of an HTTPS proxying setup.](./images/HTTPSProxyConceptualIllustration.png)
+![A conceptual view of the components of an HTTPS Proxying setup.](./images/HTTPSProxyConceptualIllustration.png)
 
-Getting around such a scheme is not easy. We'll do it in a series of steps. Before starting, we will install an _imposter_ Certificate Authority on the client server -- one that we control. This will give us the power to prove to the client that a server of our choosing is legitimate for any website. Next, we will configure a type of _proxy server_ that can make HTTPS connections to the Internet. With this configuration, the following is possible:
+Getting around such a scheme is not easy. We'll do it in a series of steps. Before starting, we will install an _impostor_ Certificate Authority on the client server -- one that we control. This will give us the power to prove to the client that a server of our choosing is legitimate for any website. Next, we will configure a type of _proxy server_ that can make HTTPS connections to the Internet. With this configuration, the following is possible:
 
 1. The client attempts to connect to `cnn.com`.
 2. The proxy server responds with a guarantee to the client that *it* is the legitimate owner of `cnn.com`. 
@@ -124,7 +124,7 @@ Python:    3.9.7
 
 Copy and paste the output from that command in `submission.txt` as your response to Question 4.
 
-HTTPS connections operate on port 443. In order for our HTTPS proxy setup to work, we will have to tell the router (Kali VM) to intercept all the traffic that it sees coming in on port 443 and redirect it to MITM Proxy so that it can work its magic. We will use `iptables` to do this redirection. 
+HTTPS connections operate on port 443. In order for our HTTPS Proxying setup to work, we will have to tell the router (Kali VM) to intercept all the traffic that it sees coming in on port 443 and redirect it to MITM Proxy so that it can work its magic. We will use `iptables` to do this redirection. 
 
 The syntax of `iptables` is, well, fun, and you can [research](https://help.ubuntu.com/community/IptablesHowTo) it on your own, if you like. However, I have provided you a script that will do the necessary configuration: `configure_as_mitm_proxy.sh` in this class' `git` repo under the `helpers/network` directory.
 
@@ -140,7 +140,7 @@ Your screen should look something like the image below.
 
 Unfortunately, that's not quite all that we need to do. Fortunately, the final step is automated and already done for you in the `configure_as_mitm_proxy.sh` helper script. Nevertheless, you need to understand what is going on even if you don't need to do anything as a result. (_Note_: The last sentence is a lie; read on to find out why!)
 
-We glossed over one important detail earlier when discussing the HTTPS Proxying configuration. While MITM Proxy is able to see the decrypted contents of the (heretofore) secure HTTPS connection between client and server, anything snooping the network (i.e., Wireshark!!) cannot. Why? Because the network transmissions (the only thing that a network snoop *can* see, after all) that MITM Proxy makes between itself and the real web server and itself and the client are both pairwise secure. All we gained with our HTTPS Proxying setup is the ability for MITM Proxy to see the decrypted contents of the connection.
+We glossed over one important detail earlier when discussing the HTTPS Proxying configuration. While MITM Proxy is able to see the decrypted contents of the (heretofore) secure HTTPS connection between client and server, anything snooping the network (i.e., Wireshark!!) cannot. Why? Because the network transmissions (the only thing that a network snoop *can* see, after all) that MITM Proxying makes between itself and the real web server and itself and the client are both pairwise secure. All we gained with our HTTPS Proxying setup is the ability for MITM Proxy to see the decrypted contents of the connection.
 
 MITM Proxy offers a cool piece of functionality that allows it to interact with Wireshark so that Wireshark can decrypt the packets that it snoops from the network. If properly configured, MITM Proxy will log all the [session keys](https://www.cloudflare.com/learning/ssl/what-is-a-session-key/) that it generates. 
 
@@ -176,9 +176,9 @@ We have all the configuration done that we need to for our analysis. Let's do a 
 
 We will again use `cnn.com` as an example and run two tests. Before starting the tests, make sure that Wireshark is running on the Kali VM and (re)apply the filter for HTTP. This time, though, let's make our filter a little more broad by including all the versions of HTTP: 1, 2 *and* 3. In Wireshark, these protocol identifiers are `http`, `http2` and `http3`, respectively. Combine that information with your knowledge of the [Wireshark filter syntax](https://www.wireshark.org/docs/wsug_html_chunked/ChWorkBuildDisplayFilterSection.html) to write an effective display filter so that you only see HTTP traffic, no matter which version of the protocol is used. Record the display filter that you applied as the answer to Question 5 in `submission.txt`. 
 
-The first test will be run through the web browser. This test will ensure that we have properly installed the MITM Proxy imposter Certificate Authority in the browser. (Re)Open Firefox and connect to `cnn.com`. By connecting to `cnn.com` in Firefox, you should see many HTTP packets being displayed in Wireshark. Choose a packet and describe its contents (what was the resource accessed? what was the HTTP method? what was the status code?). Record your description in `submission.txt` under Question 6.
+The first test will be run through the web browser. This test will ensure that we have properly installed the MITM Proxy impostor Certificate Authority in the browser. (Re)Open Firefox and connect to `cnn.com`. By connecting to `cnn.com` in Firefox, you should see many HTTP packets being displayed in Wireshark. Choose a packet and describe its contents (what was the resource accessed? what was the HTTP method? what was the status code?). Record your description in `submission.txt` under Question 6.
 
-The second test will be run through `wget`. This test will ensure that we installed the MITM Proxy imposter Certificate Authority successfully in the operating system. 
+The second test will be run through `wget`. This test will ensure that we installed the MITM Proxy impostor Certificate Authority successfully in the operating system. 
 
 ```
 $ wget http://www.cnn.com
