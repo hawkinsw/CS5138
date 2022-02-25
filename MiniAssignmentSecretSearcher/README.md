@@ -68,7 +68,7 @@ HTTPS provides end-to-end security for HTTP connections. In other words, the cli
 
 The client contains a list of Certificate Authorities -- authenticators that they implicitly trust. These Certificate Authorities are big corporate enterprises with strict protocols in place for ensuring that they grant [legitimacy under only the strictest circumstances](https://www.verisign.com/en_US/website-presence/online/ssl-certificates/index.xhtml). When the client connects to a web server it uses that list of authorities to guarantee that the server to which it connected is legitimate. This is the opposite of what we normally think of in authentication. Normally it is the *client* proving to the *server* that they are legitimate. In HTTPS it is the other way around. For a more in-depth introduction to HTTPS, watch [this video](https://www.youtube.com/watch?v=d2GmcPYWm5k) or read the associated [FAQ](https://https.cio.gov/faq/).
 
-Note that in a *real* HTTPS connection there is only one (1) secure handshake -- between the client and the authoritative webserver. Based on the description above, we can enumerate the steps in a typical connection process:
+Note that in a *real* HTTPS connection there is only one (1) secure handshake -- between the client and the authoritative webserver. Based on the description above, we can enumerate the steps in the typical HTTPS connection process:
 
 1. The client connects to `cnn.com`.
 2. The web server that is authoritative for `cnn.com` responds.
@@ -83,15 +83,15 @@ Getting around such a scheme is not easy. We'll do it in a series of steps. Befo
 2. The proxy server responds with a guarantee to the client that *it* is the legitimate owner of `cnn.com`. 
 3. The client establishes an HTTPS connection *with the proxy server*. This connection is the first of two secure connections (indicated in blue in the figure above). 
 4. The proxy server, in turn, connects with the actual `cnn.com` web server. This is the second of two secure connections (indicated in green in the figure above). 
-5. The proxy server shuffles requests and responses between the client and `cnn.com` transparently. 
+5. During the lifetime of the connection, the proxy server shuffles requests and responses between the client and `cnn.com` transparently. 
 
-Because the client thinks that proxy server is actually `cnn.com`, the proxy server can decrypt the contents of the client's transmissions. Because `cnn.com` thinks that proxy server is actually the client, the proxy server can decrypt `cnn.com`'s responses. Just what we wanted -- the ability to see the contents of both the client's and the server's data transmissions in plain text.
+Because the client thinks that the proxy server is actually `cnn.com`, the proxy server can decrypt the contents of the client's transmissions. Because `cnn.com` thinks that the proxy server is actually the client, the proxy server can decrypt `cnn.com`'s responses. Just what we wanted -- the ability to see the contents of both the client's and the server's data transmissions in plain text.
 
-Please note: HTTPS Proxying has both legitimate and illegitimate uses. They are oftentimes referred to using the same terminology: a man-in-the-middle (MITM) attack. For obvious reasons I will try to refrain from using this phrase but it _is_ the name of the software tool that we will use to actually deploy HTTP Proxying.
+Please note: HTTPS Proxying has both legitimate and illegitimate uses. They are oftentimes referred to using the same terminology: a man-in-the-middle (MITM) attack. For obvious reasons I will try to refrain from using this phrase but it _is_ the name of the software tool that we will use to actually deploy HTTPS Proxying.
 
 ### Step 3: Configuring MITM Proxy
 
-MITM Proxy is a tool installed by default in the Kali distribution that allows us to easily perform HTTP Proxying. The only problem is that the version installed is too old for our purposes. So, we will need to first upgrade the version on our Kali VM. 
+MITM Proxy is a tool installed by default in the Kali distribution that allows us to easily perform HTTPS Proxying. The only problem is that the version installed is too old for our purposes. So, we will need to first upgrade the version on our Kali VM. 
 
 Start by downloading the updated version of the program from [mitmproxy.org](https://mitmproxy.org/). Place the downloaded file in the `~Downloads/` directory. 
 
@@ -122,13 +122,13 @@ Python:    3.9.7
 ...
 ```
 
-Copy and paste the output from that command in `submission.txt` as your response to Question 3.
+Copy and paste the output from that command in `submission.txt` as your response to Question 4.
 
-HTTPS connections operate on port 443. In order for our HTTPS proxy setup to work, we will have to tell the router (Kali VM) to intercept all the traffic that it sees coming in on port 443 and redirect it to MITM Proxy so that it will work its magic. We will use `iptables` to do this redirection. 
+HTTPS connections operate on port 443. In order for our HTTPS proxy setup to work, we will have to tell the router (Kali VM) to intercept all the traffic that it sees coming in on port 443 and redirect it to MITM Proxy so that it can work its magic. We will use `iptables` to do this redirection. 
 
 The syntax of `iptables` is, well, fun, and you can [research](https://help.ubuntu.com/community/IptablesHowTo) it on your own, if you like. However, I have provided you a script that will do the necessary configuration: `configure_as_mitm_proxy.sh` in this class' `git` repo under the `helpers/network` directory.
 
-Besides configuring `iptables` properly, the helper script will also launch `mitmroxy`, the binary program for MITM Proxy. 
+Besides configuring `iptables` properly, the helper script will also launch MITM Proxy using `mitmroxy`.
 
 ```
 $ sudo ./configure_as_mitm_proxy.sh
@@ -140,11 +140,11 @@ Your screen should look something like the image below.
 
 Unfortunately, that's not quite all that we need to do. Fortunately, the final step is automated and already done for you in the `configure_as_mitm_proxy.sh` helper script. Nevertheless, you need to understand what is going on even if you don't need to do anything as a result. (_Note_: The last sentence is a lie; read on to find out why!)
 
-We glossed over one important detail earlier when discussing the configuration. While MITM Proxy is able to see the decrypted contents of the (heretofore) secure HTTPS connection between client and server, anything snooping the network (i.e., Wireshark!!) cannot. Why? Because the network transmissions (the only thing that a network snoop *can* see) that MITM Proxy makes between itself and the real web server and itself and the client are both pairwise secure. All we gained with our HTTPS Proxy setup is the ability for MITM Proxy to see the decrypted contents of the connection.
+We glossed over one important detail earlier when discussing the HTTPS Proxying configuration. While MITM Proxy is able to see the decrypted contents of the (heretofore) secure HTTPS connection between client and server, anything snooping the network (i.e., Wireshark!!) cannot. Why? Because the network transmissions (the only thing that a network snoop *can* see, after all) that MITM Proxy makes between itself and the real web server and itself and the client are both pairwise secure. All we gained with our HTTPS Proxying setup is the ability for MITM Proxy to see the decrypted contents of the connection.
 
 MITM Proxy offers a cool piece of functionality that allows it to interact with Wireshark so that Wireshark can decrypt the packets that it snoops from the network. If properly configured, MITM Proxy will log all the [session keys](https://www.cloudflare.com/learning/ssl/what-is-a-session-key/) that it generates. 
 
-In turn, we can configure Wireshark to read that log file and (in real time, mind you!) decrypt the packets that it captures from the network. 
+In turn, we can configure Wireshark to read that log file and (in real time, mind you!) use the contents of the log file (i.e., session keys) to decrypt the packets that it captures from the network. 
 
 Let's do that now. Wait!! Didn't I just say that we didn't have to do anything else? Yes, but I lied. 
 
@@ -156,54 +156,45 @@ Next, click on Protocols and find the TLS protocol settings. You should see a sc
 
 ![Wireshark TLS protocol configuration preferences.](./images/kaliwiresharkpreferencestlspng.png)
 
-Click on the `Browse` button under the `(Pre)-Master-Secret log filename` box. Browse to `/home/kali/` and select `keyfile.txt`. Press `OK`. Now that you have completed this step, you will *have to* restart Wireshark. 
+Click on the `Browse` button under the `(Pre)-Master-Secret log filename` box. Browse to `/home/kali/` and select `keyfile.txt`. This is the name and location of the file that MITM Proxy is generating -- that location and name combination is configured in `configure_as_mitm_proxy.sh` and you can customize it if you like. Press `OK`. Now that you have completed this step, you will *have to* restart Wireshark. 
 
-And now, I promise this time!, the HTTPS Proxy is configured! Congratulations!!
+And now, I promise this time!, the HTTPS Proxying setup is configured! Congratulations!!
 
 ### Step 4: Configuring the Analysis VM
 
-Remember that we will also need to tell the client about our setup, too, so that it trusts the secrets offered by the proxy server. The good news is that `mitmproxy` makes this relatively straightforward.
+Remember that we will also need to tell the client about our setup, too, so that it trusts the secrets offered by the MITM Proxy. The good news is that `mitmproxy` makes this relatively straightforward.
 
 On the analysis VM, open up Firefox and browse to `mitm.it`. If your server setup is correct, you will see something that looks like the image below:
 
-![TODO](./images/ubuntumitmwebsite.png)
+![The webpage displayed for the `mitm.it` URL when MITM Proxy is correctly configured.](./images/ubuntumitmwebsite.png)
 
 Follow the installation instructions for *both* "Linux" and "Firefox". Without following the instructions for *both* configurations, you will not be able to perform the analysis!
 
-### Final Countdown
+### Step 5: Final Countdown
 
 We have all the configuration done that we need to for our analysis. Let's do a final test to make sure that everything is set to rock and roll.
 
-We will again use `cnn.com` as an example and run two tests. Before starting the tests, make sure that Wireshark is running on the Kali VM and (re)apply the filter for HTTP. This time, though, let's make our filter a little more broad by including all the versions of HTTP: 1, 2 *and* 3. In Wireshark, these protocol identifiers are `http`, `http2` and `http3`, respectively. Combine that information with your knowledge of the [Wireshark filter syntax](https://www.wireshark.org/docs/wsug_html_chunked/ChWorkBuildDisplayFilterSection.html) to write an effective display filter so that you only see HTTP traffic, no matter which version of the protocol is used. Record the display filter that you applied as the answer to Question 4 in `submission.txt`. 
+We will again use `cnn.com` as an example and run two tests. Before starting the tests, make sure that Wireshark is running on the Kali VM and (re)apply the filter for HTTP. This time, though, let's make our filter a little more broad by including all the versions of HTTP: 1, 2 *and* 3. In Wireshark, these protocol identifiers are `http`, `http2` and `http3`, respectively. Combine that information with your knowledge of the [Wireshark filter syntax](https://www.wireshark.org/docs/wsug_html_chunked/ChWorkBuildDisplayFilterSection.html) to write an effective display filter so that you only see HTTP traffic, no matter which version of the protocol is used. Record the display filter that you applied as the answer to Question 5 in `submission.txt`. 
 
-The first test will be run through the web browser. This tests will ensure that we have properly installed the Certificate Authority in the browser. (Re)Open Firefox and connect to `cnn.com`. By connecting to `cnn.com` in Firefox, you should see many HTTP packets being displayed in Wireshark. Choose a packet and describe its contents (what was the resource accessed? what was the HTTP method? what was the status code?). Record your description in `submission.txt` under Question 5.
+The first test will be run through the web browser. This test will ensure that we have properly installed the MITM Proxy imposter Certificate Authority in the browser. (Re)Open Firefox and connect to `cnn.com`. By connecting to `cnn.com` in Firefox, you should see many HTTP packets being displayed in Wireshark. Choose a packet and describe its contents (what was the resource accessed? what was the HTTP method? what was the status code?). Record your description in `submission.txt` under Question 6.
 
-The second test will be run through `wget`. This test will ensure that we installed the HTTP proxy Certificate Authority successfully in the operating system. 
+The second test will be run through `wget`. This test will ensure that we installed the MITM Proxy imposter Certificate Authority successfully in the operating system. 
 
 ```
 $ wget http://www.cnn.com
 ```
 
-As a result of this `wget` command, you should see two HTTP messages. One of the cookies that `cnn.com` sets helps the website determine your geographic location. Look for the `geoData` value and record its contents as your response to Question 5 in `submission.txt`. 
+As a result of this `wget` command, you should see two HTTP messages in Wireshark. One of the cookies that `cnn.com` sets in your web browser helps the website determine your geographic location. Look for the `geoData` value in the HTTP headers and record its contents as your response to Question 7 in `submission.txt`. You can see those HTTP headers in Wireshark.
 
-### `secretsearcher` Analysis
+### Step 6: `secretsearcher` Analysis
 
 As a result of the preceding hard work and configuration, you should be able to execute the `secretsearcher` malware and answer the two outstanding questions posed in the beginning of this Mini Assignment:
 
 1. What is the search engine that `secretsearcher` uses?
 2. What is the query that `secretsearcher` issues?
 
-Record your response to those two questions under Question 6 in `submission.txt`. 
+Record your response to those two questions under Question 8 in `submission.txt`. 
 
 ### Conclusion
 
-I hope that you had fun on this quest and enjoyed the hunt. Please leave feedback about this Mini Assignment under Question 8 in `submission.txt` -- if you do not leave feedback, you will not get credit!
-
-
-
-
-
-
-
-
-
+I hope that you had fun on this quest and enjoyed the hunt. Please leave feedback about this Mini Assignment under Question 9 in `submission.txt` -- if you do not leave feedback, you will not get credit!

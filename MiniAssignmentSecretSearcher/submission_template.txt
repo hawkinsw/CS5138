@@ -1,20 +1,24 @@
 Name: XXXXXXXXXXXXX
 Hacker Handle: XXXXXXXXXXXX
 
-Question 1 Response:
+Question 1 Response: Prove that static analysis is not powerful enough.
 
 Question 2 Response:
 
 HTTP methods:
 Destination IP: 
 
-Question 3 Response:
+Question 3 Response: File name for screenshot that demonstrates `secretsearcher` does not use HTTP.
+*** Don't forget to include the file in the Canvas submission.
 
-Question 4 Response:
+Question 4 Response: MITM Proxy installation version.
 
-Question 6 Response:
+Question 5 Response: Wireshark display filter for all three versions of HTTP.
 
-Question 7 Response:
+Question 6 Response: Description of a decrypted packet from the proxied HTTPS connection between the client (Firefox) and the `cnn.com` server.
 
-Question 8 Response:
+Question 7 Response: Contents of the `geoData` cookie set by `cnn.com`.
 
+Question 8 Response: `secretsearcher` search engine and search query.
+
+Question 9: Mini Assignment feedback.
