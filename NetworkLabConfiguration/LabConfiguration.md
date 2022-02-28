@@ -111,7 +111,7 @@ $ ping 8.8.8.8
 
 What? Why aren't we getting any response packets? Leave the `ping` running and return to the Kali VM.
 
-By default, Linux hosts do not act as network routers -- they will not forward packets between interfaces. However, it is easy to enable that functionality. To save you from having to Google for the incantation to make that happen, you can use the `configure_as_router.sh` script in the `network/helpers` directory in the class' `git` repository. 
+By default, Linux hosts do not act as network routers -- they will not forward packets between interfaces. However, it is easy to enable that functionality. To save you from having to Google for the incantation to make that happen, you can use the `configure_as_router.sh` script in the `helpers/network` directory in the class' `git` repository. 
 
 On the Kali VM, the script as the root user:
 
