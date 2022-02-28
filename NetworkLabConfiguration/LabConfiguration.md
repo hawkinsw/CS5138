@@ -54,7 +54,7 @@ Click on the gear icon next to the label _Connected - 1000 Mbps_ (indicated in r
 
 ![TODO](./images/ubuntunetworksettings.png)
 
-Click on the _IPv4_ tab (indicated in red in the following image). In the _Addresses_ section, make the IP address be 10.3.2.2, the netmask be 255.255.255.0 and the gateway be 10.30.2.1 (indicated in green in the following image). Finally, set 8.8.8.8 as the DNS server (indicated in blue in the following image). When you are done, press _Apply_ (the green button in the upper-right portion of the screen). 
+Click on the _IPv4_ tab (indicated in red in the following image). In the _Addresses_ section, make the IP address be 10.3.2.2, the netmask be 255.255.255.0 and the gateway be 10.3.2.1 (indicated in green in the following image). Finally, set 8.8.8.8 as the DNS server (indicated in blue in the following image). When you are done, press _Apply_ (the green button in the upper-right portion of the screen). 
 
 ![TODO](./images/ubuntunetworkipv4.png)
 
