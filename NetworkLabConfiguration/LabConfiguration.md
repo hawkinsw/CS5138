@@ -83,6 +83,8 @@ Select _eth1_ as the _Device_ (indicated in green in the following figure). Then
 
 Under _Method_, select _Manual_ (indicated in yellow in the following image). Then, in the _Additional static addresses_ section (indicated in red in the following image), set the IP address to 10.3.2.1, the netmask to 255.255.255.0 and leave the gateway blank. As in the configuration of the NIC for the analysis VM, set the DNS server to 8.8.8.8 (indicated in green in the following image). Finally, press _Save_. 
 
+![Configuring the IPv4 properties of the NIC attached to the virtual network on the Kali VM](./images/kalieth1ipv4.png)
+
 ### Verifying Configuration So Far
 
 At this point, we should stop to verify the configuration so far. On the analysis VM, open the terminal emulator and attempt to `ping` the Kali VM:
