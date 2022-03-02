@@ -28,3 +28,6 @@ using `gcc.
 
 ### References:
 
+1. [System V AMD64 ABI](https://www.uclibc.org/docs/psABI-x86_64.pdf)
+2. [Summary of System V ABI calling conventions](https://wiki.osdev.org/System_V_ABI)
+3. [ARM ABI (i.e., calling conventions)](https://developer.arm.com/documentation/ihi0042/latest/)
