@@ -1,0 +1,284 @@
+     1	package main
+     2	
+     3	import (
+     4		"fmt"
+     5	)
+     6	
+     7	func looks_link_printf(format_string string, values ...int) {
+     8		// We won't actually do anything here.
+     9	}
+    10	
+    11	func main() {
+    12		parameters := make([]int, 4)
+    13		parameters[0] = 57005
+    14		parameters[1] = 48879
+    15		parameters[2] = 57005
+    16		parameters[3] = 48879
+    17		looks_link_printf("parameters %d, %d, %d, %d\n", parameters...)
+    18		fmt.Printf("parameters %d, %d, %d, %d\n", parameters[0], parameters[1], parameters[2], parameters[3])
+    19	}
+
+callingv2:     file format elf64-x86-64
+
+000000000047f820 <main.looks_link_printf>:
+  47f820:	48 89 44 24 08       	mov    QWORD PTR [rsp+0x8],rax
+  47f825:	48 89 5c 24 10       	mov    QWORD PTR [rsp+0x10],rbx
+  47f82a:	48 89 4c 24 18       	mov    QWORD PTR [rsp+0x18],rcx
+  47f82f:	48 89 7c 24 20       	mov    QWORD PTR [rsp+0x20],rdi
+  47f834:	48 89 74 24 28       	mov    QWORD PTR [rsp+0x28],rsi
+  47f839:	c3                   	ret    
+  47f83a:	cc                   	int3   
+  47f83b:	cc                   	int3   
+  47f83c:	cc                   	int3   
+  47f83d:	cc                   	int3   
+  47f83e:	cc                   	int3   
+  47f83f:	cc                   	int3   
+
+000000000047f840 <main.main>:
+  47f840:	4c 8d a4 24 78 ff ff 	lea    r12,[rsp-0x88]
+  47f847:	ff 
+  47f848:	4d 3b 66 10          	cmp    r12,QWORD PTR [r14+0x10]
+  47f84c:	0f 86 28 03 00 00    	jbe    47fb7a <main.main+0x33a>
+  47f852:	48 81 ec 08 01 00 00 	sub    rsp,0x108
+  47f859:	48 89 ac 24 00 01 00 	mov    QWORD PTR [rsp+0x100],rbp
+  47f860:	00 
+  47f861:	48 8d ac 24 00 01 00 	lea    rbp,[rsp+0x100]
+  47f868:	00 
+	# Our storage for the underlying array is not going to be on the
+	# heap -- instead, it is going to be on the stack (starting at the
+	# address rsp + 0x48. So, let's 0-initialize that space! This is
+	# a quick way of doing that to clear out room
+	# for four 8 byte values. (32 * 8 = 256 = 128 * 2 and the width of
+	# xmm registers is 128 bits)
+  47f869:	48 8d 54 24 48       	lea    rdx,[rsp+0x48]
+  47f86e:	44 0f 11 3a          	movups XMMWORD PTR [rdx],xmm15
+  47f872:	48 8d 54 24 58       	lea    rdx,[rsp+0x58]
+  47f877:	44 0f 11 3a          	movups XMMWORD PTR [rdx],xmm15
+  47f87b:	48 8d 54 24 48       	lea    rdx,[rsp+0x48]
+  47f880:	84 02                	test   BYTE PTR [rdx],al
+  47f882:	eb 00                	jmp    47f884 <main.main+0x44>
+	# rdx holds the address of the _storage_ for this
+	# slice. So, we will put that address into the first entry in this
+	# slice struct that is stored on the stack starting at rsp+0x90.
+  47f884:	48 89 94 24 90 00 00 	mov    QWORD PTR [rsp+0x90],rdx
+  47f88b:	00 
+	# Now, let's put the length of that slice in the next spot!
+  47f88c:	48 c7 84 24 98 00 00 	mov    QWORD PTR [rsp+0x98],0x4
+  47f893:	00 04 00 00 00 
+	# Now, let's put the capacity of that slice in the next spot!
+  47f898:	48 c7 84 24 a0 00 00 	mov    QWORD PTR [rsp+0xa0],0x4
+  47f89f:	00 04 00 00 00 
+  47f8a4:	eb 00                	jmp    47f8a6 <main.main+0x66>
+	# At this point we know that 
+	# &slice: rsp + 0x90
+	# &array: rsp + 0x48
+	# Let's do some initialization! Put the first value in the
+	# proper spot on the stack.
+  47f8a6:	48 c7 44 24 48 ad de 	mov    QWORD PTR [rsp+0x48],0xdead
+  47f8ad:	00 00 
+	# For some reason, instead of addressing through the array location
+	# the assembly starts addressing through the slice structure.
+	# So, let's load the address of the storage underlying the slice
+	# into rdx. After this, the value of rdx == (rsp + 0x38).
+  47f8af:	48 8b 94 24 90 00 00 	mov    rdx,QWORD PTR [rsp+0x90]
+  47f8b6:	00 
+  47f8b7:	eb 00                	jmp    47f8b9 <main.main+0x79>
+	# Put the value that goes in the 1th index in place.
+  47f8b9:	48 c7 42 08 ef be 00 	mov    QWORD PTR [rdx+0x8],0xbeef
+  47f8c0:	00 
+	# Load the size value of the underlying slice into rcx.
+  47f8c1:	48 8b 8c 24 98 00 00 	mov    rcx,QWORD PTR [rsp+0x98]
+  47f8c8:	00 
+  47f8c9:	48 8b 94 24 90 00 00 	mov    rdx,QWORD PTR [rsp+0x90]
+  47f8d0:	00 
+	# Go is helpfully bounds checking our accesses here.
+  47f8d1:	48 83 f9 02          	cmp    rcx,0x2
+  47f8d5:	77 05                	ja     47f8dc <main.main+0x9c>
+  47f8d7:	e9 93 02 00 00       	jmp    47fb6f <main.main+0x32f>
+	# Then, if we are safe, it will write to the 2nd spot!
+  47f8dc:	48 c7 42 10 ad de 00 	mov    QWORD PTR [rdx+0x10],0xdead
+  47f8e3:	00 
+	# Rinse and repeat.
+  47f8e4:	48 8b 8c 24 98 00 00 	mov    rcx,QWORD PTR [rsp+0x98]
+  47f8eb:	00 
+  47f8ec:	48 8b 94 24 90 00 00 	mov    rdx,QWORD PTR [rsp+0x90]
+  47f8f3:	00 
+  47f8f4:	48 83 f9 03          	cmp    rcx,0x3
+  47f8f8:	77 05                	ja     47f8ff <main.main+0xbf>
+  47f8fa:	e9 66 02 00 00       	jmp    47fb65 <main.main+0x325>
+	# Then, if we are safe, it will write to the 3rd spot!
+  47f8ff:	48 c7 42 18 ef be 00 	mov    QWORD PTR [rdx+0x18],0xbeef
+  47f906:	00 
+	# Now, look at the internal ABI for information here. A slice parameter
+	# is represented as a sequence of [ptr], [length], [capacity]
+	# According to the ABI, Go tries to flatten out sequences into consecutive
+	# spots, if possible. The first of those spots are registers (and the
+	# stack is used if those are unavailable.). It looks like there are
+	# registers available, so we flatten the components of the sequence 
+	# appropriately.
+  47f907:	48 8b 8c 24 90 00 00 	mov    rcx,QWORD PTR [rsp+0x90]
+  47f90e:	00 
+  47f90f:	48 8b bc 24 98 00 00 	mov    rdi,QWORD PTR [rsp+0x98]
+  47f916:	00 
+  47f917:	48 8b b4 24 a0 00 00 	mov    rsi,QWORD PTR [rsp+0xa0]
+  47f91e:	00 
+	# What we noticed above was that we flattened the sequence that represented
+	# the slice into the registers that represented the 3rd, 4th and 5th
+	# parameters. What happened to the first two?
+	# Load the quasi format string into the register used for the first
+	# parameter. Well, how are string arguments passed to functions/methods
+	# expecting them as a string? They are sequences of a [ptr] [length]. So,
+	# we flatten out that sequence accordingly:
+  47f91f:	48 8d 05 48 9a 01 00 	lea    rax,[rip+0x19a48]        # 49936e <go.string.*+0x3d2e>
+  47f926:	bb 1a 00 00 00       	mov    ebx,0x1a
+	# And now, after all that, we can finally call the function!
+  47f92b:	e8 f0 fe ff ff       	call   47f820 <main.looks_link_printf>
+  47f930:	48 8d 94 24 c0 00 00 	lea    rdx,[rsp+0xc0]
+  47f937:	00 
+  47f938:	44 0f 11 3a          	movups XMMWORD PTR [rdx],xmm15
+  47f93c:	48 8d 94 24 d0 00 00 	lea    rdx,[rsp+0xd0]
+  47f943:	00 
+  47f944:	44 0f 11 3a          	movups XMMWORD PTR [rdx],xmm15
+  47f948:	48 8d 94 24 e0 00 00 	lea    rdx,[rsp+0xe0]
+  47f94f:	00 
+  47f950:	44 0f 11 3a          	movups XMMWORD PTR [rdx],xmm15
+  47f954:	48 8d 94 24 f0 00 00 	lea    rdx,[rsp+0xf0]
+  47f95b:	00 
+  47f95c:	44 0f 11 3a          	movups XMMWORD PTR [rdx],xmm15
+  47f960:	48 8d 94 24 c0 00 00 	lea    rdx,[rsp+0xc0]
+  47f967:	00 
+  47f968:	48 89 54 24 78       	mov    QWORD PTR [rsp+0x78],rdx
+  47f96d:	48 8b 8c 24 98 00 00 	mov    rcx,QWORD PTR [rsp+0x98]
+  47f974:	00 
+  47f975:	48 8b 94 24 90 00 00 	mov    rdx,QWORD PTR [rsp+0x90]
+  47f97c:	00 
+  47f97d:	0f 1f 00             	nop    DWORD PTR [rax]
+  47f980:	48 85 c9             	test   rcx,rcx
+  47f983:	77 05                	ja     47f98a <main.main+0x14a>
+  47f985:	e9 cf 01 00 00       	jmp    47fb59 <main.main+0x319>
+  47f98a:	48 8b 02             	mov    rax,QWORD PTR [rdx]
+  47f98d:	48 89 44 24 38       	mov    QWORD PTR [rsp+0x38],rax
+  47f992:	e8 09 9c f8 ff       	call   4095a0 <runtime.convT64>
+  47f997:	48 89 44 24 70       	mov    QWORD PTR [rsp+0x70],rax
+  47f99c:	48 8b 4c 24 78       	mov    rcx,QWORD PTR [rsp+0x78]
+  47f9a1:	84 01                	test   BYTE PTR [rcx],al
+  47f9a3:	48 8d 15 b6 6e 00 00 	lea    rdx,[rip+0x6eb6]        # 486860 <type.*+0x6860>
+  47f9aa:	48 89 11             	mov    QWORD PTR [rcx],rdx
+  47f9ad:	48 8d 79 08          	lea    rdi,[rcx+0x8]
+  47f9b1:	83 3d c8 65 0d 00 00 	cmp    DWORD PTR [rip+0xd65c8],0x0        # 555f80 <runtime.writeBarrier>
+  47f9b8:	74 02                	je     47f9bc <main.main+0x17c>
+  47f9ba:	eb 06                	jmp    47f9c2 <main.main+0x182>
+  47f9bc:	48 89 41 08          	mov    QWORD PTR [rcx+0x8],rax
+  47f9c0:	eb 07                	jmp    47f9c9 <main.main+0x189>
+  47f9c2:	e8 f9 b1 fd ff       	call   45abc0 <runtime.gcWriteBarrier>
+  47f9c7:	eb 00                	jmp    47f9c9 <main.main+0x189>
+  47f9c9:	48 8b 8c 24 98 00 00 	mov    rcx,QWORD PTR [rsp+0x98]
+  47f9d0:	00 
+  47f9d1:	48 8b 94 24 90 00 00 	mov    rdx,QWORD PTR [rsp+0x90]
+  47f9d8:	00 
+  47f9d9:	48 83 f9 01          	cmp    rcx,0x1
+  47f9dd:	77 06                	ja     47f9e5 <main.main+0x1a5>
+  47f9df:	90                   	nop
+  47f9e0:	e9 6a 01 00 00       	jmp    47fb4f <main.main+0x30f>
+  47f9e5:	48 8b 42 08          	mov    rax,QWORD PTR [rdx+0x8]
+  47f9e9:	48 89 44 24 30       	mov    QWORD PTR [rsp+0x30],rax
+  47f9ee:	e8 ad 9b f8 ff       	call   4095a0 <runtime.convT64>
+  47f9f3:	48 89 44 24 68       	mov    QWORD PTR [rsp+0x68],rax
+  47f9f8:	48 8b 4c 24 78       	mov    rcx,QWORD PTR [rsp+0x78]
+  47f9fd:	84 01                	test   BYTE PTR [rcx],al
+  47f9ff:	48 8d 15 5a 6e 00 00 	lea    rdx,[rip+0x6e5a]        # 486860 <type.*+0x6860>
+  47fa06:	48 89 51 10          	mov    QWORD PTR [rcx+0x10],rdx
+  47fa0a:	48 8d 79 18          	lea    rdi,[rcx+0x18]
+  47fa0e:	83 3d 6b 65 0d 00 00 	cmp    DWORD PTR [rip+0xd656b],0x0        # 555f80 <runtime.writeBarrier>
+  47fa15:	74 02                	je     47fa19 <main.main+0x1d9>
+  47fa17:	eb 07                	jmp    47fa20 <main.main+0x1e0>
+  47fa19:	48 89 41 18          	mov    QWORD PTR [rcx+0x18],rax
+  47fa1d:	eb 08                	jmp    47fa27 <main.main+0x1e7>
+  47fa1f:	90                   	nop
+  47fa20:	e8 9b b1 fd ff       	call   45abc0 <runtime.gcWriteBarrier>
+  47fa25:	eb 00                	jmp    47fa27 <main.main+0x1e7>
+  47fa27:	48 8b 8c 24 98 00 00 	mov    rcx,QWORD PTR [rsp+0x98]
+  47fa2e:	00 
+  47fa2f:	48 8b 94 24 90 00 00 	mov    rdx,QWORD PTR [rsp+0x90]
+  47fa36:	00 
+  47fa37:	48 83 f9 02          	cmp    rcx,0x2
+  47fa3b:	77 08                	ja     47fa45 <main.main+0x205>
+  47fa3d:	0f 1f 00             	nop    DWORD PTR [rax]
+  47fa40:	e9 00 01 00 00       	jmp    47fb45 <main.main+0x305>
+  47fa45:	48 8b 42 10          	mov    rax,QWORD PTR [rdx+0x10]
+  47fa49:	48 89 44 24 28       	mov    QWORD PTR [rsp+0x28],rax
+  47fa4e:	e8 4d 9b f8 ff       	call   4095a0 <runtime.convT64>
+  47fa53:	48 89 84 24 88 00 00 	mov    QWORD PTR [rsp+0x88],rax
+  47fa5a:	00 
+  47fa5b:	48 8b 4c 24 78       	mov    rcx,QWORD PTR [rsp+0x78]
+  47fa60:	84 01                	test   BYTE PTR [rcx],al
+  47fa62:	48 8d 15 f7 6d 00 00 	lea    rdx,[rip+0x6df7]        # 486860 <type.*+0x6860>
+  47fa69:	48 89 51 20          	mov    QWORD PTR [rcx+0x20],rdx
+  47fa6d:	48 8d 79 28          	lea    rdi,[rcx+0x28]
+  47fa71:	83 3d 08 65 0d 00 00 	cmp    DWORD PTR [rip+0xd6508],0x0        # 555f80 <runtime.writeBarrier>
+  47fa78:	74 02                	je     47fa7c <main.main+0x23c>
+  47fa7a:	eb 06                	jmp    47fa82 <main.main+0x242>
+  47fa7c:	48 89 41 28          	mov    QWORD PTR [rcx+0x28],rax
+  47fa80:	eb 07                	jmp    47fa89 <main.main+0x249>
+  47fa82:	e8 39 b1 fd ff       	call   45abc0 <runtime.gcWriteBarrier>
+  47fa87:	eb 00                	jmp    47fa89 <main.main+0x249>
+  47fa89:	48 8b 8c 24 98 00 00 	mov    rcx,QWORD PTR [rsp+0x98]
+  47fa90:	00 
+  47fa91:	48 8b 94 24 90 00 00 	mov    rdx,QWORD PTR [rsp+0x90]
+  47fa98:	00 
+  47fa99:	48 83 f9 03          	cmp    rcx,0x3
+  47fa9d:	77 06                	ja     47faa5 <main.main+0x265>
+  47fa9f:	90                   	nop
+  47faa0:	e9 96 00 00 00       	jmp    47fb3b <main.main+0x2fb>
+  47faa5:	48 8b 42 18          	mov    rax,QWORD PTR [rdx+0x18]
+  47faa9:	48 89 44 24 40       	mov    QWORD PTR [rsp+0x40],rax
+  47faae:	e8 ed 9a f8 ff       	call   4095a0 <runtime.convT64>
+  47fab3:	48 89 84 24 80 00 00 	mov    QWORD PTR [rsp+0x80],rax
+  47faba:	00 
+  47fabb:	48 8b 4c 24 78       	mov    rcx,QWORD PTR [rsp+0x78]
+  47fac0:	84 01                	test   BYTE PTR [rcx],al
+  47fac2:	48 8d 15 97 6d 00 00 	lea    rdx,[rip+0x6d97]        # 486860 <type.*+0x6860>
+  47fac9:	48 89 51 30          	mov    QWORD PTR [rcx+0x30],rdx
+  47facd:	48 8d 79 38          	lea    rdi,[rcx+0x38]
+  47fad1:	83 3d a8 64 0d 00 00 	cmp    DWORD PTR [rip+0xd64a8],0x0        # 555f80 <runtime.writeBarrier>
+  47fad8:	74 02                	je     47fadc <main.main+0x29c>
+  47fada:	eb 06                	jmp    47fae2 <main.main+0x2a2>
+  47fadc:	48 89 41 38          	mov    QWORD PTR [rcx+0x38],rax
+  47fae0:	eb 07                	jmp    47fae9 <main.main+0x2a9>
+  47fae2:	e8 d9 b0 fd ff       	call   45abc0 <runtime.gcWriteBarrier>
+  47fae7:	eb 00                	jmp    47fae9 <main.main+0x2a9>
+  47fae9:	48 8b 4c 24 78       	mov    rcx,QWORD PTR [rsp+0x78]
+  47faee:	84 01                	test   BYTE PTR [rcx],al
+  47faf0:	eb 00                	jmp    47faf2 <main.main+0x2b2>
+  47faf2:	48 89 8c 24 a8 00 00 	mov    QWORD PTR [rsp+0xa8],rcx
+  47faf9:	00 
+  47fafa:	48 c7 84 24 b0 00 00 	mov    QWORD PTR [rsp+0xb0],0x4
+  47fb01:	00 04 00 00 00 
+  47fb06:	48 c7 84 24 b8 00 00 	mov    QWORD PTR [rsp+0xb8],0x4
+  47fb0d:	00 04 00 00 00 
+  47fb12:	48 8d 05 55 98 01 00 	lea    rax,[rip+0x19855]        # 49936e <go.string.*+0x3d2e>
+  47fb19:	bb 1a 00 00 00       	mov    ebx,0x1a
+  47fb1e:	bf 04 00 00 00       	mov    edi,0x4
+  47fb23:	48 89 fe             	mov    rsi,rdi
+  47fb26:	e8 f5 94 ff ff       	call   479020 <fmt.Printf>
+  47fb2b:	48 8b ac 24 00 01 00 	mov    rbp,QWORD PTR [rsp+0x100]
+  47fb32:	00 
+  47fb33:	48 81 c4 08 01 00 00 	add    rsp,0x108
+  47fb3a:	c3                   	ret    
+  47fb3b:	b8 03 00 00 00       	mov    eax,0x3
+  47fb40:	e8 1b b5 fd ff       	call   45b060 <runtime.panicIndex>
+  47fb45:	b8 02 00 00 00       	mov    eax,0x2
+  47fb4a:	e8 11 b5 fd ff       	call   45b060 <runtime.panicIndex>
+  47fb4f:	b8 01 00 00 00       	mov    eax,0x1
+  47fb54:	e8 07 b5 fd ff       	call   45b060 <runtime.panicIndex>
+  47fb59:	31 c0                	xor    eax,eax
+  47fb5b:	0f 1f 44 00 00       	nop    DWORD PTR [rax+rax*1+0x0]
+  47fb60:	e8 fb b4 fd ff       	call   45b060 <runtime.panicIndex>
+  47fb65:	b8 03 00 00 00       	mov    eax,0x3
+  47fb6a:	e8 f1 b4 fd ff       	call   45b060 <runtime.panicIndex>
+  47fb6f:	b8 02 00 00 00       	mov    eax,0x2
+  47fb74:	e8 e7 b4 fd ff       	call   45b060 <runtime.panicIndex>
+  47fb79:	90                   	nop
+  47fb7a:	e8 81 90 fd ff       	call   458c00 <runtime.morestack_noctxt.abi0>
+  47fb7f:	90                   	nop
+  47fb80:	e9 bb fc ff ff       	jmp    47f840 <main.main>
