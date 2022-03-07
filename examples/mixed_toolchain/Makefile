@@ -1,5 +1,10 @@
-all: main.o sum.o
+all: sum objdump
+
+sum: main.o sum.o
 	gcc -g -o sum main.o sum.o
+
+objdump: sum
+	objdump -Mintel -d sum > sum.obj
 
 main.o: main.c main.S
 	gcc -g -c main.c -o main.o
@@ -14,4 +19,4 @@ sum.S: sum.c
 	clang -g -S sum.c -o sum.S
 
 clean:
-	rm -rf sum.o main.o main.S sum.S sum
+	rm -rf sum.o main.o main.S sum.S sum sum.obj
