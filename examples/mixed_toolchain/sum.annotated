@@ -1,0 +1,251 @@
+
+A concatenation of the common.h, sum.c and main.c files that built a binary
+named `sum` that is then disassembled for analysis purposes.
+
+     1	#ifndef __COMMON_H
+     2	#define __COMMON_H
+     3	
+     4	/*
+     5	 * Make this structure a certain size so that it does not
+     6	 * get passed in registers!
+     7	 */
+     8	typedef struct {
+     9		int a;
+    10		int b;
+    11		int c;
+    12		int d;
+    13		int e;
+    14		int f;
+    15	} addable;
+    16	
+    17	#endif
+    18	#include <stdio.h>
+    19	#include "common.h"
+    20	
+    21	
+    22	/*
+    23	 * This function is a leaf function -- it will use the redzone
+    24	 * to store it's local variables.
+    25	 */
+    26	int sum(int a, addable ab) {
+    27		int local_a = 48879;
+    28		return a + ab.a + ab.b;
+    29	}
+    30	
+    31	/*
+    32	 * This function is *not* a leaf function -- it will make space
+    33	 * on the stack to store it's local variables.
+    34	 */
+    35	int sum_proxy(int a, addable ab) {
+    36		int local_a = 57005;
+    37		return sum(a, ab);
+    38	}
+    39	#include <stdio.h>
+    40	#include "common.h"
+    41	
+    42	extern int sum_proxy(int a, addable ab);
+    43	
+    44	int main() {
+    45		int left_operand = 1;
+    46		addable adb = { .a = 2, .b = 4};
+    47	
+    48		int total = sum_proxy(left_operand, adb);
+    49	
+    50		printf("total: %d\n", total);
+    51		return 0;
+    52	}
+
+sum:     file format elf64-x86-64
+
+0000000000001139 <main>:
+    1139:	f3 0f 1e fa          	endbr64 
+		# Store the existing rbp on the stack.
+    113d:	55                   	push   rbp
+		# Move the current value of rsp into rbp
+    113e:	48 89 e5             	mov    rbp,rsp
+		# Make 0x30 bytes (48d bytes) on the stack
+    1141:	48 83 ec 30          	sub    rsp,0x30
+		# Move 1 into the 4 bytes that are 0x28 (40d) bytes below the base pointer
+    1145:	c7 45 d8 01 00 00 00 	mov    DWORD PTR [rbp-0x28],0x1
+		# Move 0 into the 8 bytes that are 0x20 (32d) bytes below the base pointer
+		# Ie, clear out RBP-0x20 - RBP-0x18
+    114c:	48 c7 45 e0 00 00 00 	mov    QWORD PTR [rbp-0x20],0x0
+    1153:	00 
+		# Move 0 into the 8 bytes that are 0x18 (24d) bytes below the base pointer
+		# Ie, clear out RBP-0x18 - RBP-0x10
+    1154:	48 c7 45 e8 00 00 00 	mov    QWORD PTR [rbp-0x18],0x0
+    115b:	00 
+		# Move 0 into the 8 bytes that are 0x10 (16d) bytes below the base pointer
+		# Ie, clear out RBP-0x10 - RBP-0x08
+    115c:	48 c7 45 f0 00 00 00 	mov    QWORD PTR [rbp-0x10],0x0
+    1163:	00 
+		# Move 2 into the 4 bytes that are 0x20 (32d) bytes below the base pointer
+    1164:	c7 45 e0 02 00 00 00 	mov    DWORD PTR [rbp-0x20],0x2
+		# Move 4 into the 4 bytes that are 0x1c (28d) bytes below the base pointer
+    116b:	c7 45 e4 04 00 00 00 	mov    DWORD PTR [rbp-0x1c],0x4
+		# This completes the setup of the local variables for this
+		# function. What does the stack look like?
+		# > higher addresses > RBP -> [value of RBP when the function was invoked]
+		#          RBP-0x08<->RBP-0x00[ ??? ]
+		#          RBP-0x0c<->RBP-0x08[ 0x0 ] (adb.f)
+		#          RBP-0x10<->RBP-0x0c[ 0x0 ] (adb.e)
+		#          RBP-0x14<->RBP-0x10[ 0x0 ] (adb.d)
+		#          RBP-0x18<->RBP-0x14[ 0x0 ] (adb.c)
+		#          RBP-0x1c<->RBP-0x18[ 0x4 ] (adb.b)
+		#          RBP-0x20<->RBP-0x1c[ 0x2 ] (adb.a)
+		#          RBP-0x24<->RBP-0x20[ ??? ] <-we will realize later, this is total
+		#          RBP-0x28<->RBP-0x24[ 0x1 ] (left_operand)
+		#   RSP -> RBP-0x30<->RBP-0x28[ ??? ]
+		# Now, let's start doing some work ...
+		# Move left_operand into eax.
+    1172:	8b 45 d8             	mov    eax,DWORD PTR [rbp-0x28]
+		# Curious: Make 8 more bytes of space on the stack.
+    1175:	48 83 ec 08          	sub    rsp,0x8
+		# push some bytes on the stack! These look suspisciously like ...
+		# abd.e, abd.f
+    1179:	ff 75 f0             	push   QWORD PTR [rbp-0x10]
+		# abd.c, abd.d
+    117c:	ff 75 e8             	push   QWORD PTR [rbp-0x18]
+		# abd.a, abd.b
+    117f:	ff 75 e0             	push   QWORD PTR [rbp-0x20]
+		# Now, move eax (left_operand) into edi
+    1182:	89 c7                	mov    edi,eax
+		# This stuff is cool! We now have some values on the stack and a value
+		# in a register. We are getting ready to call a function -- these 
+		# operations *must* have something to do with that. But what, exactly?
+		# Working backwards from the source code for main, we know that
+		# left_operand is the first argument we pass to the sum_proxy function.
+		# According to the calling conventions of the x86-64 ABI, the first
+		# argument goes in register r/edi, if it fits. Bingo. We see that here:
+		# edi just took eax's value which is left_operand. But, what about the
+		# second parameter? It looks like we are passing that parameter on the
+		# stack and *not* in a register? Why are we doing that?
+		# To know, we'll have to look at the calling conventions! According to the
+		# documentation,
+		# "If the size of an object is larger than four 8 bytes or it contains
+		# unaligned fields, it has class memory." But, that's not the case
+		# here, so we have to dig deeper. What happens is that each of the fields
+		# of the data structure is independently analysed to see if they
+		# can be passed in registers or on the stack. In this case, (ultimately)
+		# it turns out that adbs to be passed on the stack.
+		# At this point, we have the following stack configuration:
+		# > higher addresses > RBP -> [value of RBP when the function was invoked]
+		#          RBP-0x08<->RBP-0x00[ ??? ]
+		#          RBP-0x0c<->RBP-0x08[ 0x0 ] (adb.f)
+		#          RBP-0x10<->RBP-0x0c[ 0x0 ] (adb.e)
+		#          RBP-0x14<->RBP-0x10[ 0x0 ] (adb.d)
+		#          RBP-0x18<->RBP-0x14[ 0x0 ] (adb.c)
+		#          RBP-0x1c<->RBP-0x18[ 0x4 ] (adb.b)
+		#          RBP-0x20<->RBP-0x1c[ 0x2 ] (adb.a)
+		#          RBP-0x24<->RBP-0x20[ ??? ] <-we will realize later, this is total
+		#          RBP-0x28<->RBP-0x24[ 0x1 ] (left_operand)
+		#          RBP-0x30<->RBP-0x28[ ??? ]
+		#          RBP-0x38<->RBP-0x30[ ??? ]
+		#          RBP-0x3c<->RBP-0x38[ 0x0 ] (adb.f)
+		#          RBP-0x40<->RBP-0x3c[ 0x0 ] (adb.e)
+		#          RBP-0x44<->RBP-0x40[ 0x0 ] (adb.d)
+		#          RBP-0x48<->RBP-0x44[ 0x0 ] (adb.c)
+		#          RBP-0x4c<->RBP-0x48[ 0x4 ] (adb.b)
+		#    RSP-> RBP-0x50<->RBP-0x4c[ 0x2 ] (adb.a)
+    1184:	e8 47 00 00 00       	call   11d0 <sum_proxy>
+		# Deallocate the space that we used to pass adb on the stack.
+    1189:	48 83 c4 20          	add    rsp,0x20
+		# At this point, we have the following stack configuration:
+		# > higher addresses > RBP -> [value of RBP when the function was invoked]
+		#          RBP-0x08<->RBP-0x00[ ??? ]
+		#          RBP-0x0c<->RBP-0x08[ 0x0 ] (adb.f)
+		#          RBP-0x10<->RBP-0x0c[ 0x0 ] (adb.e)
+		#          RBP-0x14<->RBP-0x10[ 0x0 ] (adb.d)
+		#          RBP-0x18<->RBP-0x14[ 0x0 ] (adb.c)
+		#          RBP-0x1c<->RBP-0x18[ 0x4 ] (adb.b)
+		#          RBP-0x20<->RBP-0x1c[ 0x2 ] (adb.a)
+		#          RBP-0x24<->RBP-0x20[ ??? ] <-we will realize later, this is total
+		#          RBP-0x28<->RBP-0x24[ 0x1 ] (left_operand)
+		#    RSP-> RBP-0x30<->RBP-0x28[ ??? ]
+		# r/eax contains the result of the function (if it can fit in a register).
+		# In the case of the sum_proxy function, it can. We are going to take
+		# the value out of that register and assign it to the memory that the
+		# compiler allocated for total.
+    118d:	89 45 dc             	mov    DWORD PTR [rbp-0x24],eax
+		# At this point, we have the following stack configuration:
+		# > higher addresses > RBP -> [value of RBP when the function was invoked]
+		#          RBP-0x08<->RBP-0x00[ ??? ]
+		#          RBP-0x0c<->RBP-0x08[ 0x0 ] (adb.f)
+		#          RBP-0x10<->RBP-0x0c[ 0x0 ] (adb.e)
+		#          RBP-0x14<->RBP-0x10[ 0x0 ] (adb.d)
+		#          RBP-0x18<->RBP-0x14[ 0x0 ] (adb.c)
+		#          RBP-0x1c<->RBP-0x18[ 0x4 ] (adb.b)
+		#          RBP-0x20<->RBP-0x1c[ 0x2 ] (adb.a)
+		#          RBP-0x24<->RBP-0x20[ 0x7 ] (total)
+		#          RBP-0x28<->RBP-0x24[ 0x1 ] (left_operand)
+		#    RSP-> RBP-0x30<->RBP-0x28[ ??? ]
+		# This, seemingly "stupid" move is, in fact, stupid. But, that's what
+		# we get for disabling optimizations when we build.
+    1190:	8b 45 dc             	mov    eax,DWORD PTR [rbp-0x24]
+		# Before we go on, let's think about the signature of printf:
+		# The first parameter is a format string.
+		# The second (and so on) are variables to plug in to that format string.
+		# Our format string is "total: %d" so there is exactly 1 variable to
+		# plug in to that. In other words, we are going to pass two arguments to
+		# printf.
+		# The compiler is filling in parameters backwards again! So, we are
+		# here loading eax (total) into esi, the four-byte version of the 
+		# register that is used to carry the second parameter.
+    1193:	89 c6                	mov    esi,eax
+		# Recall that strings in C are really just pointers to arrays
+		# of characters. So, the first argument to printf is really just a
+		# pointer to the format string. That can fit in a register. Couple
+		# that with our knowledge that the format string is the first argument,
+		# and we can see why the compiler is putting the pointer to the
+		# format string in rdi.
+    1195:	48 8d 3d 68 0e 00 00 	lea    rdi,[rip+0xe68]        # 2004 <_IO_stdin_used+0x4>
+    119c:	b8 00 00 00 00       	mov    eax,0x0
+    11a1:	e8 8a fe ff ff       	call   1030 <printf@plt>
+		# Because this function (main) returns 0, put that in the register that
+		# is used to transmit the return value!
+    11a6:	b8 00 00 00 00       	mov    eax,0x0
+		# This is a great example of a CISC instruction! It is exactly equivalent
+		# to 
+		# mov rsp, rbp <- copy the base pointer to the stack pointer (ie, remove
+		#                 the space we allocated on the stack for this function).
+		# pop rbp      <- pop stashed RBP off the stack and put it back into ebp
+    11ab:	c9                   	leave  
+		# The top of the stack should now contain the return address pointer. When
+		# we execute ret, the processor returns the address at the top of the stack
+		# and sends the CPU to start executing at that address. Voila, we are done!
+    11ac:	c3                   	ret    
+    11ad:	0f 1f 00             	nop    DWORD PTR [rax]
+
+00000000000011b0 <sum>:
+    11b0:	55                   	push   rbp
+    11b1:	48 89 e5             	mov    rbp,rsp
+    11b4:	48 8d 45 10          	lea    rax,[rbp+0x10]
+    11b8:	89 7d fc             	mov    DWORD PTR [rbp-0x4],edi
+    11bb:	c7 45 f8 ef be 00 00 	mov    DWORD PTR [rbp-0x8],0xbeef
+    11c2:	8b 4d fc             	mov    ecx,DWORD PTR [rbp-0x4]
+    11c5:	03 08                	add    ecx,DWORD PTR [rax]
+    11c7:	03 48 04             	add    ecx,DWORD PTR [rax+0x4]
+    11ca:	89 c8                	mov    eax,ecx
+    11cc:	5d                   	pop    rbp
+    11cd:	c3                   	ret    
+    11ce:	66 90                	xchg   ax,ax
+
+00000000000011d0 <sum_proxy>:
+    11d0:	55                   	push   rbp
+    11d1:	48 89 e5             	mov    rbp,rsp
+    11d4:	48 83 ec 20          	sub    rsp,0x20
+    11d8:	48 8d 45 10          	lea    rax,[rbp+0x10]
+    11dc:	89 7d fc             	mov    DWORD PTR [rbp-0x4],edi
+    11df:	c7 45 f8 ad de 00 00 	mov    DWORD PTR [rbp-0x8],0xdead
+    11e6:	8b 7d fc             	mov    edi,DWORD PTR [rbp-0x4]
+    11e9:	48 8b 08             	mov    rcx,QWORD PTR [rax]
+    11ec:	48 89 0c 24          	mov    QWORD PTR [rsp],rcx
+    11f0:	48 8b 48 08          	mov    rcx,QWORD PTR [rax+0x8]
+    11f4:	48 89 4c 24 08       	mov    QWORD PTR [rsp+0x8],rcx
+    11f9:	48 8b 40 10          	mov    rax,QWORD PTR [rax+0x10]
+    11fd:	48 89 44 24 10       	mov    QWORD PTR [rsp+0x10],rax
+    1202:	e8 a9 ff ff ff       	call   11b0 <sum>
+    1207:	48 83 c4 20          	add    rsp,0x20
+    120b:	5d                   	pop    rbp
+    120c:	c3                   	ret    
+    120d:	0f 1f 00             	nop    DWORD PTR [rax]
