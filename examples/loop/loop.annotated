@@ -1,0 +1,76 @@
+     1	#include <stdio.h>
+     2	
+     3	int main() {
+     4	  int counter = 0;
+     5	
+     6	  for (int looper = 0; looper < 0xdead; looper++) {
+     7	    counter++;
+     8	  }
+     9	
+    10	  printf("counter: %d\n", counter);
+    11	
+    12	  return 0;
+    13	}
+
+0000000000001149 <main>:
+		# I know what this means, now! How cool: This tells Intel CFI
+		# technology that this address is a valid branch target. What
+		# is a branch target? Well, this document will tell you:
+		# https://lpc.events/event/2/contributions/147/attachments/72/83/CET-LPC-2018.pdf
+    1149:	f3 0f 1e fa          	endbr64
+		# We are very familiar with this "dance" now, aren't we?
+    114d:	55                   	push   rbp
+    114e:	48 89 e5             	mov    rbp,rsp
+		# We will make 16 bytes of space on the stack for the ... 
+		# local variables or parameters? That's right! Local variables.
+    1151:	48 83 ec 10          	sub    rsp,0x10
+		# Now we have a very stack frame/activation record all set up!
+		# Looks like we are zero-ing some space on the stack.
+    1155:	c7 45 f8 00 00 00 00 	mov    DWORD PTR [rbp-0x8],0x0
+    115c:	c7 45 fc 00 00 00 00 	mov    DWORD PTR [rbp-0x4],0x0
+		# Hmm. We are jumping forward without a condition! That's quite
+		# strange. Let's go with it.
+(a) 1163:	eb 08                	jmp    116d <main+0x24>
+		# Based upon analysis below, we know the "semantics" of these
+		# two increment operations.
+(b) 1165:	83 45 f8 01          	add    DWORD PTR [rbp-0x8],0x1
+    1169:	83 45 fc 01          	add    DWORD PTR [rbp-0x4],0x1
+		# The target of the jump at (a). Oh, fascinating. We are comparing
+		# what is on the stack at rbp - 0x4 with 0xdeac. What is that?
+		# Looks like the boundary condition of the loop, to me!
+		# From this instruction, we can infer that the bytes between
+		# rbp - 0x4 and rbp (i - 0x0) contain which variable? That's right,
+		# the looper! And, by implication, the bytes between rbp - 0x8 and
+		# rbp - 0x4 are the counter!
+    116d:	81 7d fc ac de 00 00 	cmp    DWORD PTR [rbp-0x4],0xdeac
+		# What does a comparison do? Well, it has the side effect of setting
+		# one of the status fields of the flags register! What is that?
+		# https://en.wikibooks.org/wiki/X86_Assembly/X86_Architecture#EFLAGS_Register
+		# The cmp instruction above will set the SF. Then, this instruction
+		# uses that to make its decision! What is the target of the jump?
+    1174:	7e ef                	jle    1165 <main+0x1c>
+		# We are done with the loop! Now, move looper into register eax.
+    1176:	8b 45 f8             	mov    eax,DWORD PTR [rbp-0x8]
+		# Now, move eax (looper) into esi. If we are setting up to make a function
+		# call, why would we do this?
+    1179:	89 c6                	mov    esi,eax
+		# Now, what are we doing here? Well, we are loading up the address of
+		# something into rdi. What argument does rdi store when you are making
+		# a function call? What is at this address? These are all good questions!
+    117b:	48 8d 3d 82 0e 00 00 	lea    rdi,[rip+0xe82]        # 2004 <_IO_stdin_used+0x4>
+		# Reset eax!
+    1182:	b8 00 00 00 00       	mov    eax,0x0
+		# And now, do the call! What are the arguments?
+    1187:	e8 c4 fe ff ff       	call   1050 <printf@plt>
+    118c:	b8 00 00 00 00       	mov    eax,0x0
+		# This is a great example of a CISC instruction! It is exactly equivalent
+		# to 
+		# mov rsp, rbp <- copy the base pointer to the stack pointer (ie, remove
+		#                 the space we allocated on the stack for this function).
+		# pop rbp      <- pop stashed RBP off the stack and put it back into ebp
+    1191:	c9                   	leave  
+		# And, voila!
+    1192:	c3                   	ret    
+    1193:	66 2e 0f 1f 84 00 00 	nop    WORD PTR cs:[rax+rax*1+0x0]
+    119a:	00 00 00 
+    119d:	0f 1f 00             	nop    DWORD PTR [rax]
