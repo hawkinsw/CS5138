@@ -1,0 +1,376 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+
+
+void perform_menu_action(int menu_choice) {
+	int to_print = 0;
+	switch (menu_choice) {
+		case 1: {
+			to_print = 1;
+			break;
+		}
+		case 2: {
+			to_print = 2;
+			break;
+		}
+		case 3: {
+			to_print = 3;
+			break;
+		}
+		case 4: {
+			to_print = 4;
+			break;
+		}
+		case 5: {
+			to_print = 5;
+			break;
+		}
+		case 6: {
+			to_print = 6;
+			break;
+		}
+		case 7: {
+			to_print = 7;
+			break;
+		}
+		case 8: {
+			to_print = 8;
+			break;
+		}
+		case 9: {
+			to_print = 9;
+			break;
+		}
+		case 10: {
+			to_print = 10;
+			break;
+		}
+		case 11: {
+			to_print = 11;
+			break;
+		}
+		case 12: {
+			to_print = 12;
+			break;
+		}
+		case 13: {
+			to_print = 13;
+			break;
+		}
+		case 14: {
+			to_print = 14;
+			break;
+		}
+		case 15: {
+			to_print = 15;
+			break;
+		}
+		case 16: {
+			to_print = 16;
+			break;
+		}
+		case 17: {
+			to_print = 17;
+			break;
+		}
+		case 18: {
+			to_print = 18;
+			break;
+		}
+		case 19: {
+			to_print = 19;
+			break;
+		}
+		case 20: {
+			to_print = 20;
+			break;
+		}
+		case 21: {
+			to_print = 21;
+			break;
+		}
+		case 22: {
+			to_print = 22;
+			break;
+		}
+		case 23: {
+			to_print = 23;
+			break;
+		}
+		case 24: {
+			to_print = 24;
+			break;
+		}
+		case 25: {
+			to_print = 25;
+			break;
+		}
+		case 26: {
+			to_print = 26;
+			break;
+		}
+		case 27: {
+			to_print = 27;
+			break;
+		}
+		case 28: {
+			to_print = 28;
+			break;
+		}
+		case 29: {
+			to_print = 29;
+			break;
+		}
+		case 30: {
+			to_print = 30;
+			break;
+		}
+		case 31: {
+			to_print = 31;
+			break;
+		}
+		case 32: {
+			to_print = 32;
+			break;
+		}
+		case 33: {
+			to_print = 33;
+			break;
+		}
+		case 34: {
+			to_print = 34;
+			break;
+		}
+		case 35: {
+			to_print = 35;
+			break;
+		}
+		case 36: {
+			to_print = 36;
+			break;
+		}
+		case 37: {
+			to_print = 37;
+			break;
+		}
+		case 38: {
+			to_print = 38;
+			break;
+		}
+		case 39: {
+			to_print = 39;
+			break;
+		}
+		case 40: {
+			to_print = 40;
+			break;
+		}
+		case 41: {
+			to_print = 41;
+			break;
+		}
+		case 42: {
+			to_print = 42;
+			break;
+		}
+		case 43: {
+			to_print = 43;
+			break;
+		}
+		case 44: {
+			to_print = 44;
+			break;
+		}
+		case 45: {
+			to_print = 45;
+			break;
+		}
+	}
+	printf("to_print: %d\n", to_print);
+	return;
+}
+
+int main() {
+  int user_menu_choice = 0;
+  /*
+   * We would get the input from the user
+   * in a real application.
+   */
+  perform_menu_action(2);
+  return 0;
+}
+
+0000000000001149 <perform_menu_action>:
+    1149:	f3 0f 1e fa          	endbr64 
+    114d:	55                   	push   rbp
+    114e:	48 89 e5             	mov    rbp,rsp
+    1151:	48 83 ec 20          	sub    rsp,0x20
+		# Based on our understanding of the calling conventions, we know
+		# that the first parameter is going to be stored in rbp - 0x14.
+		# So, wherever we see rbp-0x14 we can say that it is menu_choice.
+    1155:	89 7d ec             	mov    DWORD PTR [rbp-0x14],edi
+    1158:	c7 45 fc 00 00 00 00 	mov    DWORD PTR [rbp-0x4],0x0
+    115f:	83 7d ec 2d          	cmp    DWORD PTR [rbp-0x14],0x2d
+    1163:	0f 87 12 02 00 00    	ja     137b <perform_menu_action+0x232>
+		# Now, move menu_choice (see above) in to eax.
+    1169:	8b 45 ec             	mov    eax,DWORD PTR [rbp-0x14]
+		# Multiply the menu_choice by four and store that in rdx.
+    116c:	48 8d 14 85 00 00 00 	lea    rdx,[rax*4+0x0]
+		# Load some memory address into rax. Where is this address? objdump
+		# says that it is 0x2014. We'll call that address _table_start_. It's
+		# an odd choice for a name, isn't it? Trust me.
+    1173:	00 
+    1174:	48 8d 05 99 0e 00 00 	lea    rax,[rip+0xe99]        # 2014 <_IO_stdin_used+0x14>
+		# The next operation our program performs is to read from memory. But,
+		# what is the address from which we are going to read?
+		# Well, from rax (0x2014, _table_start_) plus rdx (4*rax, 4*menu_choice).
+		# But, really, what is that? Let's use an example. Assume menu_choice = 2:
+		# eax = 0x2014 + 4*2 = 0x2014 + 8 = 0x201C
+		# Well, let's take a look and see what is there? How do we do that?
+		# We can use hexdump. We see the 4 bytes that look like 85 f1 ff ff.
+		# Let's guess that is a number. We are on a little-endian machine. So,
+		# let's first change that into a more "normal" (ie, big endian)
+		# representation: ff ff f1 85. Let's make a second guess: the number
+		# is stored in two's complement. If we interpret 0xfffff185 in
+		# two's complement, we get the value -3707 (in base 10). Odd, but it is
+		# what it is. We will continue using this example configuration
+		# throughout or analysis.
+    117b:	8b 04 02             	mov    eax,DWORD PTR [rdx+rax*1]
+		# This little gem sign extends the value in the register eax so that
+		# we can use the same value through rax. Exactly what we need? Why?
+		# Because we read four bytes from 0x201c (and that's it!). So, who
+		# knows what are in the top four bytes of rax. They were unaffected
+		# by our read.
+    117e:	48 98                	cdqe   
+		# Now, let's calculate another address and store it in rdx. Hmm. That's
+		# the same address that we just calculated above. So, rdx is _table_start_
+		# again.
+    1180:	48 8d 15 8d 0e 00 00 	lea    rdx,[rip+0xe8d]        # 2014 <_IO_stdin_used+0x14>
+		# Now, we add rax (that mystery value that we read from memory [-3707]
+		# in our example]) to rdx (_table_start_, 0x2014). Making it concrete,
+		# in our example, rax is equal to (0x2014 - 3707) = 0x1199.
+    1187:	48 01 d0             	add    rax,rdx
+		# Now, let's (unconditionally) jump to that address!
+    118a:	3e ff e0             	notrack jmp rax
+    118d:	c7 45 fc 01 00 00 00 	mov    DWORD PTR [rbp-0x4],0x1
+    1194:	e9 e2 01 00 00       	jmp    137b <perform_menu_action+0x232>
+		# In our example, this is the target of our jump. Wow. How cool is this?!
+		# Here we see the machine code that implements the to_print assignment.
+    1199:	c7 45 fc 02 00 00 00 	mov    DWORD PTR [rbp-0x4],0x2
+		# Now, let's just jump forward. This instruction effectively performs
+		# the `break` in our C code.
+    11a0:	e9 d6 01 00 00       	jmp    137b <perform_menu_action+0x232>
+    11a5:	c7 45 fc 03 00 00 00 	mov    DWORD PTR [rbp-0x4],0x3
+    11ac:	e9 ca 01 00 00       	jmp    137b <perform_menu_action+0x232>
+    11b1:	c7 45 fc 04 00 00 00 	mov    DWORD PTR [rbp-0x4],0x4
+    11b8:	e9 be 01 00 00       	jmp    137b <perform_menu_action+0x232>
+    11bd:	c7 45 fc 05 00 00 00 	mov    DWORD PTR [rbp-0x4],0x5
+    11c4:	e9 b2 01 00 00       	jmp    137b <perform_menu_action+0x232>
+    11c9:	c7 45 fc 06 00 00 00 	mov    DWORD PTR [rbp-0x4],0x6
+    11d0:	e9 a6 01 00 00       	jmp    137b <perform_menu_action+0x232>
+    11d5:	c7 45 fc 07 00 00 00 	mov    DWORD PTR [rbp-0x4],0x7
+    11dc:	e9 9a 01 00 00       	jmp    137b <perform_menu_action+0x232>
+    11e1:	c7 45 fc 08 00 00 00 	mov    DWORD PTR [rbp-0x4],0x8
+    11e8:	e9 8e 01 00 00       	jmp    137b <perform_menu_action+0x232>
+    11ed:	c7 45 fc 09 00 00 00 	mov    DWORD PTR [rbp-0x4],0x9
+    11f4:	e9 82 01 00 00       	jmp    137b <perform_menu_action+0x232>
+    11f9:	c7 45 fc 0a 00 00 00 	mov    DWORD PTR [rbp-0x4],0xa
+    1200:	e9 76 01 00 00       	jmp    137b <perform_menu_action+0x232>
+    1205:	c7 45 fc 0b 00 00 00 	mov    DWORD PTR [rbp-0x4],0xb
+    120c:	e9 6a 01 00 00       	jmp    137b <perform_menu_action+0x232>
+    1211:	c7 45 fc 0c 00 00 00 	mov    DWORD PTR [rbp-0x4],0xc
+    1218:	e9 5e 01 00 00       	jmp    137b <perform_menu_action+0x232>
+    121d:	c7 45 fc 0d 00 00 00 	mov    DWORD PTR [rbp-0x4],0xd
+    1224:	e9 52 01 00 00       	jmp    137b <perform_menu_action+0x232>
+    1229:	c7 45 fc 0e 00 00 00 	mov    DWORD PTR [rbp-0x4],0xe
+    1230:	e9 46 01 00 00       	jmp    137b <perform_menu_action+0x232>
+    1235:	c7 45 fc 0f 00 00 00 	mov    DWORD PTR [rbp-0x4],0xf
+    123c:	e9 3a 01 00 00       	jmp    137b <perform_menu_action+0x232>
+    1241:	c7 45 fc 10 00 00 00 	mov    DWORD PTR [rbp-0x4],0x10
+    1248:	e9 2e 01 00 00       	jmp    137b <perform_menu_action+0x232>
+    124d:	c7 45 fc 11 00 00 00 	mov    DWORD PTR [rbp-0x4],0x11
+    1254:	e9 22 01 00 00       	jmp    137b <perform_menu_action+0x232>
+    1259:	c7 45 fc 12 00 00 00 	mov    DWORD PTR [rbp-0x4],0x12
+    1260:	e9 16 01 00 00       	jmp    137b <perform_menu_action+0x232>
+    1265:	c7 45 fc 13 00 00 00 	mov    DWORD PTR [rbp-0x4],0x13
+    126c:	e9 0a 01 00 00       	jmp    137b <perform_menu_action+0x232>
+    1271:	c7 45 fc 14 00 00 00 	mov    DWORD PTR [rbp-0x4],0x14
+    1278:	e9 fe 00 00 00       	jmp    137b <perform_menu_action+0x232>
+    127d:	c7 45 fc 15 00 00 00 	mov    DWORD PTR [rbp-0x4],0x15
+    1284:	e9 f2 00 00 00       	jmp    137b <perform_menu_action+0x232>
+    1289:	c7 45 fc 16 00 00 00 	mov    DWORD PTR [rbp-0x4],0x16
+    1290:	e9 e6 00 00 00       	jmp    137b <perform_menu_action+0x232>
+    1295:	c7 45 fc 17 00 00 00 	mov    DWORD PTR [rbp-0x4],0x17
+    129c:	e9 da 00 00 00       	jmp    137b <perform_menu_action+0x232>
+    12a1:	c7 45 fc 18 00 00 00 	mov    DWORD PTR [rbp-0x4],0x18
+    12a8:	e9 ce 00 00 00       	jmp    137b <perform_menu_action+0x232>
+    12ad:	c7 45 fc 19 00 00 00 	mov    DWORD PTR [rbp-0x4],0x19
+    12b4:	e9 c2 00 00 00       	jmp    137b <perform_menu_action+0x232>
+    12b9:	c7 45 fc 1a 00 00 00 	mov    DWORD PTR [rbp-0x4],0x1a
+    12c0:	e9 b6 00 00 00       	jmp    137b <perform_menu_action+0x232>
+    12c5:	c7 45 fc 1b 00 00 00 	mov    DWORD PTR [rbp-0x4],0x1b
+    12cc:	e9 aa 00 00 00       	jmp    137b <perform_menu_action+0x232>
+    12d1:	c7 45 fc 1c 00 00 00 	mov    DWORD PTR [rbp-0x4],0x1c
+    12d8:	e9 9e 00 00 00       	jmp    137b <perform_menu_action+0x232>
+    12dd:	c7 45 fc 1d 00 00 00 	mov    DWORD PTR [rbp-0x4],0x1d
+    12e4:	e9 92 00 00 00       	jmp    137b <perform_menu_action+0x232>
+    12e9:	c7 45 fc 1e 00 00 00 	mov    DWORD PTR [rbp-0x4],0x1e
+    12f0:	e9 86 00 00 00       	jmp    137b <perform_menu_action+0x232>
+    12f5:	c7 45 fc 1f 00 00 00 	mov    DWORD PTR [rbp-0x4],0x1f
+		# Notice something really cool here. We are now using a different
+		# encoding for the jmp instruction! Why? Because the target is now
+		# closer to use. Because it is closer, we need fewer bytes to be able
+		# to represent the offset from rip (all jump targets are so-called
+		# "rip relative".
+    12fc:	eb 7d                	jmp    137b <perform_menu_action+0x232>
+    12fe:	c7 45 fc 20 00 00 00 	mov    DWORD PTR [rbp-0x4],0x20
+    1305:	eb 74                	jmp    137b <perform_menu_action+0x232>
+    1307:	c7 45 fc 21 00 00 00 	mov    DWORD PTR [rbp-0x4],0x21
+    130e:	eb 6b                	jmp    137b <perform_menu_action+0x232>
+    1310:	c7 45 fc 22 00 00 00 	mov    DWORD PTR [rbp-0x4],0x22
+    1317:	eb 62                	jmp    137b <perform_menu_action+0x232>
+    1319:	c7 45 fc 23 00 00 00 	mov    DWORD PTR [rbp-0x4],0x23
+    1320:	eb 59                	jmp    137b <perform_menu_action+0x232>
+    1322:	c7 45 fc 24 00 00 00 	mov    DWORD PTR [rbp-0x4],0x24
+    1329:	eb 50                	jmp    137b <perform_menu_action+0x232>
+    132b:	c7 45 fc 25 00 00 00 	mov    DWORD PTR [rbp-0x4],0x25
+    1332:	eb 47                	jmp    137b <perform_menu_action+0x232>
+    1334:	c7 45 fc 26 00 00 00 	mov    DWORD PTR [rbp-0x4],0x26
+    133b:	eb 3e                	jmp    137b <perform_menu_action+0x232>
+    133d:	c7 45 fc 27 00 00 00 	mov    DWORD PTR [rbp-0x4],0x27
+    1344:	eb 35                	jmp    137b <perform_menu_action+0x232>
+    1346:	c7 45 fc 28 00 00 00 	mov    DWORD PTR [rbp-0x4],0x28
+    134d:	eb 2c                	jmp    137b <perform_menu_action+0x232>
+    134f:	c7 45 fc 29 00 00 00 	mov    DWORD PTR [rbp-0x4],0x29
+    1356:	eb 23                	jmp    137b <perform_menu_action+0x232>
+    1358:	c7 45 fc 2a 00 00 00 	mov    DWORD PTR [rbp-0x4],0x2a
+    135f:	eb 1a                	jmp    137b <perform_menu_action+0x232>
+    1361:	c7 45 fc 2b 00 00 00 	mov    DWORD PTR [rbp-0x4],0x2b
+    1368:	eb 11                	jmp    137b <perform_menu_action+0x232>
+    136a:	c7 45 fc 2c 00 00 00 	mov    DWORD PTR [rbp-0x4],0x2c
+    1371:	eb 08                	jmp    137b <perform_menu_action+0x232>
+    1373:	c7 45 fc 2d 00 00 00 	mov    DWORD PTR [rbp-0x4],0x2d
+    137a:	90                   	nop
+   	# This is the end of our massive `case` statement.
+		# Read the four bytes from rbp - 0x4 into eax. What is that? It's to_print.
+		137b:	8b 45 fc             	mov    eax,DWORD PTR [rbp-0x4]
+		# Now, let's move eax (to_print) to esi. We see a move to esi and we
+		# immediately think what? The second argument to a function!
+    137e:	89 c6                	mov    esi,eax
+		# Okay, we've seen this song and dance before! We are probably loading
+		# the format string into memory. Let's use hexdump to confirm.
+		# 2000  01 00 02 00 74 6f 5f 70  72 69 6e 74 3a 20 25 64  |....to_print: %d|
+		# Sure enough, we are loading the address of the format string to
+		# the register that holds the first argument to a function!
+    1380:	48 8d 3d 7d 0c 00 00 	lea    rdi,[rip+0xc7d]        # 2004 <_IO_stdin_used+0x4>
+		# Reset eax.
+    1387:	b8 00 00 00 00       	mov    eax,0x0
+		# Call printf!
+    138c:	e8 bf fc ff ff       	call   1050 <printf@plt>
+		# Now, note what we are not doing here before we leave? That's right, we
+		# are not resetting eax after having its value set in `printf`. How come?
+		# Because perform_menu_action is a void function!
+    1391:	90                   	nop
+    1392:	c9                   	leave  
+    1393:	c3                   	ret    
