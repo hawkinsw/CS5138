@@ -1,4 +1,4 @@
-all: loop objdump
+all: loop objdump hexdump
 
 loop: loop.o
 	gcc -g -o loop loop.o
@@ -12,5 +12,8 @@ loop.o: loop.c loop.S
 loop.S: loop.c
 	gcc -g -S loop.c -masm=intel -o loop.S
 
+hexdump: objdump
+	hd -c loop > loop.hex
+
 clean:
-	rm -rf loop *.o *.S *.obj
+	rm -rf loop *.o *.S *.obj *.hex
