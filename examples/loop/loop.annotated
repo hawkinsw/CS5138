@@ -13,7 +13,7 @@
     13	}
 
 0000000000001149 <main>:
-		# I know what this means, now! How cool: This tells Intel CFI
+		# I know what this means, now! How cool: This tells Intel CET
 		# technology that this address is a valid branch target. What
 		# is a branch target? Well, this document will tell you:
 		# https://lpc.events/event/2/contributions/147/attachments/72/83/CET-LPC-2018.pdf
@@ -24,12 +24,13 @@
 		# We will make 16 bytes of space on the stack for the ... 
 		# local variables or parameters? That's right! Local variables.
     1151:	48 83 ec 10          	sub    rsp,0x10
-		# Now we have a very stack frame/activation record all set up!
-		# Looks like we are zero-ing some space on the stack.
+		# Now we have a stack frame/activation record all set up!
+		# Looks like we are zero-ing some space on the stack. But,
+		# just how much? 8 bytes!
     1155:	c7 45 f8 00 00 00 00 	mov    DWORD PTR [rbp-0x8],0x0
     115c:	c7 45 fc 00 00 00 00 	mov    DWORD PTR [rbp-0x4],0x0
 		# Hmm. We are jumping forward without a condition! That's quite
-		# strange. Let's go with it.
+		# strange. Let's go with it. The target of the jump is (c).
 (a) 1163:	eb 08                	jmp    116d <main+0x24>
 		# Based upon analysis below, we know the "semantics" of these
 		# two increment operations.
@@ -42,28 +43,33 @@
 		# rbp - 0x4 and rbp (i - 0x0) contain which variable? That's right,
 		# the looper! And, by implication, the bytes between rbp - 0x8 and
 		# rbp - 0x4 are the counter!
-    116d:	81 7d fc ac de 00 00 	cmp    DWORD PTR [rbp-0x4],0xdeac
+(c) 116d:	81 7d fc ac de 00 00 	cmp    DWORD PTR [rbp-0x4],0xdeac
 		# What does a comparison do? Well, it has the side effect of setting
 		# one of the status fields of the flags register! What is that?
 		# https://en.wikibooks.org/wiki/X86_Assembly/X86_Architecture#EFLAGS_Register
 		# The cmp instruction above will set the SF. Then, this instruction
-		# uses that to make its decision! What is the target of the jump?
+		# uses that to make its decision! What is the target of the jump? (b)
     1174:	7e ef                	jle    1165 <main+0x1c>
-		# We are done with the loop! Now, move looper into register eax.
+		# If we fall through the jle (ie, we reach here), then we know that
+		# we are done with the loop! Now, move looper into register eax.
     1176:	8b 45 f8             	mov    eax,DWORD PTR [rbp-0x8]
 		# Now, move eax (looper) into esi. If we are setting up to make a function
-		# call, why would we do this?
+		# call, why would we do this? Exactly, because we want looper to be
+		# the second argument.
     1179:	89 c6                	mov    esi,eax
-		# Now, what are we doing here? Well, we are loading up the address of
-		# something into rdi. What argument does rdi store when you are making
-		# a function call? What is at this address? These are all good questions!
+		# Now, what are we doing here? Well, we are loading the _address_ of
+		# ... something ... into rdi. What argument does rdi store when you
+		# are making a function call? The first one! What is at this address?
+		# You can use readelf/objdump/hexdump to find out!
     117b:	48 8d 3d 82 0e 00 00 	lea    rdi,[rip+0xe82]        # 2004 <_IO_stdin_used+0x4>
-		# Reset eax!
+		# Reset eax! 
     1182:	b8 00 00 00 00       	mov    eax,0x0
 		# And now, do the call! What are the arguments?
     1187:	e8 c4 fe ff ff       	call   1050 <printf@plt>
+		# We are reseting eax to 0. Perform this reset because when this function
+		# is done it will return 0.
     118c:	b8 00 00 00 00       	mov    eax,0x0
-		# This is a great example of a CISC instruction! It is exactly equivalent
+		# leave is a great example of a CISC instruction! It is exactly equivalent
 		# to 
 		# mov rsp, rbp <- copy the base pointer to the stack pointer (ie, remove
 		#                 the space we allocated on the stack for this function).
@@ -71,6 +77,10 @@
     1191:	c9                   	leave  
 		# And, voila!
     1192:	c3                   	ret    
+		# The remaining "instructions" are really just padding bytes. Interesting.
+		# Is it possible to use padding bytes as a place to store malicious
+		# instructions? Perhaps an attacker could target those instructions with
+		# a vulnerability?
     1193:	66 2e 0f 1f 84 00 00 	nop    WORD PTR cs:[rax+rax*1+0x0]
     119a:	00 00 00 
     119d:	0f 1f 00             	nop    DWORD PTR [rax]
