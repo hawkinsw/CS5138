@@ -1,14 +1,14 @@
 ## Scooby's Magical Mystery Bus
 
-In this Mini Assignment we are going to disassemble and analyse a mysterious program that our front-line security team has spotted stealing data from our network. Our vanguard only knows so much about the program -- that it appears to include a function that copies memory from one place to another. But, they are convinced that the function is malicious. We are going to determine whether the functionality they have discovered is actually malicious, or not!
+In this assignment we are going to disassemble and analyse a mysterious program that our front-line security team has spotted stealing data from our network. Our vanguard only knows so much about the program -- that it appears to include a function that copies memory from one place to another. They are convinced that the function is malicious. We are going to determine whether the functionality they have discovered is actually malicious or not!
 
 Let's get to work!
 
 ### Lay The Groundwork
 
-The first that we need is to get a disassembled version of the executable that we are going to analyze. To do that we are going to use `objdump`. Recall that there are two different syntaxes for x86-64 assembly code: at&t and intel. We have been learning by looking at intel-formatted assembly and we will continue to work with that format in this investigation. 
+The first step of our analysis is to get a disassembled version of the suspicious executable. To do that we are going to use `objdump`. Recall that there are two different syntaxes for x86-64 assembly code: AT&T and Intel. We have been learning analysis by looking at Intel-formatted assembly and we will continue to work with that format in this investigation. 
 
-Use the following command to generate a file named `scooby_slim.obj`:
+Use the following command to generate a file named `scooby_slim.obj` that includes machine code written in Intel format:
 
 ```
 $ objdump -Mintel -d scooby_slim > scooby_slim.obj
@@ -44,7 +44,6 @@ We've become experts at disassembling, at least the practical aspects of creatin
 
 Unless told otherwise, a compiler/assembler/linker will leave behind some information that makes disassembly easier. These *symbols* help the disassembler label certain addresses with helpful names. For instance, the disassembler can use symbols to turn 
 
-
 ```
     1159: 0f 1f 80 00 00 00 00  nopl   0x0(%rax)
     1160: f3 0f 1e fa           endbr64
@@ -68,24 +67,24 @@ into
     116d: 55                    push   %rbp
 ```
 
-We can tell whether a binary (e.g., `a.out`) is stripped or not by using the `file` tool: 
+Unfortunately, most programs that are distributed do *not* contain those symbols. A program is *stripped* of symbols in order to save space (or to obfuscate its intentions). We can tell whether a binary (e.g., `a.out`) is stripped or not by using the `file` tool: 
 
 ```
 $ file a.out
 a.out: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=07ef2a721513aa4b9dce2d4bedc22d7fc69903f6, for GNU/Linux 3.2.0, stripped
 ```
 
-Use the `file` command to find an unstripped program somewhere on the file system of your Kali virtual machine. Hint: Check out the `/usr/share/spike/dcedump/ifids` binary. Next, use the `file` command to find a stripped program somewhere on the file system of your Kali virtual machine. Hint: Look at *any* file in `/usr/bin`. For both the stripped and unstripped binary, record the output in `submission.txt` as the answer to Question 1.
+Use the `file` command to find an unstripped program somewhere on the file system of your Kali virtual machine. Hint: Check out the `/usr/share/spike/dcedump/ifids` binary. Next, use the `file` command to find a stripped program somewhere on the file system of your Kali virtual machine. Hint: Look at *any* file in `/usr/bin`. For both the stripped and unstripped binary, record the output of `readelf` in `submission.txt` as the answer to Question 1.
 
 ### Finding Functions
 
-Well, we're in trouble. `scooby` is stripped. That means we are too close for missiles and we'll have to switch to guns. Not all hope is lost. Recall from class that there is a prologue that functions typically use to complete the creation of the activation record that the caller started. In particular, a function typically starts by stashing away the RBP, moving the current stack pointer into RBP and then allocating space on the stack for local variables (by adjust RSP down).
+Well, we're in trouble. `scooby_slim` is stripped. That means we are too close for missiles and we'll have to switch to guns. Not all hope is lost. Recall from class that there is a prologue that functions typically use to complete the creation of the activation record that the caller started. In particular, a function typically starts by stashing away `rbp`, moving the current stack pointer into `rbp` and then allocating space on the stack for local variables (by adjusting `rsp` down).
 
-In the `.text` section of `scooby` find the likely location of the start of functions. Record the address of these function candidates as the response to Question 2 in `submission.txt`.
+In the `.text` section of `scooby_slim` find the likely location of the start of functions. Record the address of these function candidates as the response to Question 2 in `submission.txt`.
 
 You should find only one place in the `.text` section that matches this pattern. We will refer to this address as `$MAIN` -- an evocative name, to be sure.
 
-. Does that mean that this is the *only* place in the `.text` segment where code exists that begins a function? No! Remember in class we discussed a type of function that does not call other functions. We gave those functions a technical name and discussed *why* they did not have to allocate space on the stack before they perform their work. Record the technical name for functions that do not call other functions and the reason that they do not have to allocate space on the stack as your answer to Question 3 in `submission.txt`.
+Does that mean that the address you found is the *only* place in the `.text` segment where code exists that begins a function? No! Remember in class we discussed a type of function that does not call other functions. We gave those functions a technical name and discussed *why* they did not have to allocate space on the stack before they perform their work. Record the technical name for functions that do not call other functions and the reason that they do not have to allocate space on the stack as your answer to Question 3 in `submission.txt`.
 
 ### Confirm Our Function Hypothesis
 
@@ -97,19 +96,19 @@ Let's see if we can conceptualize an execution path between the entry point and 
     10a8: ff 15 32 2f 00 00     call   QWORD PTR [rip+0x2f32]        # 3fe0 <calloc@plt+0x2f70>
 ```
 
-This is curious. The call here is unconditional -- the program control will absolutely be transferred to the address *in the eight bytes at `[rip + 0x2f32]`* Objdump helpfully calculates `$rip + 0x2f32`: `3fe0`. Look through the `objdump` file -- does it contain a snapshot of the byte values at that address? No! 
+This is curious. The call here is unconditional -- the program control will absolutely be transferred to the address *in the eight bytes at `[rip + 0x2f32]`* `objdump` helpfully calculates `$rip + 0x2f32`: `3fe0`. Look through the `objdump` file -- does it contain a snapshot of the byte values at that address? No! 
 
-Despair. Fortunately, we have another set of tools in our toolbelt: `hexdump` and `readelf`. In past Mini Assignments we learned how to a) determine the section of the ELF containing a given program's address and b) use `hexdump` to determine the initial values of those bytes when the program executes. Use `readelf` and `hexdump` to calculate the *file address* of *program address* `0x3fe0` and the initial value of the 8 bytes at that address. Record your response as the answer to Question 5.
+Despair. Fortunately, we have another set of tools in our toolbelt: `hexdump` and `readelf`. In past Mini Assignments we learned how to a) determine the section of the ELF containing a given program's address and b) use `hexdump` to determine the initial values of those bytes when the program executes. Use `readelf` and `hexdump` to calculate the *file address* of *program address* `0x3fe0` and the initial value of the 8 bytes at that address. Record your responses as the answer to Question 5.
 
 ### Extra Credit: Dynamic Analysis of Program Execution Between 0x10a8 and `$MAIN`
 
-For extra credit, combine your knowledge of the mechanics of dynamic linking, the operation of `gdb` (in particular `starti`, `watch`, `continue`) to trace the execution of `scooby_slim` between `0x10a8` and `$MAIN`. If you would like to undertake this challenge and want to work together, please let me know! I am happy to help! Record your response as the answer to Extra Credit 1 in `submission.txt`.
+For extra credit, combine your knowledge of the mechanics of dynamic linking and the operation of `gdb` (in particular `starti`, `watch`, `continue`) to trace the execution of `scooby_slim` between `0x10a8` and `$MAIN`. If you would like to undertake this challenge but need some help, please let me know! I am happy to assist! Record your response as the answer to Extra Credit 1 in `submission.txt`.
 
 ### What If I Told You ...
 
 At runtime, the contents of the 8 bytes at `0x3fe0` contain a pointer to `__libc_start_main`. Look at the specified behavior of this function online [here](http://refspecs.linux-foundation.org/LSB_4.1.0/LSB-Core-generic/LSB-Core-generic.html#BASELIB---LIBC-START-MAIN-). Wow, this is really cool! We can determine that the function (indirectly) invoked at `0x10a8` will eventually call the function at the *address* in its first parameter. 
 
-Having trouble groking the *type* of the first function to `__libc_start_main`? Yes, me too! Fortunately, there's an awesome tool that converts types written in C into "plain" English -- `cdecl`. You will need to install in on Kali:
+Having trouble groking the *type* of the first parameter to `__libc_start_main`? Yes, me too! Fortunately, there's an awesome tool that converts types written in C into "plain" English -- `cdecl`. You will need to install in on Kali:
 
 ```
 $ sudo apt-get install cdecl
@@ -121,23 +120,23 @@ Then, run it like this:
 $ cdecl explain "int (*main) (int, char * *, char * *)"
 ```
 
-Woah, so much easier to read and just what we expected based on our C knowledge of the signature of `main`. Note: Yes, there *is* a third parameter to `main` and almost everyone (including me) forgets that it is there. The third argument is a pointer to the environment variables.
+Woah, so much easier to read and just what we expected based on our C knowledge of the signature of `main`. Note: Yes, there *is* a third parameter to `main` and almost everyone (including me) forgets that it is there. The third argument is a pointer to the values of environment variables.
 
-So, what have we learned? We learned that the function called at `0x10a8` will call the function whose address is its first parameter. Use your knowledge of the System V Calling Convention to determine the address passed in the first argument to `__libc_start_main`. Record the address as your response to Question 6. It should look eerily similar to `$MAIN`.
+So, what have we learned? We learned that the function called at `0x10a8` will call the function whose address is in its first parameter. Use your knowledge of the System V Calling Convention to determine the address passed in the first argument to `__libc_start_main`. Record the address as your response to Question 6. It should look eerily similar to `$MAIN`.
 
 Yes, that *was* a bunch of work just to determine that the instructions starting at address `$MAIN` do, indeed, constitute the `main` function of `scooby_slim`. I think it was worth it!
 
 ### The Main Course
 
-Take a quick scan of the instructions starting at `$MAIN`. What we can see is that there are no `jmp` instructions between `$MAIN` and the `ret` at `1264`. Without a `jmp`, there's really no way for the function repeat any instructions. If no instructions are repeated, then there *probably* isn't a loop. 
+Take a quick scan of the instructions starting at `$MAIN`. What we can see is that there are no `jmp` instructions between `$MAIN` and the `ret` at `1267`. Without a `jmp`, there's really no way for the function repeat any instructions. If no instructions are repeated, then there *probably* isn't a loop. 
 
-Remember that our goal is to find and analysis a function that copies memory -- our working hypothesis is that a function that copies memory uses a loop. This assumption is not altogether bad and we will continue to grant the premise until proven wrong.
+Remember that our goal is to find and analyse a function that copies memory -- our working hypothesis is that a function that copies memory uses a loop. This assumption is not altogether bad and we will continue to grant the premise until proven wrong.
 
 That means our inscrutable instructions are somewhere else. But, where?
 
-Assuming the identity of the CPU for a moment, we will branch out from the `main` function through `call`s at `1219`, `122a`, `1241` and `1259`. `objdump` properly recognizes that the calls at `122a` and `1259` are to `calloc` and `printf` respectively (through the PLT). Because those are functions provided by the standard library, we will assume that they are not the ones that we want to analyze for malicious behavior.
+Assume the identity of the CPU for a moment. We will branch out from the `main` function through `call`s at `121c`, `122d`, `1244` and `125c`. `objdump` properly recognizes that the calls at `122d` and `125c` are to `calloc` and `printf`, respectively (through the PLT). Because those are functions are provided by the standard library, we will assume that they are not the ones that we want to analyse for malicious behavior.
 
-That leaves us to analyse the code beginning at the addresses `11c1` and `0x1169`. We will assume (for grammatical purposes) that the code beginning at these addresses are functions.
+That leaves us to analyse the code beginning at the addresses `11c1` and `1169`. We will assume (for grammatical purposes) that the code beginning at these addresses are functions.
 
 ### I'll Help With the Shorter One
 
