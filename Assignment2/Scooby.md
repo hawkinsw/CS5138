@@ -1,6 +1,12 @@
+**Assignment Mechanics**
+
+This assignment is worth 100 points and there are 15 possible extra credit points. The exact breakdown of points per question is available in `submission.txt`. 
+
+This assignment is due on March 25th at 11:59pm. Submit your completed `submission.txt` through Canvas by the deadline. Please do *not* include your name anywhere in the `submission.txt` file (makes anonymous grading possible) but be sure to include your *Hacker Motto*.
+
 ## Scooby's Magical Mystery Bus
 
-In this assignment we are going to disassemble and analyse a mysterious program that our front-line security team has spotted stealing data from our network. Our vanguard only knows so much about the program -- that it appears to include a function that copies memory from one place to another. They are convinced that the function is malicious. We are going to determine whether the functionality they have discovered is actually malicious or not!
+In this assignment we are going to disassemble and analyse a mysterious program that our front-line security team has spotted stealing data from our network. Our vanguard only knows so much about the program -- that it appears to include a function that copies memory from one place to another. They are convinced that the function is malicious. We are going to determine whether the functionality they flagged is actually malicious or not!
 
 Let's get to work!
 
@@ -14,7 +20,30 @@ Use the following command to generate a file named `scooby_slim.obj` that includ
 $ objdump -Mintel -d scooby_slim > scooby_slim.obj
 ```
 
-We cannot go any further in this investigation unless we have a valid disassembly of `scooby_slim`. Confirm that you did the disassembly correctly. Your `scooby_slim.obj` file should begin with the first twenty lines:
+**Digression**
+
+> `gdb` will print disassembled instructions in AT&T format by default. Thankfully there is a way to change its format. Once at the `gdb` command line (i.e., *after* you have started `gdb`), you can issue the `set disassembly-flavor intel` command. 
+
+```
+(gdb) set disassembly-flavor intel
+```
+
+> You can verify that you correctly set the `disassembly-flavor` using a `show` command, `show disassembly-flavor`.
+
+```
+(gdb) show disassembly-flavor 
+The disassembly flavor is "intel".
+```
+
+> Wouldn't it be nice if we didn't have to type this every time? Yes!! To make the change permanent, you can create a file in your home directory (i.e., `~`) named `.gdbinit` and add the `set disassembly-flavor intel` command to it. The commands in the `~/.gdbinit` file get executed every time `gdb` starts. For reference, here is my `~/.gdbinit` file:
+
+```
+set disassembly-flavor intel
+set history filename ~/.gdb_history
+set history save on
+```
+
+We cannot go any further in this investigation unless we have a valid disassembly of `scooby_slim`. Confirm that you did the disassembly correctly by comparing the first twenty lines of your `scooby_slim.obj` file with the following:
 
 ```
 scooby_slim:     file format elf64-x86-64
@@ -78,7 +107,7 @@ Use the `file` command to find an unstripped program somewhere on the file syste
 
 ### Finding Functions
 
-Well, we're in trouble. `scooby_slim` is stripped. That means we are too close for missiles and we'll have to switch to guns. Not all hope is lost. Recall from class that there is a prologue that functions typically use to complete the creation of the activation record that the caller started. In particular, a function typically starts by stashing away `rbp`, moving the current stack pointer into `rbp` and then allocating space on the stack for local variables (by adjusting `rsp` down).
+Well, we're in trouble. `scooby_slim` is stripped. That means we are too close for missiles and we'll have to switch to guns. Not all hope is lost. Recall from class that there is a prologue that functions ("callees") typically use to complete the creation of the activation record that the caller started. In particular, a function typically starts by stashing away `rbp`, moving the current stack pointer (`rsp`) into `rbp` and then allocating space on the stack for local variables (by adjusting `rsp` down).
 
 In the `.text` section of `scooby_slim` find the likely location of the start of functions. Record the address of these function candidates as the response to Question 2 in `submission.txt`.
 
@@ -98,7 +127,7 @@ Let's see if we can conceptualize an execution path between the entry point and 
 
 This is curious. The call here is unconditional -- the program control will absolutely be transferred to the address *in the eight bytes at `[rip + 0x2f32]`* `objdump` helpfully calculates `$rip + 0x2f32`: `3fe0`. Look through the `objdump` file -- does it contain a snapshot of the byte values at that address? No! 
 
-Despair. Fortunately, we have another set of tools in our toolbelt: `hexdump` and `readelf`. In past Mini Assignments we learned how to a) determine the section of the ELF containing a given program's address and b) use `hexdump` to determine the initial values of those bytes when the program executes. Use `readelf` and `hexdump` to calculate the *file address* of *program address* `0x3fe0` and the initial value of the 8 bytes at that address. Record your responses as the answer to Question 5.
+Despair. Fortunately, we have another set of tools in our toolbelt: `hexdump` and `readelf`. In past Mini Assignments we learned how to a) determine the section of the ELF file containing a given program's address and b) use `hexdump` to determine the initial values of those bytes when the program executes. Use `readelf` and `hexdump` to calculate the *file address* of *program address* `0x3fe0` and the initial value of the 8 bytes at that address. Record your responses as the answer to Question 5.
 
 ### Extra Credit: Dynamic Analysis of Program Execution Between 0x10a8 and `$MAIN`
 
@@ -106,7 +135,7 @@ For extra credit, combine your knowledge of the mechanics of dynamic linking and
 
 ### What If I Told You ...
 
-At runtime, the contents of the 8 bytes at `0x3fe0` contain a pointer to `__libc_start_main`. Look at the specified behavior of this function online [here](http://refspecs.linux-foundation.org/LSB_4.1.0/LSB-Core-generic/LSB-Core-generic.html#BASELIB---LIBC-START-MAIN-). Wow, this is really cool! We can determine that the function (indirectly) invoked at `0x10a8` will eventually call the function at the *address* in its first parameter. 
+At runtime, the contents of the 8 bytes at `0x3fe0` contain a pointer to `__libc_start_main`. As a result, the call at `10a8` invokes this function. Look at the specified behavior of this function online [here](http://refspecs.linux-foundation.org/LSB_4.1.0/LSB-Core-generic/LSB-Core-generic.html#BASELIB---LIBC-START-MAIN-). Wow, this is really cool! We can determine that the function (indirectly) invoked at `0x10a8` will eventually call the function at the *address* in its first parameter. 
 
 Having trouble groking the *type* of the first parameter to `__libc_start_main`? Yes, me too! Fortunately, there's an awesome tool that converts types written in C into "plain" English -- `cdecl`. You will need to install in on Kali:
 
@@ -122,21 +151,21 @@ $ cdecl explain "int (*main) (int, char * *, char * *)"
 
 Woah, so much easier to read and just what we expected based on our C knowledge of the signature of `main`. Note: Yes, there *is* a third parameter to `main` and almost everyone (including me) forgets that it is there. The third argument is a pointer to the values of environment variables.
 
-So, what have we learned? We learned that the function called at `0x10a8` will call the function whose address is in its first parameter. Use your knowledge of the System V Calling Convention to determine the address passed in the first argument to `__libc_start_main`. Record the address as your response to Question 6. It should look eerily similar to `$MAIN`.
+So, what have we learned? We learned that the function called at `0x10a8` will ultimately call the function whose address is in its first parameter. Use your knowledge of the System V Calling Convention to determine the address passed in the first argument to `__libc_start_main`. Record the address as your response to Question 6. It should look eerily similar to `$MAIN`.
 
 Yes, that *was* a bunch of work just to determine that the instructions starting at address `$MAIN` do, indeed, constitute the `main` function of `scooby_slim`. I think it was worth it!
 
 ### The Main Course
 
-Take a quick scan of the instructions starting at `$MAIN`. What we can see is that there are no `jmp` instructions between `$MAIN` and the `ret` at `1267`. Without a `jmp`, there's really no way for the function repeat any instructions. If no instructions are repeated, then there *probably* isn't a loop. 
+Take a quick scan of the instructions starting at `$MAIN`. What we can see is that there are no `jmp` instructions between `$MAIN` and the `ret` at `1267`. Without a `jmp`, there's really no way for the function to repeat any instructions. If no instructions are repeated, then there *probably* isn't a loop. 
 
 Remember that our goal is to find and analyse a function that copies memory -- our working hypothesis is that a function that copies memory uses a loop. This assumption is not altogether bad and we will continue to grant the premise until proven wrong.
 
 That means our inscrutable instructions are somewhere else. But, where?
 
-Assume the identity of the CPU for a moment. We will branch out from the `main` function through `call`s at `121c`, `122d`, `1244` and `125c`. `objdump` properly recognizes that the calls at `122d` and `125c` are to `calloc` and `printf`, respectively (through the PLT). Because those are functions are provided by the standard library, we will assume that they are not the ones that we want to analyse for malicious behavior.
+Assume the identity of the CPU for a moment. We will branch out from the `main` function through `call`s at `121c`, `122d`, `1244` and `125c`. `objdump` properly recognizes that the `call`s at `122d` and `125c` are to `calloc` and `printf`, respectively (through the PLT). Because those are functions are provided by the standard library, we will assume that they are not the ones that we want to analyse for malicious behavior.
 
-That leaves us to analyse the code beginning at the addresses `11c1` and `1169`. We will assume (for grammatical purposes) that the code beginning at these addresses are functions.
+That leaves us to analyse the code beginning at the addresses `11c1` and `1169`. We will assume (for grammatical purposes) that the code beginning at these addresses constitute functions.
 
 ### I'll Help With the Shorter One
 
@@ -152,41 +181,42 @@ Simply the prologue. We don't need to say anything more!
 ```
     11c9: 48 89 7d e8           mov    QWORD PTR [rbp-0x18],rdi
 ```
-We know that `rdi` contains the first argument (if it can fit in 8 bytes). This statement appears to be storing the value of the first parameter in the 8 bytes
+We know that `rdi` contains the first argument (if it can fit in 8 bytes). This `mov` appears to be storing the value of the first parameter in the 8 bytes
 between `rbp - 0x18` and `rbp - 0x10`. We will call the value of these 8 bytes  `param`. 
 
 ```
     11cd: 48 c7 45 f8 00 00 00  mov    QWORD PTR [rbp-0x8],0x0
 ```
-This instruction zero initializes the 8 bytes between `rbp - 0x8` and `rbp`. We will refer to the value of these 8 bytes as `local`. In C, this instruction might translate to
+This `mov` zero initializes the 8 bytes between `rbp - 0x8` and `rbp`. We will refer to the value of these 8 bytes as `local`. In C, this instruction might translate to
 
 ```
 int local = 0;
 ```
 
-We have a curious space of uninitialized bytes on the stack. Record the address (relative to `rbp`) of the 8 allocated but uninitialized byes on the stack as your answer to Question 7.
+We have a curious space of uninitialized bytes on the stack. Record the address (relative to `rbp`) of the 8 allocated but uninitialized bytes on the stack as your answer to Question 7.
 
 ```
     11d4: 00
     11d5: 90                    nop
     11d6: 48 8b 45 f8           mov    rax,QWORD PTR [rbp-0x8]
 ```
-We will later determine that the instruction at `11d6` begins the set of instructions that constitute the body of a loop. For now, we will simply note that this instruction loads `local` in to register `rax`.
+We will later determine that the instruction at `11d6` begins the set of instructions that constitute the body of a loop. For now, we will simply note that this instruction loads `local` into register `rax`.
 
 ```
     11da: 48 8d 50 01           lea    rdx,[rax+0x1]
 ```
-This instruction is a great example of the way that the lea instruction can be used to do normal arithmetic. lea is used to add 1 to `rax` and store the result in `rdx`. Yes, this use of the lea instruction to essentially perform arithmetic is common.
+This instruction is a great example of the way that the `lea` instruction can be used to do normal arithmetic. `lea` is used to add 1 to `rax` and store the result in `rdx`. Yes, this use of the `lea` instruction to essentially perform arithmetic is common.
 
 ```
     11de: 48 89 55 f8           mov    QWORD PTR [rbp-0x8],rdx
 ```
-Store `rdx` in `local`. We have essentially added on to `local`. In C, the preceding two instructions could be written
+Store `rdx` in `local`. The last two instructions have essentially incremented `local` by one. In C, the preceding two instructions could be written
 
 ```
 local = local + 1;
 ```
 
+*Crucially*, however, the value of `rax` *has not changed* from the value that was originally read from memory. So, `rax` contains the value of `local` before it was incremented!
 ```
     11e2: 48 8b 55 e8           mov    rdx,QWORD PTR [rbp-0x18]
 ```
@@ -195,10 +225,10 @@ Load `param` in to `rdx`.
 ```
     11e6: 48 01 d0              add    rax,rdx
 ```
-Add `rdx` to `rax` and store the value in `rax`. Semantically, we know that `rax` now holds `param` + `local`. In C, we could imagine this looks like
+Add `rdx` to `rax` and store the value in `rax`. Semantically, we know that `rax` now holds `param` + `local` (*before `local` was incremented*)`. In C, we could imagine this looks like
 
 ```
-int address = param + local;
+int address = param + (local-1);
 ```
 
 Yes, that variable name was chosen intentionally!
@@ -207,7 +237,7 @@ Yes, that variable name was chosen intentionally!
     11e9: 0f b6 00              movzx  eax,BYTE PTR [rax]
 ```
 
-Now, move the byte *at the address* `rax` into `eax` and zero sign extend the 1 byte value so that it fills 4 bytes without changing its meaning. What could possibly be going on here? We can infer that the calculated value of `rax` is some type of a pointer to some byte in memory. It stands to reason that we are loading the byte *at that address* in to eax. The bottom line is that `rax` (before it is overwritten by this `movz`) is a pointer! We might get the above instruction generated by C code that looks like:
+Now, move the byte *at the address* `rax` into `eax` and zero sign extend the 1 byte value so that it fills 4 bytes without changing its meaning. What could possibly be going on here? We can infer that the calculated value of `rax` is some type of a pointer to a byte in memory. It stands to reason that we are loading the byte *at that address* into `eax`. The bottom line is that `rax` (before it is overwritten by this `movz`) is a pointer! We might get the above instruction generated by a compiler that sees (pun intended) C code that looks like:
 
 ```
 char temp_byte = *address;
@@ -217,18 +247,18 @@ char temp_byte = *address;
     11ec: 84 c0                 test   al,al
 ```
 
-Now, use the test instruction to set a flag in the FLAGS register. `al` is the one-byte version of the r/eax register. test does a bitwise and of its two register operands and sets `ZF` of the FLAGS register to 1 if the result is 0. In other words,
+The `test` instruction is used will set a flag in the `FLAGS` register based on a bitwise *and* of the contents of its two operands and sets `ZF` of the `FLAGS` register to 1 if the result is 0. `al` is the one-byte version of the `r/eax` register.  In other words,
 
 ```
-if al & al == 0 
+if (the lower 8 bits of r/eax) & (the lower 8 bits of r/eax) == 0 
   ZF = 1; 
 else
   ZF = 0;
 ```
-Because `al` is used on both sides of the bitwise & operator, we can simplify:
+Because the same operand is used on both sides of the bitwise & operator, we can simplify:
 
 ```
-if al == 0
+if (the lower 8 bits of r/eax) == 0
   ZF = 1; 
 else
   ZF = 0;
@@ -236,20 +266,20 @@ else
 ```
     11ee: 75 e6                 jne    11d6 <calloc@plt+0x166>
 ```
-jne will transfer program control to `11d6` if `ZF = 0`. We can synthesize our accumulation of facts and determine that the combination of the test and the jne instruction will transfer program control to `11d6` as long as the contents of the byte at `param` + `local` are not `0`.
+`jne` will transfer program control to `11d6` if `ZF = 0`. We can synthesize our accumulation of facts and determine that the combination of the `test` and the `jne` instruction will transfer program control to `11d6` as long as the contents of the byte at `param` + `(local-1)` are not `0`.
 
 In the case where we do *not* transfer control to `11d6` at `11ee`, we continue ...
 
 ```
     11f0: 48 8b 45 f8           mov    rax,QWORD PTR [rbp-0x8]
 ```
-Put _local_ in to `rax`.
+Put `local` into `rax`.
 
 ```
     11f4: 5d                    pop    rbp
     11f5: c3                    ret
 ```
-From our knowledge of the calling conventions we know that `rax` holds the return value of a function and its value is `local` when the function ends. We can infer, then, that this function returns the value of _local_.
+From our knowledge of the System V ABI Calling Conventions we know that `rax` holds the return value of a function (if it will fit). `rax`'s value is `local - 1` when the function ends. We can infer, then, that this function returns the value of `local - 1`.
 
 We have lots of facts, but not much knowledge. Let's try to mentally *lift* the machine code into C:
 
@@ -259,9 +289,25 @@ int unknown_function(char *param) {
   char temp_byte = '\0';
   do {
     local = local + 1;
-    int address = (uint64_t)param + local;
+    int address = (uint64_t)param + (local-1);
     temp_byte = *address;
   } while (temp_byte != 0);
+}
+return local - 1;
+```
+
+The `local - 1` bit is really annoying. Let's rewrite it:
+
+```
+int unknown_function(char *param) {
+  int local = 0;
+  int address = (uint64_t)param + local;
+  char temp_byte = *address;
+  while (temp_byte != 0) {
+    local = local + 1;
+    address = (uint64_t)param + local;
+    temp_byte = *address;
+  }
 }
 return local;
 ```
@@ -271,13 +317,51 @@ We will do some hocus pocus and deploy our mental C compiler to rewrite that cod
 ```
 int unknown_function(char *param) {
   int local = 0;
-  char temp_byte = '\0';
-  do {
+  char temp_byte = param[local];
+  while (temp_byte != 0) {
     local = local + 1;
-    temp_byte = param[local];
-  } while (temp_byte != '\0');
+    temp_byte = param[local]
+  }
 }
 return local;
+```
+
+Let's rename `local` to something more meaningful:
+
+```
+int unknown_function(char *param) {
+  int index = 0;
+  char temp_byte = param[index];
+  while (temp_byte != 0) {
+    index = index + 1;
+    temp_byte = param[index]
+  }
+}
+return index;
+```
+
+And, a final rewrite to remove that pesky, useless temporary variable `temp_byte`:
+
+```
+int unknown_function(char *param) {
+  int index = 0;
+  while (param[index] != 0) {
+    index = index + 1;
+  }
+}
+return index;
+```
+
+I lied. Let's make one final change. From the ASCII table we know that 0 is the same as '\0':
+
+```
+int unknown_function(char *param) {
+  int index = 0;
+  while (param[index] != '\0') {
+    index = index + 1;
+  }
+}
+return index;
 ```
 
 Oh, *now* that looks like some C code that we would really write. In fact, it is likely you *have* written code like this before. Interpret the loop above to determine what it calculates. Hint: [Think about how strings are represented in C](https://www.gnu.org/software/libc/manual/html_node/Representation-of-Strings.html). Record you response as the answer to Question 8 in `submission.txt`. Give this function a meaningful name. Record your response as the answer to Question 9 in `submission.txt`. Congratulations, you just reverse engineered your first function!
@@ -300,7 +384,7 @@ We've seen this movie before -- just do the function prologue work.
     1175: 48 89 75 e0           mov    QWORD PTR [rbp-0x20],rsi
 ```
 
-Store the first two arguments on the stack. The 8 bytes between `rbp - 0x18` and `rbp - 0x10` contain rdi, the first parameter. We will refer to this parameter as `d`. The 8 bytes between `rbp - 0x20` and `rbp - 0x18` contain `rdi`. We will refer to this parameter as `s`.
+Store the first two arguments on the stack. The 8 bytes between `rbp - 0x18` and `rbp - 0x10` contain `rdi`, the first parameter. We will refer to this parameter as `d`. The 8 bytes between `rbp - 0x20` and `rbp - 0x18` contain `rsi`. We will refer to this parameter as `s`.
 
 ```
     1179: 48 c7 45 f0 00 00 00  mov    QWORD PTR [rbp-0x10],0x0
@@ -375,17 +459,22 @@ Determine whether `al` (the 8-bit version of the `r/eax` register) contains 0.
 ```
     11bb: 75 cd                 jne    118a <calloc@plt+0x11a>
 ```
-If it does not, jump back to `118a` and do it again!
+If it does not, jump back to `118a` and do it again! Otherwise, fall through and finish the function with the next two instructions.
 
 ```
     11bf: 5d                    pop    rbp
     11c0: c3                    ret
 ```
-Note that we do *not* intentionally set `rax` before finishing the function. Curious. It likely means that there is no return value for this function.
+Note that we do *not intentionally* set `rax` before finishing the function. Curious. There are two possible reasons for this omission:
+
+1. The value of `rax` at the point of the return is the function's return value.
+2. There is no return value for this function.
+
+Let's assume the latter but we cannot discount the former.
 
 Okay, now it's your turn! As we did for the previous function we disassembled, craft *lifted* C code for the function you just disassembled. Record your response as the answer to Question 10 in `submission.txt`.
 
-With a set of C code to work from, interpret the semantics of the function you just disassembled. Record your response as the answer to Question 11 in `submission.txt`. Finally, name the function and record that as your answer to Question 12 in `submission.txt`.
+With a set of C code to work from, interpret the semantics of the function you just disassembled. Record your response as the answer to Question 11 in `submission.txt`. In the course of your analysis, answer the question posed to you by your analysts: Is this function the one that concerned them and is it really malicious? Finally, name the function and record that as your answer to Question 12 in `submission.txt`.
 
 Wow, you did it! 
 

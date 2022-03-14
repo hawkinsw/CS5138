@@ -1,30 +1,29 @@
-Name:
 Hacker Motto:
 
-Question 1: Evidence that you were able to find a stripped and unstripped binary on the system.
+Question 1 (5 pts): Evidence that you were able to find a stripped and unstripped binary on the system.
 
-Question 2: The possible address(es) of functions in the .text segment of scooby.
+Question 2 (5 pts): The possible address(es) of functions in the .text segment of scooby.
 
-Question 3: The technical term for functions that do not call other functions; description of the technology (optimization!) that makes it possible for those types of functions to do their work without having to allocate space on the stack.
+Question 3 (10 pts): The technical term for functions that do not call other functions; description of the technology (optimization!) that makes it possible for those types of functions to do their work without having to allocate space on the stack.
 
-Question 4: The entry point of scooby_slim.
+Question 4 (5 pts): The entry point of scooby_slim.
 
-Question 5: Address of program address 0x3fe0 in the ELF file and the initial contents of the 8 bytes at this address.
+Question 5 (10 pts): Address of program address 0x3fe0 in the ELF file and the initial contents of the 8 bytes at this address.
 
-Question 6: Address passed as the argument to __libc_start_main.
+Question 6 (5 pts): Address passed as the first argument to __libc_start_main.
 
-Question 7: The address of the 8 bytes uninitialized on the stack.
+Question 7 (5 pts): The address of the 8 bytes uninitialized on the stack.
 
-Question 8: Your interpretation of the semantics of the function starting at address 0x11c1.
+Question 8 (10 pts): Your interpretation of the semantics of the function starting at address 0x11c1.
 
-Question 9: Your name for the function starting at address 0x11c1.
+Question 9 (5 pts): Your name for the function starting at address 0x11c1.
 
-Question 10: Your lifted C code for the function starting at address 0x1169.
+Question 10 (15 pts): Your lifted C code for the function starting at address 0x1169.
 
-Question 11: The semantics of the function starting at address 0x1169.
+Question 11 (20 pts): The semantics of the function starting at address 0x1169.
 
-Question 12: Your name for the function starting at 0x1169.
+Question 12 (5 pts): Your name for the function starting at 0x1169.
 
-Extra Credit 1:
+Extra Credit 1 (10 pts):
 
-Extra Credit 2:
+Extra Credit 2 (5 pts):
