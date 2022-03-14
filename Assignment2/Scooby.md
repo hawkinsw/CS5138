@@ -2,7 +2,7 @@
 
 This assignment is worth 100 points and there are 15 possible extra credit points. The exact breakdown of points per question is available in `submission.txt`. 
 
-This assignment is due on March 25th at 11:59pm. Submit your completed `submission.txt` through Canvas by the deadline. Please do *not* include your name anywhere in the `submission.txt` file (makes anonymous grading possible) but be sure to include your *Hacker Motto*.
+This assignment is due on March 28th at 11:59pm. Submit your completed `submission.txt` through Canvas by the deadline. Please do *not* include your name anywhere in the `submission.txt` file (makes anonymous grading possible) but be sure to include your *Hacker Motto*.
 
 ## Scooby's Magical Mystery Bus
 
