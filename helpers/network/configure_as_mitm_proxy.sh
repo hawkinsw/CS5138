@@ -34,7 +34,7 @@ ip6tables -t nat -A PREROUTING -i ${OUTBOUND_IFACE} -p tcp --dport 80 -j REDIREC
 ip6tables -t nat -A PREROUTING -i ${OUTBOUND_IFACE} -p tcp --dport 443 -j REDIRECT --to-port 8080
 
 # Now, launch it!
-SSLKEYLOGFILE="${KEYFILE_FILE}" mitmproxy --mode transparent --showhost --set block_global=false --ignore-hosts ${IGNORE_REGEX} 
+SSLKEYLOGFILE="${KEYFILE_FILE}" mitmproxy --mode transparent --verbose --set stream_large_bodies=3m --showhost --set block_global=false --ignore-hosts ${IGNORE_REGEX}
 
 # Remove the iptables/ip6tables redirection rules -- just
 # to be safe.
