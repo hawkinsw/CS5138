@@ -78,16 +78,33 @@
 
 00000000000011c9 <_Z9actionateRK10Actionable>:
     11c9:	f3 0f 1e fa          	endbr64 
+		# Reserve some space on the stack!
     11cd:	55                   	push   rbp
     11ce:	48 89 e5             	mov    rbp,rsp
     11d1:	48 83 ec 10          	sub    rsp,0x10
+		# We want to store the first argument in the eight bytes between
+		# rbp - 0x8 and rbp - 0x0
     11d5:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+		# Now, move that back out into rax.
     11d9:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+		# Dereference rax into rax. This motion makes sense because we know that
+		# the argument was a reference (ie, pointer) to an Actionable.
     11dd:	48 8b 00             	mov    rax,QWORD PTR [rax]
+		# March forward by 8 bytes.
     11e0:	48 83 c0 08          	add    rax,0x8
+		# There should be an address at this point! Store that address in
+		# to rdx. 
     11e4:	48 8b 10             	mov    rdx,QWORD PTR [rax]
+		# Now, load the function's argument (a pointer to the Actionable object
+		# passed as the argument) into rax.
     11e7:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+		# Move rax into rdi -- we know what *that* means -- rax is about to be used
+		# as the first parameter in a function call. This *seems* to make sense.
+		# Calling a member function means that the first argument to the function
+		# is actually "this". 
     11eb:	48 89 c7             	mov    rdi,rax
+		# Now, call the function whose pointer is in rdx. And what was that? Well,
+		# it was the pointer stored 8 bytes ahead of the beginning of the object.
     11ee:	ff d2                	call   rdx
     11f0:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
     11f4:	48 8b 00             	mov    rax,QWORD PTR [rax]
@@ -186,10 +203,23 @@
     132c:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
     1330:	48 8d 15 f1 29 00 00 	lea    rdx,[rip+0x29f1]        # 3d28 <_ZTV10Actionable+0x10>
     # So, we know that rdx contains the address of the vtable pointer for Actionable.
-    # 0x134c (addr of Actionable::take_action), 0x1396 (Actionable::default_action)
+    # 0x134c: addr of Actionable::take_action,
+		# 0x1396: addr of Actionable::default_action
+		# We can calculate this as such:
+		# The address for the default_action function is 8 bytes ahead of the base
+		# of the object.
+		# The address for the take_action function is 0 bytes ahead of the base 
+		# of the object.
     1337:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+		# This means that the first 8 bytes of the memory constructed for this
+		# object point to the vtable for the class.
     133b:	48 89 10             	mov    QWORD PTR [rax],rdx
     133e:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+		# After the 8 bytes for the vtable pointer, we now have space for the local
+		# variables. In this case, the first local variable is the only local variable
+		# and, therefore, is the space to hold m_identifier. Because the default
+		# constructor for the Actionable class initializes the value to 0xba3e,
+		# we see that value here.
     1342:	c7 40 08 3e ba 00 00 	mov    DWORD PTR [rax+0x8],0xba3e
     1349:	90                   	nop
     134a:	5d                   	pop    rbp
@@ -249,18 +279,29 @@
     13e8:	48 83 ec 10          	sub    rsp,0x10
     13ec:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
     13f0:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+		# This is going to call the base class constructor with a pointer
+		# to this's "this". As a result of this initialization, the 
+		# vtable for it, as a result, is set to the vtable for the Actionable.
     13f4:	48 89 c7             	mov    rdi,rax
     13f7:	e8 28 ff ff ff       	call   1324 <_ZN10ActionableC1Ev>
+		# Now, overwrite the default vtable with one that was built for Mathematic.
     13fc:	48 8d 15 fd 28 00 00 	lea    rdx,[rip+0x28fd]        # 3d00 <_ZTV10Mathematic+0x10>
-    # 0x1418: Mathematic::take_action
-    # 0x1396: Actionable::default_action (ie, we do not override this one!)
-    # 0x1462: Mathematic::take_mathematic_action
+    # 0x1418: addr of Mathematic::take_action
+    # 0x1396: addr of Actionable::default_action (ie, we do not override this one!)
+    # 0x1462: addr of Mathematic::take_mathematic_action
     # Load the vpointer into the proper spot!
     1403:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
     1407:	48 89 10             	mov    QWORD PTR [rax],rdx
+		# Now, load the pointer to this back into rax.
     140a:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
     # We put our private variable at rax + 0xc because our parent
     # element requires 0xc bytes of storage (including space for vpointer)
+		# eight bytes for the vpointer and 4 bytes for the member variable. Note:
+		# we do not want to destroy the private member variable of the same
+		# name in the base class. That private member variable is still accessible
+		# from any functions implemented by the base class and is different
+		# than the private member variable in this class, even though they have
+		# the same name! Ie, there is no way to override a member variable!
     140e:	c7 40 0c 71 de 00 00 	mov    DWORD PTR [rax+0xc],0xde71
     1415:	90                   	nop
     1416:	c9                   	leave  
