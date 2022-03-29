@@ -103,7 +103,7 @@ $ file a.out
 a.out: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=07ef2a721513aa4b9dce2d4bedc22d7fc69903f6, for GNU/Linux 3.2.0, stripped
 ```
 
-Use the `file` command to find an unstripped program somewhere on the file system of your Kali virtual machine. Hint: Check out the `/usr/share/spike/dcedump/ifids` binary. Next, use the `file` command to find a stripped program somewhere on the file system of your Kali virtual machine. Hint: Look at *any* file in `/usr/bin`. For both the stripped and unstripped binary, record the output of `readelf` in `submission.txt` as the answer to Question 1.
+Use the `file` command to find an unstripped program somewhere on the file system of your Kali virtual machine. Hint: Check out the `/usr/share/spike/dcedump/ifids` binary. Next, use the `file` command to find a stripped program somewhere on the file system of your Kali virtual machine. Hint: Look at *any* file in `/usr/bin`. For both the stripped and unstripped binary, record the output of `file` in `submission.txt` as the answer to Question 1.
 
 ### Finding Functions
 
