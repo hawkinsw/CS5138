@@ -1,0 +1,257 @@
+     1	#include <iostream>
+     2	
+     3	class Vehicle {
+     4	public:
+     5	  Vehicle() : m_price{0xba3e} {};
+     6	  virtual bool needs_gas() { return true; }
+     7	
+     8	private:
+     9	  int m_price;
+    10	};
+    11	
+    12	class EV : public Vehicle {
+    13	public:
+    14	  EV() : m_price{0xe11} {};
+    15	  bool needs_gas() final { return false; }
+    16	
+    17	private:
+    18	  int m_price;
+    19	};
+    20	
+    21	class Tesla : public EV {
+    22	public:
+    23	  Tesla() : m_price{0x7e31a} {};
+    24	
+    25	private:
+    26	  int m_price;
+    27	};
+    28	
+    29	class Semi : public Vehicle {
+    30	public:
+    31	  Semi() : m_price{0x1073} {};
+    32	  virtual bool needs_gas() { return false; }
+    33	
+    34	private:
+    35	  int m_price;
+    36	};
+    37	
+    38	void print_if_needs_gas(Vehicle &vehicle) {
+    39	  if (vehicle.needs_gas()) {
+    40	    std::cout << "This vehicle needs gas.\n";
+    41	  } else {
+    42	    std::cout << "This vehicle does not need gas.\n";
+    43	  }
+    44	}
+    45	
+    46	int main() {
+    47	  Semi semi{};
+    48	  Tesla tesla{};
+    49	  EV ev{};
+    50	
+    51	  print_if_needs_gas(semi);
+    52	  print_if_needs_gas(tesla);
+    53	  print_if_needs_gas(ev);
+    54	
+    55	  return 0;
+    56	}
+
+final:     file format elf64-x86-64
+
+00000000000011a9 <_Z18print_if_needs_gasR7Vehicle>:
+    11a9:	f3 0f 1e fa          	endbr64 
+    11ad:	55                   	push   rbp
+    11ae:	48 89 e5             	mov    rbp,rsp
+    11b1:	48 83 ec 10          	sub    rsp,0x10
+    11b5:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+    11b9:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+    11bd:	48 8b 00             	mov    rax,QWORD PTR [rax]
+    11c0:	48 8b 10             	mov    rdx,QWORD PTR [rax]
+    11c3:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+    11c7:	48 89 c7             	mov    rdi,rax
+    11ca:	ff d2                	call   rdx
+    11cc:	84 c0                	test   al,al
+    11ce:	74 15                	je     11e5 <_Z18print_if_needs_gasR7Vehicle+0x3c>
+    11d0:	48 8d 35 32 0e 00 00 	lea    rsi,[rip+0xe32]        # 2009 <_ZStL19piecewise_construct+0x1>
+    11d7:	48 8d 3d 62 2e 00 00 	lea    rdi,[rip+0x2e62]        # 4040 <_ZSt4cout@@GLIBCXX_3.4>
+    11de:	e8 ad fe ff ff       	call   1090 <_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc@plt>
+    11e3:	eb 13                	jmp    11f8 <_Z18print_if_needs_gasR7Vehicle+0x4f>
+    11e5:	48 8d 35 3c 0e 00 00 	lea    rsi,[rip+0xe3c]        # 2028 <_ZStL19piecewise_construct+0x20>
+    11ec:	48 8d 3d 4d 2e 00 00 	lea    rdi,[rip+0x2e4d]        # 4040 <_ZSt4cout@@GLIBCXX_3.4>
+    11f3:	e8 98 fe ff ff       	call   1090 <_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc@plt>
+    11f8:	90                   	nop
+    11f9:	c9                   	leave  
+    11fa:	c3                   	ret    
+
+00000000000011fb <main>:
+    11fb:	f3 0f 1e fa          	endbr64 
+    11ff:	55                   	push   rbp
+    1200:	48 89 e5             	mov    rbp,rsp
+    1203:	48 83 ec 40          	sub    rsp,0x40
+    1207:	64 48 8b 04 25 28 00 	mov    rax,QWORD PTR fs:0x28
+    120e:	00 00 
+    1210:	48 89 45 f8          	mov    QWORD PTR [rbp-0x8],rax
+    1214:	31 c0                	xor    eax,eax
+    1216:	48 8d 45 c0          	lea    rax,[rbp-0x40]
+    121a:	48 89 c7             	mov    rdi,rax
+    121d:	e8 7e 01 00 00       	call   13a0 <_ZN4SemiC1Ev>
+    1222:	48 8d 45 e0          	lea    rax,[rbp-0x20]
+    1226:	48 89 c7             	mov    rdi,rax
+    1229:	e8 3a 01 00 00       	call   1368 <_ZN5TeslaC1Ev>
+    122e:	48 8d 45 d0          	lea    rax,[rbp-0x30]
+    1232:	48 89 c7             	mov    rdi,rax
+    1235:	e8 e2 00 00 00       	call   131c <_ZN2EVC1Ev>
+    123a:	48 8d 45 c0          	lea    rax,[rbp-0x40]
+    123e:	48 89 c7             	mov    rdi,rax
+    1241:	e8 63 ff ff ff       	call   11a9 <_Z18print_if_needs_gasR7Vehicle>
+    1246:	48 8d 45 e0          	lea    rax,[rbp-0x20]
+    124a:	48 89 c7             	mov    rdi,rax
+    124d:	e8 57 ff ff ff       	call   11a9 <_Z18print_if_needs_gasR7Vehicle>
+    1252:	48 8d 45 d0          	lea    rax,[rbp-0x30]
+    1256:	48 89 c7             	mov    rdi,rax
+    1259:	e8 4b ff ff ff       	call   11a9 <_Z18print_if_needs_gasR7Vehicle>
+    125e:	b8 00 00 00 00       	mov    eax,0x0
+    1263:	48 8b 55 f8          	mov    rdx,QWORD PTR [rbp-0x8]
+    1267:	64 48 33 14 25 28 00 	xor    rdx,QWORD PTR fs:0x28
+    126e:	00 00 
+    1270:	74 05                	je     1277 <main+0x7c>
+    1272:	e8 29 fe ff ff       	call   10a0 <__stack_chk_fail@plt>
+    1277:	c9                   	leave  
+    1278:	c3                   	ret    
+
+00000000000012c6 <_GLOBAL__sub_I__Z18print_if_needs_gasR7Vehicle>:
+    12c6:	f3 0f 1e fa          	endbr64 
+    12ca:	55                   	push   rbp
+    12cb:	48 89 e5             	mov    rbp,rsp
+    12ce:	be ff ff 00 00       	mov    esi,0xffff
+    12d3:	bf 01 00 00 00       	mov    edi,0x1
+    12d8:	e8 9c ff ff ff       	call   1279 <_Z41__static_initialization_and_destruction_0ii>
+    12dd:	5d                   	pop    rbp
+    12de:	c3                   	ret    
+    12df:	90                   	nop
+
+    # The Car constructor.
+00000000000012e0 <_ZN7VehicleC1Ev>:
+    12e0:	f3 0f 1e fa          	endbr64 
+    12e4:	55                   	push   rbp
+    12e5:	48 89 e5             	mov    rbp,rsp
+    12e8:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+		# Load a pointer to the vtable for this class.
+    12ec:	48 8d 15 45 2a 00 00 	lea    rdx,[rip+0x2a45]        # 3d38 <_ZTV7Vehicle+0x10>
+		# 0. 0x1308: _ZN7Vehicle9needs_gasEv: Vehicle::needs_gas()
+    12f3:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+    12f7:	48 89 10             	mov    QWORD PTR [rax],rdx
+    12fa:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+    12fe:	c7 40 08 3e ba 00 00 	mov    DWORD PTR [rax+0x8],0xba3e
+    1305:	90                   	nop
+    1306:	5d                   	pop    rbp
+    1307:	c3                   	ret    
+
+0000000000001308 <_ZN7Vehicle9needs_gasEv>:
+    1308:	f3 0f 1e fa          	endbr64 
+    130c:	55                   	push   rbp
+    130d:	48 89 e5             	mov    rbp,rsp
+    1310:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+    1314:	b8 01 00 00 00       	mov    eax,0x1
+    1319:	5d                   	pop    rbp
+    131a:	c3                   	ret    
+    131b:	90                   	nop
+
+    # The EV constructor!
+000000000000131c <_ZN2EVC1Ev>:
+    131c:	f3 0f 1e fa          	endbr64 
+    1320:	55                   	push   rbp
+    1321:	48 89 e5             	mov    rbp,rsp
+    1324:	48 83 ec 10          	sub    rsp,0x10
+    1328:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+    132c:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+    1330:	48 89 c7             	mov    rdi,rax
+		# Call the Car constructor.
+    1333:	e8 a8 ff ff ff       	call   12e0 <_ZN7VehicleC1Ev>
+		# Load a pointer to the vtable for this class.
+		# 0. 0x1354: _ZN2EV9needs_gasEv>: EV::needs_gas()
+    1338:	48 8d 15 e1 29 00 00 	lea    rdx,[rip+0x29e1]        # 3d20 <_ZTV2EV+0x10>
+    133f:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+    1343:	48 89 10             	mov    QWORD PTR [rax],rdx
+    1346:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+    134a:	c7 40 0c 11 0e 00 00 	mov    DWORD PTR [rax+0xc],0xe11
+    1351:	90                   	nop
+    1352:	c9                   	leave  
+    1353:	c3                   	ret    
+
+0000000000001354 <_ZN2EV9needs_gasEv>:
+    1354:	f3 0f 1e fa          	endbr64 
+    1358:	55                   	push   rbp
+    1359:	48 89 e5             	mov    rbp,rsp
+    135c:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+    1360:	b8 00 00 00 00       	mov    eax,0x0
+    1365:	5d                   	pop    rbp
+    1366:	c3                   	ret    
+    1367:	90                   	nop
+
+
+    # This is the Tesla constructor!
+0000000000001368 <_ZN5TeslaC1Ev>:
+    1368:	f3 0f 1e fa          	endbr64 
+    136c:	55                   	push   rbp
+    136d:	48 89 e5             	mov    rbp,rsp
+    1370:	48 83 ec 10          	sub    rsp,0x10
+    1374:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+    1378:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+    137c:	48 89 c7             	mov    rdi,rax
+		# Call the EV Constructor.
+    137f:	e8 98 ff ff ff       	call   131c <_ZN2EVC1Ev>
+		# Load a pointer to the vtable for this class.
+    1384:	48 8d 15 7d 29 00 00 	lea    rdx,[rip+0x297d]        # 3d08 <_ZTV5Tesla+0x10>
+		# 0. 0x1354: _ZN2EV9needs_gasEv>: EV::needs_gas()
+    138b:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+    138f:	48 89 10             	mov    QWORD PTR [rax],rdx
+    1392:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+    1396:	c7 40 10 1a e3 07 00 	mov    DWORD PTR [rax+0x10],0x7e31a
+    139d:	90                   	nop
+    139e:	c9                   	leave  
+    139f:	c3                   	ret    
+
+00000000000013a0 <_ZN4SemiC1Ev>:
+    13a0:	f3 0f 1e fa          	endbr64 
+    13a4:	55                   	push   rbp
+    13a5:	48 89 e5             	mov    rbp,rsp
+    13a8:	48 83 ec 10          	sub    rsp,0x10
+    13ac:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+    13b0:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+    13b4:	48 89 c7             	mov    rdi,rax
+    13b7:	e8 24 ff ff ff       	call   12e0 <_ZN7VehicleC1Ev>
+		# Load a pointer to the vtable for this class.
+    13bc:	48 8d 15 2d 29 00 00 	lea    rdx,[rip+0x292d]        # 3cf0 <_ZTV4Semi+0x10>
+		# 0. 0x13d8: _ZN4Semi9needs_gasEv>: Semi::needs_gas()
+    13c3:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+    13c7:	48 89 10             	mov    QWORD PTR [rax],rdx
+    13ca:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+    13ce:	c7 40 0c 73 10 00 00 	mov    DWORD PTR [rax+0xc],0x1073
+    13d5:	90                   	nop
+    13d6:	c9                   	leave  
+    13d7:	c3                   	ret    
+
+00000000000013d8 <_ZN4Semi9needs_gasEv>:
+    13d8:	f3 0f 1e fa          	endbr64 
+    13dc:	55                   	push   rbp
+    13dd:	48 89 e5             	mov    rbp,rsp
+    13e0:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+    13e4:	b8 00 00 00 00       	mov    eax,0x0
+    13e9:	5d                   	pop    rbp
+    13ea:	c3                   	ret    
+    13eb:	0f 1f 44 00 00       	nop    DWORD PTR [rax+rax*1+0x0]
+
+
+00002cc0  00 00 00 00 00 00 00 00  a0 11 00 00 00 00 00 00  |................|
+00002cd0  c6 12 00 00 00 00 00 00  60 11 00 00 00 00 00 00  |........`.......|
+00002ce0  00 00 00 00 00 00 00 00  40 3d 00 00 00 00 00 00  |........@=......|
+00002cf0  d8 13 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+                                   Beginning of Tesla's VTABLE
+00002d00  58 3d 00 00 00 00 00 00  54 13 00 00 00 00 00 00  |X=......T.......|
+00002d10  00 00 00 00 00 00 00 00  70 3d 00 00 00 00 00 00  |........p=......|
+          Beginning of EV's VTABLE
+00002d20  54 13 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |T...............|
+                                   Beginning of Car's VTABLE
+00002d30  88 3d 00 00 00 00 00 00  08 13 00 00 00 00 00 00  |.=..............|
+00002d40  00 00 00 00 00 00 00 00  49 20 00 00 00 00 00 00  |........I ......|
+00002d50  88 3d 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |.=..............|
