@@ -1,8 +1,9 @@
 #include <cmath>
+#include <stdint.h>
 #include <stdio.h>
 
 double end_speed(double starting_speed, double coefficient_of_friction,
-                 double distance, double mass) {
+                 double distance, uint64_t mass) {
 
   auto gravity = 9.8;
   auto decel = coefficient_of_friction * gravity;
@@ -12,6 +13,6 @@ double end_speed(double starting_speed, double coefficient_of_friction,
 }
 
 int main() {
-  printf("%f\n", end_speed(50.0, .75, 12, 102));
+  printf("%f\n", end_speed(50.0, .75, 12, 0xdeadb));
   return 0;
 }
