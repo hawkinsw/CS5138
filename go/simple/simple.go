@@ -11,7 +11,5 @@ func addOne(base int) int {
 func main() {
 	result := addOne(15)
 
-	fmt.Printf("testing: %v\n", runtime.firstmoduledata)
-
 	fmt.Printf("result: %v\n", result)
 }
