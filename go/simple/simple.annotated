@@ -1,0 +1,405 @@
+     1	package main
+     2	
+     3	import (
+     4		"fmt"
+     5	)
+     6	
+     7	func addOne(base int) int {
+     8		return base + 1
+     9	}
+    10	
+    11	func main() {
+    12		result := addOne(15)
+    13	
+    14		fmt.Printf("testing: %v\n", runtime.firstmoduledata)
+    15	
+    16		fmt.Printf("result: %v\n", result)
+    17	}
+
+There are 23 section headers, starting at offset 0x1c8:
+
+Section Headers:
+  [Nr] Name              Type             Address           Offset
+       Size              EntSize          Flags  Link  Info  Align
+  [ 0]                   NULL             0000000000000000  00000000
+       0000000000000000  0000000000000000           0     0     0
+  [ 1] .text             PROGBITS         0000000000401000  00001000
+       000000000007e60a  0000000000000000  AX       0     0     32
+  [ 2] .rodata           PROGBITS         0000000000480000  00080000
+       00000000000353e3  0000000000000000   A       0     0     32
+  [ 3] .shstrtab         STRTAB           0000000000000000  000b5400
+       000000000000017a  0000000000000000           0     0     1
+  [ 4] .typelink         PROGBITS         00000000004b5580  000b5580
+       00000000000004c0  0000000000000000   A       0     0     32
+  [ 5] .itablink         PROGBITS         00000000004b5a40  000b5a40
+       0000000000000058  0000000000000000   A       0     0     32
+  [ 6] .gosymtab         PROGBITS         00000000004b5a98  000b5a98
+       0000000000000000  0000000000000000   A       0     0     1
+  [ 7] .gopclntab        PROGBITS         00000000004b5aa0  000b5aa0
+       0000000000054118  0000000000000000   A       0     0     32
+  [ 8] .go.buildinfo     PROGBITS         000000000050a000  0010a000
+       0000000000000130  0000000000000000  WA       0     0     16
+  [ 9] .noptrdata        PROGBITS         000000000050a140  0010a140
+       00000000000105e0  0000000000000000  WA       0     0     32
+  [10] .data             PROGBITS         000000000051a720  0011a720
+       0000000000007810  0000000000000000  WA       0     0     32
+  [11] .bss              NOBITS           0000000000521f40  00121f40
+       000000000002ef60  0000000000000000  WA       0     0     32
+  [12] .noptrbss         NOBITS           0000000000550ea0  00150ea0
+       00000000000051a0  0000000000000000  WA       0     0     32
+  [13] .zdebug_abbrev    PROGBITS         0000000000557000  00122000
+       0000000000000127  0000000000000000           0     0     1
+  [14] .zdebug_line      PROGBITS         0000000000557127  00122127
+       000000000001b4d5  0000000000000000           0     0     1
+  [15] .zdebug_frame     PROGBITS         00000000005725fc  0013d5fc
+       0000000000005525  0000000000000000           0     0     1
+  [16] .debug_gdb_script PROGBITS         0000000000577b21  00142b21
+       000000000000002a  0000000000000000           0     0     1
+  [17] .zdebug_info      PROGBITS         0000000000577b4b  00142b4b
+       0000000000033968  0000000000000000           0     0     1
+  [18] .zdebug_loc       PROGBITS         00000000005ab4b3  001764b3
+       000000000001a844  0000000000000000           0     0     1
+  [19] .zdebug_ranges    PROGBITS         00000000005c5cf7  00190cf7
+       0000000000008c06  0000000000000000           0     0     1
+  [20] .note.go.buildid  NOTE             0000000000400f9c  00000f9c
+       0000000000000064  0000000000000000   A       0     0     4
+  [21] .symtab           SYMTAB           0000000000000000  00199900
+       000000000000c138  0000000000000018          22    85     8
+  [22] .strtab           STRTAB           0000000000000000  001a5a38
+       000000000000acc5  0000000000000000           0     0     1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  l (large), p (processor specific)
+# command-line-arguments
+"".addOne STEXT nosplit size=50 args=0x8 locals=0x10 funcid=0x0 align=0x0
+	0x0000 00000 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:5)	TEXT	"".addOne(SB), NOSPLIT|ABIInternal, $16-8
+	0x0000 00000 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:5)	SUBQ	$16, SP
+	0x0004 00004 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:5)	MOVQ	BP, 8(SP)
+	0x0009 00009 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:5)	LEAQ	8(SP), BP
+	0x000e 00014 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:5)	FUNCDATA	$0, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
+	0x000e 00014 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:5)	FUNCDATA	$1, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
+	0x000e 00014 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:5)	FUNCDATA	$5, "".addOne.arginfo1(SB)
+	0x000e 00014 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:5)	MOVQ	AX, "".base+24(SP)
+	0x0013 00019 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:5)	MOVQ	$0, "".~r0(SP)
+	0x001b 00027 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:6)	MOVQ	"".base+24(SP), CX
+	0x0020 00032 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:6)	LEAQ	1(CX), AX
+	0x0024 00036 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:6)	MOVQ	AX, "".~r0(SP)
+	0x0028 00040 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:6)	MOVQ	8(SP), BP
+	0x002d 00045 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:6)	ADDQ	$16, SP
+	0x0031 00049 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:6)	RET
+	0x0000 48 83 ec 10 48 89 6c 24 08 48 8d 6c 24 08 48 89  H...H.l$.H.l$.H.
+	0x0010 44 24 18 48 c7 04 24 00 00 00 00 48 8b 4c 24 18  D$.H..$....H.L$.
+	0x0020 48 8d 41 01 48 89 04 24 48 8b 6c 24 08 48 83 c4  H.A.H..$H.l$.H..
+	0x0030 10 c3                                            ..
+"".main STEXT size=202 args=0x0 locals=0x70 funcid=0x0 align=0x0
+	0x0000 00000 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:9)	TEXT	"".main(SB), ABIInternal, $112-0
+	0x0000 00000 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:9)	CMPQ	SP, 16(R14)
+	0x0004 00004 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:9)	PCDATA	$0, $-2
+	0x0004 00004 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:9)	JLS	188
+	0x000a 00010 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:9)	PCDATA	$0, $-1
+	0x000a 00010 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:9)	SUBQ	$112, SP
+	0x000e 00014 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:9)	MOVQ	BP, 104(SP)
+	0x0013 00019 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:9)	LEAQ	104(SP), BP
+	0x0018 00024 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:9)	FUNCDATA	$0, gclocals·69c1753bd5f81501d95132d08af04464(SB)
+	0x0018 00024 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:9)	FUNCDATA	$1, gclocals·ce02aabaa73fa33b1b70f5cfd490303f(SB)
+	0x0018 00024 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:9)	FUNCDATA	$2, "".main.stkobj(SB)
+	0x0018 00024 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:10)	MOVL	$15, AX
+	0x001d 00029 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:10)	PCDATA	$1, $0
+	0x001d 00029 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:10)	NOP
+	0x0020 00032 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:10)	CALL	"".addOne(SB)
+	0x0025 00037 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:10)	MOVQ	AX, "".result+40(SP)
+	0x002a 00042 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	MOVUPS	X15, ""..autotmp_1+64(SP)
+	0x0030 00048 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	LEAQ	""..autotmp_1+64(SP), CX
+	0x0035 00053 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	MOVQ	CX, ""..autotmp_3+56(SP)
+	0x003a 00058 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	MOVQ	"".result+40(SP), AX
+	0x003f 00063 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	PCDATA	$1, $1
+	0x003f 00063 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	NOP
+	0x0040 00064 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	CALL	runtime.convT64(SB)
+	0x0045 00069 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	MOVQ	AX, ""..autotmp_4+48(SP)
+	0x004a 00074 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	MOVQ	""..autotmp_3+56(SP), CX
+	0x004f 00079 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	TESTB	AL, (CX)
+	0x0051 00081 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	LEAQ	type.int(SB), DX
+	0x0058 00088 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	MOVQ	DX, (CX)
+	0x005b 00091 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	LEAQ	8(CX), DI
+	0x005f 00095 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	PCDATA	$0, $-2
+	0x005f 00095 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	CMPL	runtime.writeBarrier(SB), $0
+	0x0066 00102 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	JEQ	106
+	0x0068 00104 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	JMP	112
+	0x006a 00106 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	MOVQ	AX, 8(CX)
+	0x006e 00110 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	JMP	119
+	0x0070 00112 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	CALL	runtime.gcWriteBarrier(SB)
+	0x0075 00117 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	JMP	119
+	0x0077 00119 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	PCDATA	$0, $-1
+	0x0077 00119 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	MOVQ	""..autotmp_3+56(SP), CX
+	0x007c 00124 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	TESTB	AL, (CX)
+	0x007e 00126 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	NOP
+	0x0080 00128 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	JMP	130
+	0x0082 00130 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	MOVQ	CX, ""..autotmp_2+80(SP)
+	0x0087 00135 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	MOVQ	$1, ""..autotmp_2+88(SP)
+	0x0090 00144 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	MOVQ	$1, ""..autotmp_2+96(SP)
+	0x0099 00153 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	LEAQ	go.string."result: %v\n"(SB), AX
+	0x00a0 00160 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	MOVL	$11, BX
+	0x00a5 00165 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	MOVL	$1, DI
+	0x00aa 00170 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	MOVQ	DI, SI
+	0x00ad 00173 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	PCDATA	$1, $0
+	0x00ad 00173 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:12)	CALL	fmt.Printf(SB)
+	0x00b2 00178 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:13)	MOVQ	104(SP), BP
+	0x00b7 00183 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:13)	ADDQ	$112, SP
+	0x00bb 00187 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:13)	RET
+	0x00bc 00188 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:13)	NOP
+	0x00bc 00188 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:9)	PCDATA	$1, $-1
+	0x00bc 00188 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:9)	PCDATA	$0, $-2
+	0x00bc 00188 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:9)	NOP
+	0x00c0 00192 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:9)	CALL	runtime.morestack_noctxt(SB)
+	0x00c5 00197 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:9)	PCDATA	$0, $-1
+	0x00c5 00197 (/home/hawkinsw/code/uc/CS5138/go/simple/simple.go:9)	JMP	0
+	0x0000 49 3b 66 10 0f 86 b2 00 00 00 48 83 ec 70 48 89  I;f.......H..pH.
+	0x0010 6c 24 68 48 8d 6c 24 68 b8 0f 00 00 00 0f 1f 00  l$hH.l$h........
+	0x0020 e8 00 00 00 00 48 89 44 24 28 44 0f 11 7c 24 40  .....H.D$(D..|$@
+	0x0030 48 8d 4c 24 40 48 89 4c 24 38 48 8b 44 24 28 90  H.L$@H.L$8H.D$(.
+	0x0040 e8 00 00 00 00 48 89 44 24 30 48 8b 4c 24 38 84  .....H.D$0H.L$8.
+	0x0050 01 48 8d 15 00 00 00 00 48 89 11 48 8d 79 08 83  .H......H..H.y..
+	0x0060 3d 00 00 00 00 00 74 02 eb 06 48 89 41 08 eb 07  =.....t...H.A...
+	0x0070 e8 00 00 00 00 eb 00 48 8b 4c 24 38 84 01 66 90  .......H.L$8..f.
+	0x0080 eb 00 48 89 4c 24 50 48 c7 44 24 58 01 00 00 00  ..H.L$PH.D$X....
+	0x0090 48 c7 44 24 60 01 00 00 00 48 8d 05 00 00 00 00  H.D$`....H......
+	0x00a0 bb 0b 00 00 00 bf 01 00 00 00 48 89 fe e8 00 00  ..........H.....
+	0x00b0 00 00 48 8b 6c 24 68 48 83 c4 70 c3 0f 1f 40 00  ..H.l$hH..p...@.
+	0x00c0 e8 00 00 00 00 e9 36 ff ff ff                    ......6...
+	rel 3+0 t=23 type.int+0
+	rel 33+4 t=7 "".addOne+0
+	rel 65+4 t=7 runtime.convT64+0
+	rel 84+4 t=14 type.int+0
+	rel 97+4 t=14 runtime.writeBarrier+-1
+	rel 113+4 t=7 runtime.gcWriteBarrier+0
+	rel 156+4 t=14 go.string."result: %v\n"+0
+	rel 174+4 t=7 fmt.Printf+0
+	rel 193+4 t=7 runtime.morestack_noctxt+0
+go.cuinfo.producer.main SDWARFCUINFO dupok size=0
+	0x0000 2d 4e 20 2d 6c 20 72 65 67 61 62 69              -N -l regabi
+go.cuinfo.packagename.main SDWARFCUINFO dupok size=0
+	0x0000 6d 61 69 6e                                      main
+""..inittask SNOPTRDATA size=32
+	0x0000 00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00  ................
+	0x0010 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+	rel 24+8 t=1 fmt..inittask+0
+go.string."result: %v\n" SRODATA dupok size=11
+	0x0000 72 65 73 75 6c 74 3a 20 25 76 0a                 result: %v.
+runtime.nilinterequal·f SRODATA dupok size=8
+	0x0000 00 00 00 00 00 00 00 00                          ........
+	rel 0+8 t=1 runtime.nilinterequal+0
+runtime.memequal64·f SRODATA dupok size=8
+	0x0000 00 00 00 00 00 00 00 00                          ........
+	rel 0+8 t=1 runtime.memequal64+0
+runtime.gcbits.01 SRODATA dupok size=1
+	0x0000 01                                               .
+type..namedata.*interface {}- SRODATA dupok size=15
+	0x0000 00 0d 2a 69 6e 74 65 72 66 61 63 65 20 7b 7d     ..*interface {}
+type.*interface {} SRODATA dupok size=56
+	0x0000 08 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00  ................
+	0x0010 4f 0f 96 9d 08 08 08 36 00 00 00 00 00 00 00 00  O......6........
+	0x0020 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+	0x0030 00 00 00 00 00 00 00 00                          ........
+	rel 24+8 t=1 runtime.memequal64·f+0
+	rel 32+8 t=1 runtime.gcbits.01+0
+	rel 40+4 t=5 type..namedata.*interface {}-+0
+	rel 48+8 t=1 type.interface {}+0
+runtime.gcbits.02 SRODATA dupok size=1
+	0x0000 02                                               .
+type.interface {} SRODATA dupok size=80
+	0x0000 10 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00  ................
+	0x0010 e7 57 a0 18 02 08 08 14 00 00 00 00 00 00 00 00  .W..............
+	0x0020 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+	0x0030 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+	0x0040 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+	rel 24+8 t=1 runtime.nilinterequal·f+0
+	rel 32+8 t=1 runtime.gcbits.02+0
+	rel 40+4 t=5 type..namedata.*interface {}-+0
+	rel 44+4 t=-32763 type.*interface {}+0
+	rel 56+8 t=1 type.interface {}+80
+type..namedata.*[]interface {}- SRODATA dupok size=17
+	0x0000 00 0f 2a 5b 5d 69 6e 74 65 72 66 61 63 65 20 7b  ..*[]interface {
+	0x0010 7d                                               }
+type.*[]interface {} SRODATA dupok size=56
+	0x0000 08 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00  ................
+	0x0010 f3 04 9a e7 08 08 08 36 00 00 00 00 00 00 00 00  .......6........
+	0x0020 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+	0x0030 00 00 00 00 00 00 00 00                          ........
+	rel 24+8 t=1 runtime.memequal64·f+0
+	rel 32+8 t=1 runtime.gcbits.01+0
+	rel 40+4 t=5 type..namedata.*[]interface {}-+0
+	rel 48+8 t=1 type.[]interface {}+0
+type.[]interface {} SRODATA dupok size=56
+	0x0000 18 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00  ................
+	0x0010 70 93 ea 2f 02 08 08 17 00 00 00 00 00 00 00 00  p../............
+	0x0020 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+	0x0030 00 00 00 00 00 00 00 00                          ........
+	rel 32+8 t=1 runtime.gcbits.01+0
+	rel 40+4 t=5 type..namedata.*[]interface {}-+0
+	rel 44+4 t=-32763 type.*[]interface {}+0
+	rel 48+8 t=1 type.interface {}+0
+type..namedata.*[1]interface {}- SRODATA dupok size=18
+	0x0000 00 10 2a 5b 31 5d 69 6e 74 65 72 66 61 63 65 20  ..*[1]interface 
+	0x0010 7b 7d                                            {}
+type.[1]interface {} SRODATA dupok size=72
+	0x0000 10 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00  ................
+	0x0010 50 91 5b fa 02 08 08 11 00 00 00 00 00 00 00 00  P.[.............
+	0x0020 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+	0x0030 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+	0x0040 01 00 00 00 00 00 00 00                          ........
+	rel 24+8 t=1 runtime.nilinterequal·f+0
+	rel 32+8 t=1 runtime.gcbits.02+0
+	rel 40+4 t=5 type..namedata.*[1]interface {}-+0
+	rel 44+4 t=-32763 type.*[1]interface {}+0
+	rel 48+8 t=1 type.interface {}+0
+	rel 56+8 t=1 type.[]interface {}+0
+type.*[1]interface {} SRODATA dupok size=56
+	0x0000 08 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00  ................
+	0x0010 bf 03 a8 35 08 08 08 36 00 00 00 00 00 00 00 00  ...5...6........
+	0x0020 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+	0x0030 00 00 00 00 00 00 00 00                          ........
+	rel 24+8 t=1 runtime.memequal64·f+0
+	rel 32+8 t=1 runtime.gcbits.01+0
+	rel 40+4 t=5 type..namedata.*[1]interface {}-+0
+	rel 48+8 t=1 type.[1]interface {}+0
+type..importpath.fmt. SRODATA dupok size=5
+	0x0000 00 03 66 6d 74                                   ..fmt
+gclocals·33cdeccccebe80329f1fdbee7f5874cb SRODATA dupok size=8
+	0x0000 01 00 00 00 00 00 00 00                          ........
+"".addOne.arginfo1 SRODATA static dupok size=3
+	0x0000 00 08 ff                                         ...
+gclocals·69c1753bd5f81501d95132d08af04464 SRODATA dupok size=8
+	0x0000 02 00 00 00 00 00 00 00                          ........
+gclocals·ce02aabaa73fa33b1b70f5cfd490303f SRODATA dupok size=10
+	0x0000 02 00 00 00 07 00 00 00 00 02                    ..........
+"".main.stkobj SRODATA static size=24
+	0x0000 01 00 00 00 00 00 00 00 d8 ff ff ff 10 00 00 00  ................
+	0x0010 10 00 00 00 00 00 00 00                          ........
+	rel 20+4 t=5 runtime.gcbits.02+0
+
+simple:     file format elf64-x86-64
+
+Disassembly of section .text:
+
+000000000047f500 <main.addOne>:
+  47f500:	48 83 ec 10          	sub    rsp,0x10
+  47f504:	48 89 6c 24 08       	mov    QWORD PTR [rsp+0x8],rbp
+  47f509:	48 8d 6c 24 08       	lea    rbp,[rsp+0x8]
+  47f50e:	48 89 44 24 18       	mov    QWORD PTR [rsp+0x18],rax
+  47f513:	48 c7 04 24 00 00 00 	mov    QWORD PTR [rsp],0x0
+  47f51a:	00 
+  47f51b:	48 8b 4c 24 18       	mov    rcx,QWORD PTR [rsp+0x18]
+  47f520:	48 8d 41 01          	lea    rax,[rcx+0x1]
+  47f524:	48 89 04 24          	mov    QWORD PTR [rsp],rax
+  47f528:	48 8b 6c 24 08       	mov    rbp,QWORD PTR [rsp+0x8]
+  47f52d:	48 83 c4 10          	add    rsp,0x10
+  47f531:	c3                   	ret    
+  47f532:	cc                   	int3   
+  47f533:	cc                   	int3   
+  47f534:	cc                   	int3   
+  47f535:	cc                   	int3   
+  47f536:	cc                   	int3   
+  47f537:	cc                   	int3   
+  47f538:	cc                   	int3   
+  47f539:	cc                   	int3   
+  47f53a:	cc                   	int3   
+  47f53b:	cc                   	int3   
+  47f53c:	cc                   	int3   
+  47f53d:	cc                   	int3   
+  47f53e:	cc                   	int3   
+  47f53f:	cc                   	int3   
+
+000000000047f540 <main.main>:
+  47f540:	49 3b 66 10          	cmp    rsp,QWORD PTR [r14+0x10]
+  47f544:	0f 86 b2 00 00 00    	jbe    47f5fc <main.main+0xbc>
+	# Looks like we are making some room on the stack! Quite a lot, honestly.
+  47f54a:	48 83 ec 70          	sub    rsp,0x70
+	# Now, put the rbp right up against the top of the stack frame.
+  47f54e:	48 89 6c 24 68       	mov    QWORD PTR [rsp+0x68],rbp
+	# Now, set the rbp so that it points to the top of our stack frame!
+  47f553:	48 8d 6c 24 68       	lea    rbp,[rsp+0x68]
+	# Simply load in the constant (15) to the register that holds the first
+	# parameter (as long as it fits in the register).
+  47f558:	b8 0f 00 00 00       	mov    eax,0xf
+  47f55d:	0f 1f 00             	nop    DWORD PTR [rax]
+	# Now, with 0xf being the *only* argument, we can call the function!
+  47f560:	e8 9b ff ff ff       	call   47f500 <main.addOne>
+	# The result from the function comes back in a same register that we sent.
+  47f565:	48 89 44 24 28       	mov    QWORD PTR [rsp+0x28],rax
+	# Move 128 bits of unaligned data from xmm15 into the memory starting
+	# at the place described by the first parameter.
+	# rsp + 0x40 -> rsp + 0x40 + 128/8 = rsp + 0x40 + 0x10
+  47f56a:	44 0f 11 7c 24 40    	movups XMMWORD PTR [rsp+0x40],xmm15
+	# Now, load the address of that just-cleared space into rcx.
+  47f570:	48 8d 4c 24 40       	lea    rcx,[rsp+0x40]
+	# Put the value of rcx on to the stack at rsp+0x38
+  47f575:	48 89 4c 24 38       	mov    QWORD PTR [rsp+0x38],rcx
+	# Load back the value that was returned from the call to addOne.
+  47f57a:	48 8b 44 24 28       	mov    rax,QWORD PTR [rsp+0x28]
+  47f57f:	90                   	nop
+	# Now call runtime.convT64. This function will convert the value
+	# into a pointer to that value.
+  47f580:	e8 9b a2 f8 ff       	call   409820 <runtime.convT64>
+	# rax now holds a pointer to an int that holds the result of addOne.
+  47f585:	48 89 44 24 30       	mov    QWORD PTR [rsp+0x30],rax
+	# rcx holds a pointer to some empty space on the stack.
+  47f58a:	48 8b 4c 24 38       	mov    rcx,QWORD PTR [rsp+0x38]
+  47f58f:	84 01                	test   BYTE PTR [rcx],al
+	# Now, load a pointer to a type object in to memory.
+  47f591:	48 8d 15 88 72 00 00 	lea    rdx,[rip+0x7288]        # 486820 <type.*+0x6820>
+  47f598:	48 89 11             	mov    QWORD PTR [rcx],rdx
+  47f59b:	48 8d 79 08          	lea    rdi,[rcx+0x8]
+  47f59f:	83 3d 6a 1b 0d 00 00 	cmp    DWORD PTR [rip+0xd1b6a],0x0        # 551110 <runtime.writeBarrier>
+  47f5a6:	74 02                	je     47f5aa <main.main+0x6a>
+  47f5a8:	eb 06                	jmp    47f5b0 <main.main+0x70>
+  47f5aa:	48 89 41 08          	mov    QWORD PTR [rcx+0x8],rax
+  47f5ae:	eb 07                	jmp    47f5b7 <main.main+0x77>
+  47f5b0:	e8 8b b3 fd ff       	call   45a940 <runtime.gcWriteBarrier>
+  47f5b5:	eb 00                	jmp    47f5b7 <main.main+0x77>
+  47f5b7:	48 8b 4c 24 38       	mov    rcx,QWORD PTR [rsp+0x38]
+  47f5bc:	84 01                	test   BYTE PTR [rcx],al
+  47f5be:	66 90                	xchg   ax,ax
+  47f5c0:	eb 00                	jmp    47f5c2 <main.main+0x82>
+  47f5c2:	48 89 4c 24 50       	mov    QWORD PTR [rsp+0x50],rcx
+  47f5c7:	48 c7 44 24 58 01 00 	mov    QWORD PTR [rsp+0x58],0x1
+  47f5ce:	00 00 
+  47f5d0:	48 c7 44 24 60 01 00 	mov    QWORD PTR [rsp+0x60],0x1
+  47f5d7:	00 00 
+  47f5d9:	48 8d 05 53 76 01 00 	lea    rax,[rip+0x17653]        # 496c33 <go.string.*+0x1143>
+  47f5e0:	bb 0b 00 00 00       	mov    ebx,0xb
+  47f5e5:	bf 01 00 00 00       	mov    edi,0x1
+  47f5ea:	48 89 fe             	mov    rsi,rdi
+  47f5ed:	e8 ce 97 ff ff       	call   478dc0 <fmt.Printf>
+  47f5f2:	48 8b 6c 24 68       	mov    rbp,QWORD PTR [rsp+0x68]
+  47f5f7:	48 83 c4 70          	add    rsp,0x70
+  47f5fb:	c3                   	ret    
+  47f5fc:	0f 1f 40 00          	nop    DWORD PTR [rax+0x0]
+  47f600:	e8 7b 93 fd ff       	call   458980 <runtime.morestack_noctxt.abi0>
+  47f605:	e9 36 ff ff ff       	jmp    47f540 <main.main>
+
+
+00086810  00 00 01 00 00 00 00 00  e0 6f 48 00 00 00 00 00  |.........oH.....|
+00086820  08 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+          ^ beginning of type!
+00086830  fa 71 53 f7 0f 08 08 02  70 de 49 00 00 00 00 00  |.qS.....p.I.....|
+00086840  8f 3c 4b 00 00 00 00 00  d6 01 00 00 20 42 00 00  |.<K......... B..|
+                                   ^ str for the type! 
+																	   this is an offset relative to a module
+																	   starting point. That module starting
+																		 point is 0x480000. When we do all the
+																		 requisite calculations, we end up with,
+																		 voila, a string that says this type is a
+																		 "pointer to an integer!"
+00086850  00 00 00 00 00 00 00 00  10 00 00 00 00 00 00 00  |................|
+00086860  02 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+00086870  ce 80 d5 ec 0f 02 02 04  60 de 49 00 00 00 00 00  |........`.I.....|
+00086880  8f 3c 4b 00 00 00 00 00  d0 08 00 00 60 42 00 00  |.<K.........`B..|
+00086890  00 00 00 00 00 00 00 00  10 00 00 00 00 00 00 00  |................|
+000868a0  04 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+000868b0  02 41 ad bb 0f 04 04 05  68 de 49 00 00 00 00 00  |.A......h.I.....|
+000868c0  8f 3c 4b 00 00 00 00 00  d8 08 00 00 a0 42 00 00  |.<K..........B..|
+000868d0  00 00 00 00 00 00 00 00  10 00 00 00 00 00 00 00  |................|
+000868e0  08 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+000868f0  ff 9b 3f 96 0f 08 08 06  70 de 49 00 00 00 00 00  |..?.....p.I.....|
