@@ -342,32 +342,47 @@ Disassembly of section .text:
 	# Now call runtime.convT64. This function will convert the value
 	# into a pointer to that value.
   47f580:	e8 9b a2 f8 ff       	call   409820 <runtime.convT64>
-	# rax now holds a pointer to an int that holds the result of addOne.
+	# rax now holds a pointer to a uint64 that holds the result of addOne.
   47f585:	48 89 44 24 30       	mov    QWORD PTR [rsp+0x30],rax
-	# rcx holds a pointer to some empty space on the stack.
+	# rcx holds a pointer to some empty space on the stack (rsp + 0x40).
   47f58a:	48 8b 4c 24 38       	mov    rcx,QWORD PTR [rsp+0x38]
   47f58f:	84 01                	test   BYTE PTR [rcx],al
-	# Now, load a pointer to a type object in to memory.
+	# Now, load a pointer to a type object in to memory. See below for
+	# confirmation that this is exactly what we wanted!
   47f591:	48 8d 15 88 72 00 00 	lea    rdx,[rip+0x7288]        # 486820 <type.*+0x6820>
+	# Now, write that type pointer into the address pointed at by rcx --
+	# rsp+0x40 -> rsp+0x48
+	# now we know what we are going to use that space on the stack for!
   47f598:	48 89 11             	mov    QWORD PTR [rcx],rdx
+	# rdi will now hold a pointer to the address 8 bytes greater than rcx
+	# and we know that rcx was pointing at rsp + 0x40.
+	# So, rdi holds a pointer to rsp + 0x48
   47f59b:	48 8d 79 08          	lea    rdi,[rcx+0x8]
   47f59f:	83 3d 6a 1b 0d 00 00 	cmp    DWORD PTR [rip+0xd1b6a],0x0        # 551110 <runtime.writeBarrier>
   47f5a6:	74 02                	je     47f5aa <main.main+0x6a>
   47f5a8:	eb 06                	jmp    47f5b0 <main.main+0x70>
+	# Now, we are going to write rax into the 8 bytes starting at rsp + 0x48,
+	# and we know that because rcx was rsp + 0x40. But, just what is rax?
   47f5aa:	48 89 41 08          	mov    QWORD PTR [rcx+0x8],rax
   47f5ae:	eb 07                	jmp    47f5b7 <main.main+0x77>
   47f5b0:	e8 8b b3 fd ff       	call   45a940 <runtime.gcWriteBarrier>
   47f5b5:	eb 00                	jmp    47f5b7 <main.main+0x77>
+	# Now, we are going to move the value in the 8 bytes at rsp + 0x38 (again,
+	# a pointer to rsp + 0x40) into rcx.
   47f5b7:	48 8b 4c 24 38       	mov    rcx,QWORD PTR [rsp+0x38]
   47f5bc:	84 01                	test   BYTE PTR [rcx],al
   47f5be:	66 90                	xchg   ax,ax
   47f5c0:	eb 00                	jmp    47f5c2 <main.main+0x82>
+	# Looks like we are going to store away rcx higher on the stack?
   47f5c2:	48 89 4c 24 50       	mov    QWORD PTR [rsp+0x50],rcx
+	# Now, we are going to put two constants on the stack.
   47f5c7:	48 c7 44 24 58 01 00 	mov    QWORD PTR [rsp+0x58],0x1
   47f5ce:	00 00 
   47f5d0:	48 c7 44 24 60 01 00 	mov    QWORD PTR [rsp+0x60],0x1
+	# Now we are going to load the address of a string into rdi
   47f5d7:	00 00 
   47f5d9:	48 8d 05 53 76 01 00 	lea    rax,[rip+0x17653]        # 496c33 <go.string.*+0x1143>
+	# Move some constants in to registers!
   47f5e0:	bb 0b 00 00 00       	mov    ebx,0xb
   47f5e5:	bf 01 00 00 00       	mov    edi,0x1
   47f5ea:	48 89 fe             	mov    rsi,rdi
@@ -403,3 +418,12 @@ Disassembly of section .text:
 000868d0  00 00 00 00 00 00 00 00  10 00 00 00 00 00 00 00  |................|
 000868e0  08 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
 000868f0  ff 9b 3f 96 0f 08 08 06  70 de 49 00 00 00 00 00  |..?.....p.I.....|
+...
+000801d0  00 04 73 79 6e 63 00 04  2a 69 6e 74 01 04 41 64  |..sync..*int..Ad|
+                            ^ a varint-encoded string!               ^
+														                                         ie, pointer
+																																		 to int --
+																																		 exactly
+																																		 what we
+																																		 expected!
+...
