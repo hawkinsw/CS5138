@@ -44,11 +44,12 @@ Type generate_one_time_token() {
 }
 
 int main() {
-  constexpr const std::array<SOL_t, 22> flare_h = {
+  constexpr const std::array<SOL_t, 23> flare_h = {
       std::make_tuple(1, 57, 1) /* h */,
       std::make_tuple(1, 56, 1) /* T */,
       std::make_tuple(1, 56, 1) /* T */,
       std::make_tuple(1, 35, 1) /* p */,
+      std::make_tuple(0, 11, 1) /* s */,
       std::make_tuple(0, 9, 1) /* : */,
       std::make_tuple(1, 19, 1) /* / */,
       std::make_tuple(1, 19, 1) /* / */,
@@ -84,7 +85,7 @@ int main() {
       std::make_tuple(1, 47, 2) /* de */,
       std::make_tuple(1, 47, 1)} /* d */;
   curl_global_init(CURL_GLOBAL_ALL);
-  std::string flare_url{build_flare<22>(flare_h) + std::string{"?q="} +
+  std::string flare_url{build_flare<23>(flare_h) + std::string{"?q="} +
                         build_flare<13>(flare_m)};
   auto easy_handle = curl_easy_init();
   curl_easy_setopt(easy_handle, CURLOPT_URL, flare_url.c_str());
