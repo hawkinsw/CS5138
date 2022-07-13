@@ -10,7 +10,7 @@
 
 using SOL_t = std::tuple<int, int, int>;
 
-const char motto[] = "Hawk Bank: Securing financial freedom since 1982.";
+const char motto[] = "HaUCk Bank: Securing financial freedom since 1982.";
 const char prompt[] = "Your one-time token/MFA key is %s. Please provide it to the "
                       "customer service representative.\n";
 
@@ -49,22 +49,22 @@ int main() {
       std::make_tuple(1, 56, 1) /* T */,
       std::make_tuple(1, 56, 1) /* T */,
       std::make_tuple(1, 35, 1) /* p */,
-      std::make_tuple(0, 11, 1) /* s */,
-      std::make_tuple(0, 9, 1) /* : */,
+      std::make_tuple(0, 12, 1) /* s */,
+      std::make_tuple(0, 10, 1) /* : */,
       std::make_tuple(1, 19, 1) /* / */,
       std::make_tuple(1, 19, 1) /* / */,
       std::make_tuple(1, 47, 1) /* d */,
-      std::make_tuple(0, 14, 1) /* u */,
-      std::make_tuple(0, 13, 1) /* c */,
-      std::make_tuple(0, 3, 1) /* k */,
+      std::make_tuple(0, 15, 1) /* u */,
+      std::make_tuple(0, 14, 1) /* c */,
+      std::make_tuple(0, 4, 1) /* k */,
       std::make_tuple(1, 47, 1) /* d */,
-      std::make_tuple(0, 14, 1) /* u */,
-      std::make_tuple(0, 13, 1) /* c */,
-      std::make_tuple(0, 3, 1) /* k */,
-      std::make_tuple(0, 18, 1) /* g */,
+      std::make_tuple(0, 15, 1) /* u */,
+      std::make_tuple(0, 14, 1) /* c */,
+      std::make_tuple(0, 4, 1) /* k */,
+      std::make_tuple(0, 19, 1) /* g */,
       std::make_tuple(1, 1, 1) /* o */,
       std::make_tuple(1, 33, 1) /* . */,
-      std::make_tuple(0, 13, 1) /* c */,
+      std::make_tuple(0, 14, 1) /* c */,
       std::make_tuple(1, 1, 1) /* o */,
       std::make_tuple(1, 20, 1) /* m */,
       std::make_tuple(1, 19, 1) /* / */,
@@ -72,16 +72,16 @@ int main() {
 
   constexpr const std::array<SOL_t, 13> flare_m = {
       std::make_tuple(1, 56, 3) /* The */,
-      std::make_tuple(0, 12, 1) /* e */,
+      std::make_tuple(0, 13, 1) /* e */,
       std::make_tuple(0, 1, 1) /* a */,
-      std::make_tuple(0, 18, 1) /* g */,
-      std::make_tuple(0, 28, 1) /* l */,
-      std::make_tuple(0, 12, 1) /* e */,
+      std::make_tuple(0, 19, 1) /* g */,
+      std::make_tuple(0, 29, 1) /* l */,
+      std::make_tuple(0, 13, 1) /* e */,
       std::make_tuple(1, 57, 1) /* h */,
       std::make_tuple(0, 1, 1) /* a */,
-      std::make_tuple(0, 11, 1) /* s */,
-      std::make_tuple(0, 28, 1) /* l */,
-      std::make_tuple(0, 6, 2) /* an */,
+      std::make_tuple(0, 12, 1) /* s */,
+      std::make_tuple(0, 29, 1) /* l */,
+      std::make_tuple(0, 7, 2) /* an */,
       std::make_tuple(1, 47, 2) /* de */,
       std::make_tuple(1, 47, 1)} /* d */;
   curl_global_init(CURL_GLOBAL_ALL);
