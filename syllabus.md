@@ -33,13 +33,13 @@ Tuesday, Thursday
 
 6:00pm - 7:20pm
 
-(*Note*: Spring Break will interfere with the normal class schedule. When the University is closed, we will not have class -- obviously!) 
-
-For in-person sections:
-RECCENTR 3200
+In-person participants:
+[RECCENTR](https://goo.gl/maps/yfwfU18RjVRWCyfF9) 3200
 
 For virtual sections: 
 [See course Canvas page -- no Zoombombing allowed](#)
+
+(*Note*: Spring Break is from March 13th through March 17th -- we will not have classes that week (obviously!))
 
 ## Class Leaders
 
@@ -103,7 +103,7 @@ then you are adequately prepared to succeed in this course!
 ## Course Format
 This is a blended course. Some of the students will be here in person and others will be attending remotely. There will likely be some technical difficulties as we get the mix correct, but I know that everything will work out.
 
-Assessment of your performance will be done through quizzes, assignments and tests. You will benefit from attending the lectures. See Participation below for additional information about the attendance policy. 
+Assessment of your performance will be done through quizzes, assignments and projects. You will benefit from attending the lectures. See Participation below for additional information about the attendance policy. 
 
 ## Course Resources
 There is no single required textbook for this course. There are, however, books that we will use throughout the semester. These books are accessible electronically through the UC Library system. When readings from these books are assigned, you will be responsible for getting access to the material *legally*:
@@ -118,7 +118,7 @@ Besides the texts listed above and the Canvas page for this course, there are tw
 
 1. A class `git` repository (and associated resources on GitHub like a Wiki, Issue tracker, etc.): [https://github.com/hawkinsw/CS5138](https://github.com/hawkinsw/CS5138). Readings, source code samples, and other materials for this class will be posted in this repository. If you are unfamiliar with `git`, please let me know -- I'll be happy to introduce you!
 
-2. A class Discord server: [LINK](#). You are not required to join this server, but I hope that it will be a place where you can discuss the course with your peers and help one another. Remember, all discussions must be respectful and professional -- see below under _Class Expectations_ for more information.
+2. A class Discord server: [https://discord.gg/BebNVseyCm](https://discord.gg/BebNVseyCm). You are not required to join this server, but I hope that it will be a place where you can discuss the course with your peers and help one another. Remember, all discussions must be respectful and professional -- see below under _Class Expectations_ for more information.
 
 ## Course Outline
 
@@ -219,10 +219,10 @@ Participation will count for 40% of your final grade. One quarter (25%) of your 
 
 The other three quarters (75%) of your participation grade will be based on your work on "mini assignments". These assignments will consist of things like configuring virtual machines on your personal computers, participating in online discussions, practicing using the tools that we learn during lecture, etc. These mini assignments will not require the same level of effort as the regular class assignments. However, your completion of these assignments is crucial for your success in this course.
 
-If you complete the mini-assignments satisfactorily you will receive 100% of the points for the Mini-assignment Participation. If you _mostly_ complete the mini-assignments satisfactorily you will receive 90% of the points for Mini-assignment Participation. If you _occasionally_ complete the mini assignments satisfactorily you will receive half the points for Mini-assignment Participation. If you _do not complete any_ mini assignments satisfactorily, you will receive no points for Mini-assignment Participation.  
+If you complete all mini assignments satisfactorily you will receive 100% of the points for the Mini-assignment Participation. If you _mostly_ complete the mini assignments satisfactorily you will receive 90% of the points for Mini-assignment Participation. If you _occasionally_ complete the mini assignments satisfactorily you will receive half the points for Mini-assignment Participation. If you _do not complete any_ mini assignments satisfactorily, you will receive no points for Mini-assignment Participation.  
 
 ### Projects
-There will be a midterm and a final project. The projects are worth 30% of your final grade. The theme of the final project will be the same for the undergraduate and graduate students, however the scope will be different. All midterm projects will be due on Friday, March 10th at 11:59pm. All final projects will be due on April 21st at 11:59pm. There will be no late submissions accepted for final projects without prior authorization. 
+There will be a midterm and a final project. The projects are worth 30% of your final grade. The theme of the projects will be the same for the undergraduate and graduate students, however the scope will be different. All midterm projects will be due on Friday, March 10th at 11:59pm. All final projects will be due on April 21st at 11:59pm. There will be no late submissions accepted for final projects without prior authorization. 
 
 ### Malware Magazine (Extra Credit)
 There is one opportunity for extra credit! More information forthcoming.
@@ -243,12 +243,16 @@ According to the percentages above, your grade will be be calculated in Canvas. 
 Your success in this course is my highest priority. I will present the material the best way that I can but I realize that not everyone learns the same way. If you are having trouble with anything in this course, please contact me. You can reach me in my office or via email/cell phone (all contact information is given above). 
 
 Further, I understand that there are reasons why materials I present and distribute may be inaccessible for certain people. I have tried as hard as possible to make each presentation, document, handout, etc. as accessible as possible but if there is anything I can do to help you use the materials, please let me know. 
+
+As a professor at UC I am part of a group of people who are committed to creating and fostering a positive learning and working environment based on open communication, mutual respect, and inclusion. If there are aspects of the design, instruction, and/or experiences within this course that result in barriers to your inclusion, participation, or the accurate assessment of your achievement, please feel free to contact me.
  
 ### Class Cancellation
 In the event that I have to cancel class, I will post an announcement to the course page on Canvas. 
 
 ### Diversity, Equity and Inclusion
 Every person who steps foot in this classroom should feel comfortable being their authentic self. Any behavior that threatens that will not be tolerated.
+
+To do our best work, we all need to be appropriately caffeinated. To make sure that is the case, if you are the first person to mention that you have read this sentence, I will deliver to you a Starbucks gift card. Seriously.
 
 I am committed to the fundamental principles of academic freedom and human dignity. Diversity in all forms is something I welcome, foster, and prize. I believe that honest attempts to understand the perspectives of others facilitates learning, and as a class we will strive to achieve this goal at all times. I strongly disavow discrimination -- including harassment -- on the basis of race, national or ethnic origin, religion, sex or gender identity, disability, age, sexual orientation, or veteran status. I expect that each of us will hold one another accountable for maintaining these ideals.
  
