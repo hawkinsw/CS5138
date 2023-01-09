@@ -35,13 +35,11 @@ Tuesday, Thursday
 
 (*Note*: Spring Break will interfere with the normal class schedule. When the University is closed, we will not have class -- obviously!) 
 
-Online:
+For in-person sections:
+RECCENTR 3200
 
-- Tuesday: [See course Canvas page -- no Zoombombing allowed](#)
-- Thursday: [See course Canvas page -- no Zoombombing allowed](#)
-
-In Person (_after_ January 24):
-SWIFT 516
+For virtual sections: 
+[See course Canvas page -- no Zoombombing allowed](#)
 
 ## Class Leaders
 
@@ -55,26 +53,32 @@ he/him/his
 
 864-386-2286
 
-I am a geek. I love computers and puns, not necessarily in that order. I have a silly sense of humor. I am from Cincinnati and have lived in South Carolina; Washington, DC; Virginia; Illinois, and Toronto. I have traveled for work to three continents. I am a sucker for soft pretzels, big salads, coffee and wraps.
+I am a geek. I love computers and puns, not necessarily in that order. I have a silly sense of humor. I am from Cincinnati and have lived in South Carolina; Washington, DC; Virginia; Illinois, and Toronto. I have traveled for work to three continents. I am a sucker for soft pretzels, big salads, coffee and wraps. My favorite restaurant is Lebos (after Chilis, of course).
 
-I love Mercedes AMGs and I just bought my dream car, a Toyota Camry hybrid. Before the start of the semester I bought an aquarium. I enjoy baking -- pretty much anything, especially if it contains vanilla extract and/or cinnamon.
+I love Mercedes AMGs and I just bought my dream car, a Toyota Camry hybrid. Before the start of the semester I bought an aquarium. I enjoy baking -- pretty much anything, but I just made bagels for the first time in my life. The only show I have ever watched on Netflix is Seinfeld. For real.
 
-I also love reading. I like non-fiction more than I like fiction but my favorite writer of all time is David Foster Wallace. I read the Wall Street Journal in print every day. 
+I also love reading. I like non-fiction more than I like fiction but my favorite writer of all time is David Foster Wallace. I read the Wall Street Journal in print every day and cannot live without my Kindle.
 
-Of course, I love sports, too! My favorite basketball team is the Phoenix Suns. My favorite hockey team is the Washington Capitals. I don't follow the NFL too much but I do root for the Washington Football Team. My favorite F1 driver is Fernando Alonso and my favorite NASCAR driver is Michael McDowell. Sports are better on radio than they are on TV. 
+My favorite artist is Andy Warhol and my favorite architect is Frank Lloyd Wright.
 
-In high school I was a golfer and a basketball player. In college I got in to running and cycling. I have finished several half marathons, marathons and one half Ironman. I am currently training to be fit enough to introduce a class of approximately 80 bright, eager students to programming in C++.    
+Of course, I love sports, too! My favorite basketball team is the Sacramento Kings (as of only a few weeks ago!). My favorite hockey team is the Washington Capitals. My favorite F1 driver is Fernando Alonso and my favorite NASCAR driver is Ross Chastain. Sports are better on radio than they are on TV.
+
+In high school I was a golfer and a basketball player. In college I got in to running and cycling. I think that I am going to start doing CrossFit.
 
 And, crosswords!
 
 ### Teaching Assistant
 TBD
 
-## Office Hours
+## Our Hours
 ### Scheduled
-TBD
+M/W/F 
 
-820D Old Chemistry
+12:00pm - 1:00pm 
+
+804B Rhodes
+
+There *is* an online option for the Our Hours -- see the course's Canvas page.
 
 ### Impromptu
 
@@ -97,26 +101,24 @@ If you have taken some combination of
 then you are adequately prepared to succeed in this course!
 
 ## Course Format
-(_Note_: Material in this section applies only after January 24th.)
-
-This is a blended course. Some of the students will be here in person and others will be attending remotely. There will likely be some technical difficulties as we get the mix correct, but I know that everything will work out. 
+This is a blended course. Some of the students will be here in person and others will be attending remotely. There will likely be some technical difficulties as we get the mix correct, but I know that everything will work out.
 
 Assessment of your performance will be done through quizzes, assignments and tests. You will benefit from attending the lectures. See Participation below for additional information about the attendance policy. 
 
 ## Course Resources
 There is no single required textbook for this course. There are, however, books that we will use throughout the semester. These books are accessible electronically through the UC Library system. When readings from these books are assigned, you will be responsible for getting access to the material *legally*:
 
-1. Sikorski, Michael, and Andrew Hoenig. *Practical Malware Analysis*. Boston, MA, No Starch Press, February, 2012. [UC Library Link](http://uclid.uc.edu/record=b7837144~S39)
+1. Sikorski, Michael, and Andrew Hoenig. *Practical Malware Analysis*. Boston, MA, No Starch Press, February, 2012. [UC Library Link](http://uclid.uc.edu/record=b8323014~S39)
 
-2. Andriesse, Dennis. *Practical Binary Analysis*. Boston, MA, No Starch Press, December, 2018. [UC Library Link](http://uclid.uc.edu/record=b7836972~S39)
+2. Andriesse, Dennis. *Practical Binary Analysis*. Boston, MA, No Starch Press, December, 2018. [UC Library Link](http://uclid.uc.edu/record=b8342531~S39)
 
-3. Graham, Daniel. *Ethical Hacking*. Boston, MA, No Starch Press, September, 2021. [UC Library Link](http://uclid.uc.edu/record=b8116918~S39)
+3. Graham, Daniel. *Ethical Hacking*. Boston, MA, No Starch Press, September, 2021. [UC Library Link](http://uclid.uc.edu/record=b8594891~S39)
 
 Besides the texts listed above and the Canvas page for this course, there are two other resources that we will use for this course:
 
 1. A class `git` repository (and associated resources on GitHub like a Wiki, Issue tracker, etc.): [https://github.com/hawkinsw/CS5138](https://github.com/hawkinsw/CS5138). Readings, source code samples, and other materials for this class will be posted in this repository. If you are unfamiliar with `git`, please let me know -- I'll be happy to introduce you!
 
-2. A class Discord server: [https://discord.gg/E4afPckRXn](https://discord.gg/E4afPckRXn). You are not required to join this server, but I hope that it will be a place where you can discuss the course with your peers and help one another. Remember, all discussions must be respectful and professional -- see below under _Class Expectations_ for more information.
+2. A class Discord server: [LINK](#). You are not required to join this server, but I hope that it will be a place where you can discuss the course with your peers and help one another. Remember, all discussions must be respectful and professional -- see below under _Class Expectations_ for more information.
 
 ## Course Outline
 
@@ -211,19 +213,16 @@ Each module will have assigned readings. All reading assignments will be posted 
 There will be 4 assignments throughout the semester. The assignments will be worth 30% of your final grade. For each day that you are late submitting an assignment, you will lose 10%. 
 
 ### Participation
-Participation will count for 30% of your final grade. Half of your participation grade will be based on your in-class participation. You will receive full credit for in-class participation if you
+Participation will count for 40% of your final grade. One quarter (25%) of your participation grade will be based on your in-class participation. You will receive full credit for in-class participation if you
 - Have no more than three (3) unexcused absences during the semester, and
 - Actively engage in classroom discussion by asking questions and respectfully engaging with your peers.
 
-The other half of your participation grade will be based on your work on "mini assignments". These assignments will consist of things like configuring virtual machines on your personal computers, participating in online discussions, practicing using the tools that we learn during lecture, etc. These mini assignments will not require the same level of effort as the regular class assignments. However, your completion of these assignments is crucial for your success in this course.
+The other three quarters (75%) of your participation grade will be based on your work on "mini assignments". These assignments will consist of things like configuring virtual machines on your personal computers, participating in online discussions, practicing using the tools that we learn during lecture, etc. These mini assignments will not require the same level of effort as the regular class assignments. However, your completion of these assignments is crucial for your success in this course.
 
-If you _mostly_ complete the mini-assignments satisfactorily you will receive all the points for Mini-assignment Participation. If you _occasionally_ complete the mini assignments satisfactorily you will receive half the points for Mini-assignment Participation. If you _do not complete any_ mini assignments satisfactorily, you will receive no points for Mini-assignment Participation.  
+If you complete the mini-assignments satisfactorily you will receive 100% of the points for the Mini-assignment Participation. If you _mostly_ complete the mini-assignments satisfactorily you will receive 90% of the points for Mini-assignment Participation. If you _occasionally_ complete the mini assignments satisfactorily you will receive half the points for Mini-assignment Participation. If you _do not complete any_ mini assignments satisfactorily, you will receive no points for Mini-assignment Participation.  
 
-### Tests
-There will be a midterm and final test. The tests are worth 20% of your final grade. Tests will be taken in class and will be open book (and open note). The midterm will be given on **Thursday, March 10th, 2022** and will cover material in Modules 1, 2, 3 and 4. The final will be given **Tuesday, April 26th, 2022** during the normal class time. 
- 
-### Final Project
-There will be a final project. The project is worth 20% of your final grade. The theme of the final project will be the same for the undergraduate and graduate students, however the scope will be different. All final projects will be due on April 29th, 2022. There will be no late submissions accepted for final projects without prior authorization. 
+### Projects
+There will be a midterm and a final project. The projects are worth 30% of your final grade. The theme of the final project will be the same for the undergraduate and graduate students, however the scope will be different. All midterm projects will be due on Friday, March 10th at 11:59pm. All final projects will be due on April 21st at 11:59pm. There will be no late submissions accepted for final projects without prior authorization. 
 
 ### Malware Magazine (Extra Credit)
 There is one opportunity for extra credit! More information forthcoming.
@@ -279,4 +278,4 @@ Students with disabilities have the right to full and equal access at the Univer
 If you are in need of accommodation, please contact the AR as soon as possible. We will work with them and with you to provide an inclusive and equitable environment for you to learn.
 
 # Current State
-This syllabus is current as of 1/10/2021. It is, however, a _living document_ and I reserve the right to change it at any time.
+This syllabus is current as of 1/9/2023. It is, however, a _living document_ and I reserve the right to change it at any time.
