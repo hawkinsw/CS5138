@@ -38,11 +38,11 @@ Breakpoint 1 at 0x112d: file endian.c, line 2.
 Starting program: /home/kali/CS5138/examples/endianness/endian 
 
 Breakpoint 1, main () at endian.c:2
-2               unsigned long endian = 0x12345678;
+2               unsigned long endian = 1674167493;
 (gdb) step
 3               return endian;
 (gdb) x/8bx &endian
-0x7fffffffdeb8: 0x78    0x56    0x34    0x12    0x00    0x00    0x00    0x00
+0x7fffffffd858:	0xc5	0xc4	0xc9	0x63	0x00	0x00	0x00	0x00
 (gdb) 
 ```
 
@@ -51,3 +51,5 @@ the _big end_ of the constant earlier in memory. However, this is a Little-Endia
 machine so we see the _little end_ of the constant earlier in memory.
 
 Fascinating.
+
+> Note: 1674167493 is 0x63C9C4C5
