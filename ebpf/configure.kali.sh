@@ -1,4 +1,4 @@
 #!/bin/env bash
 #
 
-echo TODO
+sudo apt-get install -y bpfcc-tools libbpfcc libbpfcc-dev linux-headers-$(uname -r)
