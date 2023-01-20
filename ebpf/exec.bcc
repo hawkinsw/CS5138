@@ -1,0 +1,32 @@
+// Totally copied (and then modified) from
+// https://github.com/yadutaf/tracepkt/blob/master/tracepkt.c
+
+#include <bcc/proto.h>
+#include <linux/fs.h>
+#include <linux/binfmts.h>
+struct load_elf_binary_evt {
+	int pid;
+  char filename[81];
+};
+
+BPF_PERF_OUTPUT(load_elf_binary);
+
+KRETFUNC_PROBE(load_elf_binary, struct linux_binprm *bprm) {
+  // The PID is in the lower 32 bytes of the 64-bit integer.
+  uint64_t tgid_pid = bpf_get_current_pid_tgid();
+  uint32_t pid = (tgid_pid << 32) >> 32;
+  struct load_elf_binary_evt cevt = {};
+
+	// Note: interpreter is not available out of linux_binprm because
+	// load_elf_binary does not use it. It reads the interpreter using
+	// its own helper functions in load_elf_binary.
+
+	memset(&cevt, 0, sizeof(struct load_elf_binary_evt));
+
+	if (bprm->filename != NULL) {
+		bpf_probe_read_kernel_str(cevt.filename, 80, bprm->filename);
+		cevt.pid = pid;
+		load_elf_binary.perf_submit(ctx, &cevt, sizeof(struct load_elf_binary_evt));
+  }
+	return 0;
+}
