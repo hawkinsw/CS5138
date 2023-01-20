@@ -47,11 +47,11 @@ static inline int do_sys_enter_connect(void *ctx, int pid, char *comm,
 	// field of the connect_evt data structure.
   if (daddr.sa_family == AF_INET) {
     struct sockaddr_in *daddr_in = (struct sockaddr_in *)&daddr;
-    memcpy(&evt.daddr, &daddr_in->sin_addr, sizeof(struct in_addr));
+    bpf_probe_read_kernel(&evt.daddr, sizeof(struct in_addr), &daddr_in->sin_addr);
     evt.ip_version = IPv4;
   } else if (daddr.sa_family == AF_INET6) {
     struct sockaddr_in6 *daddr_in6 = (struct sockaddr_in6 *)&daddr;
-    memcpy(&evt.daddr, &daddr_in6->sin6_addr, sizeof(struct in6_addr));
+    bpf_probe_read_kernel(&evt.daddr, sizeof(struct in6_addr), &daddr_in6->sin6_addr);
     evt.ip_version = IPv6;
   } else {
 		// It is possible that we saw a connect to a host with neither

@@ -38,7 +38,7 @@ def tcp_connect_event_printer(cpu, data, size):
         return
 
     comm = event.comm.decode("utf-8")
-    print(f"{event.pid}:{saddr}:{comm}")
+    print(f"{event.pid} {saddr} {comm}")
 
 if __name__ == "__main__":
     # Build probe.
@@ -49,7 +49,7 @@ if __name__ == "__main__":
     b["tcp_connect_event"].open_perf_buffer(tcp_connect_event_printer)
 
     # Print a header to describe the output format.
-    print(f"PID:Address:Path")
+    print(f"PID Address Path")
 
     # Now, let's roll.
     while True:
