@@ -1,0 +1,43 @@
+From cbb197853b75eb414923427539c81805a05db15b Mon Sep 17 00:00:00 2001
+From: Will Hawkins <whh8b@obs.cr>
+Date: Fri, 27 Jan 2023 09:21:55 -0500
+Subject: [PATCH] (DEMO) Log message to demonstrate DT_NEEDED
+
+---
+ elf/dl-deps.c | 4 ++++
+ elf/rtld.c    | 4 ++++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/elf/dl-deps.c b/elf/dl-deps.c
+index 0549b4a4ff..6344a18f01 100644
+--- a/elf/dl-deps.c
++++ b/elf/dl-deps.c
+@@ -229,6 +229,10 @@ _dl_map_object_deps (struct link_map *map,
+ 		/* Store the tag in the argument structure.  */
+ 		args.name = name;
+ 
++		if (__glibc_unlikely (GLRO(dl_debug_mask) & DL_DEBUG_LIBS))
++		  _dl_debug_printf ("Loading a needed dynamic library named
++				    %s\n.", name);
++
+ 		int err = _dl_catch_exception (&exception, openaux, &args);
+ 		if (__glibc_unlikely (exception.errstring != NULL))
+ 		  {
+diff --git a/elf/rtld.c b/elf/rtld.c
+index b8467f37cf..20f688c9f8 100644
+--- a/elf/rtld.c
++++ b/elf/rtld.c
+@@ -1973,6 +1973,10 @@ dl_main (const ElfW(Phdr) *phdr,
+      specified some libraries to load, these are inserted before the actual
+      dependencies in the executable's searchlist for symbol resolution.  */
+   {
++    /* Print a message if the loading of libs is traced.  */
++    if (__glibc_unlikely (GLRO(dl_debug_mask) & DL_DEBUG_LIBS))
++			 _dl_debug_printf (" starting to load dependencies.\n");
++
+     RTLD_TIMING_VAR (start);
+     rtld_timer_start (&start);
+     _dl_map_object_deps (main_map, preloads, npreloads,
+-- 
+2.38.1
+
