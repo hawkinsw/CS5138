@@ -128,7 +128,7 @@ Instead of letting such a tedious set of steps take the wind out of our sails wh
 1. The name/path of a 32-bit PE file. 
 2. The target virtual address. 
 
-`vapid` will allow for specification of the target virtual address in either decimal or hexadecimal form. `vapid` assumes that the user specifies a hexadecimal-formatted target virtual address by prefixing the value with `0x`. A target virtual address specified in decimal format contains no such prefix.
+`vapid` will allow for specification of the target virtual address in either decimal or hexadecimal form. `vapid` assumes that the user specifies a hexadecimal-formatted target virtual address by prefixing the value with `0x`. All hexadecimal digits between `a` and `f` used in input/output with the `vapid` user must be written in lowercase (as shown here). A target virtual address specified in decimal format contains no such prefix.
 
 Should the `vapid` user specify a name/path of a 32-bit PE file that does not exist, `vapid` may print anything to the screen (obviously a nicely formatted error message would be ideal) but _it must_ exit with a status code of 1. Should the `vapid` user specify a target virtual address that cannot be parsed into a number (e.g., 0xg00dg4@d3), `vapid` may print anything to the screen (again, a nicely formatted error message would be good) but _it must_ exit with a status code of 1.
 
