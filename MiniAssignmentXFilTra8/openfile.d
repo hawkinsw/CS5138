@@ -31,16 +31,14 @@ int debug_mode;
  * Documentation for NtCreateFile: https://learn.microsoft.com/en-us/windows/win32/api/winternl/nf-winternl-ntcreatefile
  */
 syscall::NtCreateFile:entry
+/ strstr(execname, "XFilTr8") != "" /
 {
     debug_mode = 1;
 
     self->phandle = (HANDLE*)0;
     self->fname_buffer = (uint16_t*)NULL;
     self->fname_buffer_len = 0;
-/*
- * Provided to save time with typing.
- */
-/*
+
     this->attr = (POBJECT_ATTRIBUTES)
         copyin(arg2, sizeof(OBJECT_ATTRIBUTES));
 
@@ -53,10 +51,11 @@ syscall::NtCreateFile:entry
             copyin((uintptr_t)this->objectName->Buffer,
                     this->objectName->Length);
         this->fname_buffer_len = this->objectName->Length;
-    }
-*/    
-}
 
-syscall::NtCreateFile:return
-{
+        printf("Process %s PID %d opened file %*ws \n",
+            execname,
+            pid,
+            this->fname_buffer_len / 2,
+            ((struct ustr*)this->fname_buffer)->buffer);
+    }
 }
