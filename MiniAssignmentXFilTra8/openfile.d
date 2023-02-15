@@ -39,6 +39,10 @@ syscall::NtCreateFile:entry
     self->fname_buffer = (uint16_t*)NULL;
     self->fname_buffer_len = 0;
 
+    /*
+     * Proudly taken (verbatim) from Microsoft's examples:
+     * https://github.com/microsoft/DTrace-on-Windows/blob/windows/samples/windows/file/filedeletetracker.d
+     */
     this->attr = (POBJECT_ATTRIBUTES)
         copyin(arg2, sizeof(OBJECT_ATTRIBUTES));
 
