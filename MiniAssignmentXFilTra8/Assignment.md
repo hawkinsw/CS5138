@@ -428,7 +428,7 @@ I would recommend using the `fname_buffer` member of the `this` structure as a m
 
 ## Submission and Assessment
 
-Submissions for this assignment will be through Canvas. There is no automated testing for this assignment. The Assignment associated with this assignment on the course's Canvas page will provide the tools you need to submit your assignment.
+Submissions for this assignment will be through Canvas. There is no automated testing for this assignment. The [Assignment associated with this assignment on the course's Canvas page](https://uc.instructure.com/courses/1598802/assignments/19789754) will provide the tools you need to submit your assignment.
 
 This assignment is worth 75 points. Your submission will be assessed according to the following rubric:
 
