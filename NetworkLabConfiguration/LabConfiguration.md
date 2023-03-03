@@ -54,11 +54,13 @@ Click on the gear icon next to the label _Connected - 1000 Mbps_ (indicated in r
 
 ![TODO](./images/ubuntunetworksettings.png)
 
-Click on the _IPv4_ tab (indicated in red in the following image). In the _Addresses_ section, make the IP address be 10.3.2.2, the netmask be 255.255.255.0 and the gateway be 10.3.2.1 (indicated in green in the following image). Finally, set 8.8.8.8 as the DNS server (indicated in blue in the following image). When you are done, press _Apply_ (the green button in the upper-right portion of the screen). 
+Click on the _IPv4_ tab (indicated in red in the following image). In the _Addresses_ section, make the IP address be 10.3.2.2, the netmask be 255.255.255.0 and the gateway be 10.3.2.1 (indicated in green in the following image). Finally, set 10.25.3.2 as the DNS server (indicated in blue in the following image). When you are done, press _Apply_ (the green button in the upper-right portion of the screen). 
 
 ![TODO](./images/ubuntunetworkipv4.png)
 
-Setting the values the way that we did above will assign the analysis machine the 10.3.2.2 IPv4 address on the 10.3.2.0/24 network. It will set the analysis VM's router to 10.3.2.1, the Kali VM (we will configure the Kali VM next). These settings configure the Kali VM to use Google's anycast server at 8.8.8.8 to perform DNS resolution.
+Setting the values the way that we did above will assign the analysis machine the 10.3.2.2 IPv4 address on the 10.3.2.0/24 network. It will set the analysis VM's router to 10.3.2.1, the Kali VM (we will configure the Kali VM next). These settings configure the analysis VM to use UC's internal DNS server.
+
+> Note: Using UC's internal DNS server means that this configuration will only work when you are on campus. To use the configuration off campus, you should change the DNS server setting to the IP address of a different DNS server (8.8.8.8 is a good choice!).
 
 ### Configuring The VMs: Kali VM
 
