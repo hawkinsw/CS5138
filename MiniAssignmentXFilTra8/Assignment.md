@@ -10,6 +10,8 @@ In this assignment you will get experience using DTrace for program analysis by
 2. Using DTrace to monitor the files that the chosen program opens as it operates.
 3. Using DTrace to block access to *one* of those files by the program-under-study and document how the application behaves in the presence of that failure.
 
+> Note: Because of platform differences, there is an alternate formulation of this assignment for those who are running Apple silicon-based macOS laptops and desktops. The overall theme of the project does not change -- using DTrace to experiment with a program -- so please continue reading. However, some technical details will differ. See [below](#apple-silicon-based-macos-alternative-assignment-information) for more information.
+
 ## An Example
 
 To give you a better understanding of what I expect, I have performed an analysis that exemplifies an exemplary submission. Your research and documentation do not need to be *as* complete as what I will write below, but your writeup should be substantially similar.
@@ -27,7 +29,11 @@ Let's start with overall objective (1) from the Summary section above and choose
 
 > *Note: That means you cannot choose to monitor the WhatsApp application. You will have to choose another!*
 
-Now that we've chosen, let's customize the `openfile.d` D Script so that we can monitor the chosen application. We want to do monitoring only at this point, so ...
+Now that we've chosen, let's customize the `openfile.d` D Script so that we can monitor the chosen application. 
+
+> Note: As above, the following information may refer to technical points that are not applicable to you who are doing this assignment on an Apple silicon-based macOS device. See [below](#apple-silicon-based-macos-alternative-assignment-information) for more information.
+
+We want to do monitoring only at this point, so ...
 
 1. "disable" the `copyout` of the 8 `null` bytes whose purpose it is to overwrite the kernel-assigned handle value
 
@@ -437,3 +443,110 @@ This assignment is worth 75 points. Your submission will be assessed according t
 | 50 | Report | You will be awarded 35 points for the *content* of your report. If your report thoroughly covers all three of the required topics you will receive 35 points. If your report covers all three of the required topics you will receive 20 points. If your report superficially covers all the required topics you will receive 10 points. *If your report does not cover all the required topics you will receive 0 points*. The remaining 15 points will be awarded based on the grammar and structure of your report: Reports with few, if any, grammatical/spelling errors will receive full points.
 | 25 | Programming | You will be awarded 25 points for your implementation of a robust scheme to determine when to use DTrace to deny access to a particular file. A robust scheme is one that cannot fail when long/short file names are potentially accessed, one that handles wide character strings, one that does not block access to more than a single file, etc. |
 
+
+## Apple silicon-Based macOS Alternative Assignment Information
+
+The overall theme of the project is identical no matter whether you are using Windows or you are running macOS on an Apple silicon-based computer. The differences are only technical. In other words, you are still responsible for submitting a report that meets all the requirements outlined above no matter the fact that you are working with macOS and the example and details provided above include information about technical details specific to the Windows platform. 
+
+As we said in class, what makes DTrace so amazing is that it works on Windows *and* macOS in *almost* exactly the same way. If you consider that different platforms and different hosts have to, by necessity, offer different probes depending on the version of software (etc.), then DTrace on a macOS-based computer and DTrace on a Windows-based computer are identical. In other words, with the exception of the names of the probes that are used on each platform, the concepts are absolutely the same!
+
+For the rest of this description, we will use the shorthand of "Windows openfile.d" to refer to the D Script that monitors and blocks file access for the program under study designed to work on computers running Windows. Alternatively, we will use the shorthand of "macOS openfile.d" to refer to the D Script that monitors and blocks file access for the program under study designed to work on computers running macOS.
+
+In the Windows openfile.d, the means of preventing an application from reading data from a particular file is done by executing actions in a clause on a probe associated with the `NtCreateFile` system call. The Windows openfile.d D Script makes the application think that its attempt at opening a file resulted in an error.
+
+For technical reasons, such an approach -- intercepting the system call that a program would use to open a file -- does not work on computers running macOS. We will have to use an alternative means. We will implement a system that lets the program under study open a file *and* read its data. What, then, good is our program? If the program under study can both open and read the file, are we doing anything? 
+
+Yes, in fact, we are! If you have just let me finish ...
+
+We will overwrite all the data that the program reads from the file whose access we want to block. In its place, we will put garbage.
+
+### Using DTrace on macOS
+
+Before starting, check to make sure that you are able to use DTrace on your computer running macOS. Open a terminal emulator (`iTerm` or `Terminal.app`) and run the following command:
+
+```console
+$ sudo dtrace -l | head
+```
+
+If everything is working correctly, you should see output that looks roughly like:
+
+```console
+m1ac:~ hawkinsw$ sudo dtrace -l | head
+   ID   PROVIDER            MODULE                          FUNCTION NAME
+    1     dtrace                                                     BEGIN
+    2     dtrace                                                     END
+    3     dtrace                                                     ERROR
+    4   lockstat       mach_kernel                      lck_mtx_lock adaptive-acquire
+    5   lockstat       mach_kernel                 lck_mtx_lock_spin adaptive-acquire
+    6   lockstat       mach_kernel                  lck_mtx_try_lock adaptive-acquire
+    7   lockstat       mach_kernel             lck_mtx_try_lock_spin adaptive-acquire
+    8   lockstat       mach_kernel                    lck_mtx_unlock adaptive-release
+    9   lockstat       mach_kernel                      lck_mtx_lock adaptive-block
+```
+
+In order to get DTrace to work on a computer running macOS, you will need to disable System Integrity Protection. [Here](https://developer.apple.com/documentation/security/disabling_and_enabling_system_integrity_protection) is documentation from Apple on how to do that. Further instructions are available at [The Poweruser Blog](https://poweruser.blog/using-dtrace-with-sip-enabled-3826a352e64b).
+
+### The macOS openfile.d Skeleton Code
+
+The macOS skeleton code for this assignment is in the `macOS` directory. To test whether you have the skeleton code working correctly, you will need to build the `XFilTr8` application. In order to do that, you will need Apple's command-line developer tools. You can install those by running the 
+
+```console
+$ xcode-select --install
+```
+
+command from the terminal. The installation might take some time.
+
+Once you have installed the XCode Command-Line Tools, you can build the `XFilTr8` application by `make`:
+
+```console
+$ make
+```
+
+Test whether `XFilTr8` built correctly by confirming its output matches:
+
+```console
+$ ./XFilTr8
+Your secret is safe with me: 'Elaine's middle name is Ike.'.
+```
+
+To continue, open *another* terminal window (you will have two open at this point). In the other window, gain administrator access:
+
+```console
+$ sudo su
+```
+
+Then, execute DTrace and tell it to execute the skeleton code:
+
+```console
+$ dtrace -w -s openfile.d
+```
+
+You may have to provide the full path to `openfile.d` depending on your current working directory when executing the command above. Just remember that you want to specify the macOS version of the `openfile.d` DTrace script. If you don't, you will get a syntax error.
+
+The final confirmation comes when we are able to see the skeleton macOS openfile.d successfully block `XFilTr8`'s access to the secret file. Return to the terminal window where DTrace is *not* running (remember, keep DTrace running in the other window!). From there, execute `XFilTr8` again:
+
+```console
+$ ./XFilTr8
+```
+
+In the window where DTrace is running, you should see something that looks like
+
+```console
+dtrace: script '/Users/hawkinsw/Code/CS5138/MiniAssignmentXFilTra8/macOS/openfile.d' matched 14 probes
+dtrace: allowing destructive actions
+CPU     ID                    FUNCTION:NAME
+  6      1                           :BEGIN We are starting to protect ...
+
+  1    172                       read:entry path? secret.txt
+
+  1    172                       read:entry Definitely stopping this one: secret.txt!
+```
+
+and in the window where `XFilTrace` is running, you should see something like
+
+
+```console
+Your secret is safe with me: ''.
+```
+
+Now that you have confirmed your setup, let the games begin ...
