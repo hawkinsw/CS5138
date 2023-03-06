@@ -12,6 +12,7 @@ dtrace:::END
  * Look up `man 2 open` for information about the open POSIX function.
  */
 syscall::read:entry 
+/ strstr(execname, "XFilTr8") != "" /
 {
     /*
      * In all cases, let's reset all the shared flags (just for safety).
