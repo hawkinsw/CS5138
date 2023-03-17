@@ -47,7 +47,7 @@ Now that we know we *can* see HTTP traffic if it exists, let's run `secretsearch
 
 1. Open a terminal on the analysis VM and run `secretsearcher`: 
 ```console
-$ ./secretsearcher`.
+$ ./secretsearcher
 ```
 2. Verify that Wireshark shows no HTTP packets.
 
