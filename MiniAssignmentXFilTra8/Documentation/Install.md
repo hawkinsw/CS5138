@@ -40,7 +40,7 @@ First, click the Start button and then search for "powershell". Right click on t
 Once you have a command prompt, execute the command
 
 ```PowerShell
-bcedit /set dtrace on
+bcdedit /set dtrace on
 ```
 ![](./images/bcdedit.png)
 
