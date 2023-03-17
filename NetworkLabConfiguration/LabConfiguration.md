@@ -16,9 +16,11 @@ We will _not_ run a [DHCP](https://en.wikipedia.org/wiki/Dynamic_Host_Configurat
 
 ### Assumptions
 
-It is assumed that you have installed a Kali and an Ubuntu Linux or Windows guest on the same hypervisor and are virtualizing them with VirtualBox. For additional information on how to perform these installations using different hypervisors, see the class' Wiki. Even if you are using a different hypervisor, these instructions might still help you!
+It is assumed that you have installed a Kali and an Ubuntu Linux or Windows guest on the same hypervisor and are virtualizing them with VirtualBox or VMWare Fusion. For additional information on how to perform these installations using different hypervisors, see the class' Wiki. Even if you are using a different hypervisor, these instructions might still help you!
 
-### Configuring the Guests's NICs
+Continue [below](#configuring-the-hypervisor---virtualbox) if you are using VirtualBox and [skip](#configuring-the-hypervisor---vmware-fusion) ahead if you are using VMWare Fusion.
+
+### Configuring The Hypervisor - VirtualBox
 
 Begin by opening up VirtualBox. While the VM is powered down (and *not* just paused), select the Kali VM and then open its settings.
 
@@ -44,11 +46,52 @@ No matter whether your Analysis VM is running Windows or Ubuntu Linux, you will 
 
 ![TODO](./images/virtualboxanalysisnetworkanalysis.png)
 
+### Configuring The Hypervisor - VMWare Fusion
+
+First, start by opening the hypervisor and making sure that each of the Kali and Analysis VMs are powered down (and not just "paused").
+
+Select the Kali VM and right click. Then, choose settings.
+
+
+![](./images/VMWareFusion/kalisettings.png)
+
+Next, click _Add Device..._ .
+
+![](./images/VMWareFusion/kaliadddevice.png)
+
+Choose _Network Adapter_.
+
+![](./images/VMWareFusion/kaliaddnetworkadapter.png)
+
+Finally, set the new adapter to be private.
+
+![](./images/VMWareFusion/kalimakeprivate.png)
+
+Close the window. 
+
+With that, your Kali VM now has a second network interface -- one that can only communicate with other _Private to my Mac_ network interfaces running on guests virtualized by VMWare Fusion and is how we will build the virtual network when using the VMWare Fusion hypervisor.
+
+Next, let's configure the Analysis VM so that it can connect to the Kali VM over the virtual network.
+
+Start by selecting the Analysis VM and choosing settings, like we did above.
+
+This time we will configure the existing network adapter to be private rather than adding a second adapter.
+
+![](./images/VMWareFusion/analysisnetworkadapter.png)
+
+Next, set that adapter to connect to other private adapters.
+
+![](./images/VMWareFusion/analysismakeprivate.png)
+
+Voila! That's it! You now have the two guests configured with (at least) one network interface connected to the virtual network.
+
+Close the window.
+
 ### Configuring The VMs: Analysis VM
 
 #### Ubuntu
 
-Follow the configuration instructions in this section if your Analysis VM is running Ubuntu Linux. Skip ahead if your Analysis VM is running Windows.
+Follow the configuration instructions in this section if your Analysis VM is running Ubuntu Linux. [Skip ahead](#windows) if your Analysis VM is running Windows.
 
 Boot up the Analysis VM. Once you have logged in, click on the network icon in the upper-right hand corner of the screen (indicated in green in the following image), then click on _Wired Connected_ (indicated in blue in the following image), and, finally, click on _Wired Settings_ (indicated in red in the following image). 
 
