@@ -8,8 +8,10 @@ dtrace:::END
     printf("We are done protecting ...\n");
 }
 
+/* The maximimum length of a filename in Windows (in 16-bit units) */
+inline const int MAX_FILENAME_LEN = 256;
 /* Necessary for printing out a unicode string. */
-struct ustr{uint16_t buffer[256];};
+struct ustr{uint16_t buffer[MAX_FILENAME_LEN];};
 /* A set of bytes to use to "null out" the handle's value. */
 uint8_t null[8];
 
@@ -56,17 +58,13 @@ syscall::NtCreateFile:entry
                     this->objectName->Length);
         this->fname_buffer_len = this->objectName->Length;
 
-        /*
-         * Be very careful here -- this may mess up further
-         * processing or even fail to work at all!
-         * And, for some unknown reason, if you put this code deeper
-         * in a conditional, it fails to work. I. Have. No. Idea.
+        /* Attempting to print out the unicode-encoded filename path
+         * tends to cause problems because of "unprintable characters".
+         * Even though the tracemem function does not print things
+         * as nicely as we would like, it does not fail and we can see
+         * the essential information.
          */
-        printf("Process %s PID %d opened file %*ws \n",
-            execname,
-            pid,
-            this->fname_buffer_len / 2,
-            ((struct ustr*)this->fname_buffer)->buffer);
+        tracemem(this->fname_buffer, MAX_FILENAME_LEN, this->fname_buffer_len);
     }
 
     if (this->fname_buffer_len != 0) {
