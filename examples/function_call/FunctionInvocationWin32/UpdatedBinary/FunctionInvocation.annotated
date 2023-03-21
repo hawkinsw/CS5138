@@ -1,0 +1,114 @@
+Data:
+
+00009020  00 00 00 00 25 66 0a 00  00 00 00 00 00 00 e8 3f  |....%f.........?|
+                      ^ Looks like a format string to me!
+                                   ^ Start of .75 in 64-bit FP (LE)
+00009030  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 40  |...............@|
+00009040  00 00 00 00 00 00 00 00  9a 99 99 99 99 99 23 40  |..............#@|
+00009050  00 00 00 00 00 00 00 00  00 00 00 00 00 00 28 40  |..............(@|
+                                   ^ Start of 12 in 64-bit FP (LE)
+00009060  00 00 00 00 00 00 00 00  00 00 00 00 00 00 49 40  |..............I@|
+                                   ^ Start of 50 in 64-bit FP (LE)
+All representations can be confirmed with:
+https://baseconvert.com/ieee-754-floating-point
+
+Instructions:
+
+FunctionInvocation.exe:     file format pei-x86-64
+
+Disassembly of section .text:
+...
+
+- Indirection point for "the function"
+   140011140:	e9 5b 06 00 00       	jmp    0x1400117a0
+
+...
+
+- Indirection point for printf
+   140011195:	e9 16 08 00 00       	jmp    0x1400119b0
+
+...
+
+- Start of "the function":
+   1400117a0:	4c 89 4c 24 20       	mov    QWORD PTR [rsp+0x20],r9
+   1400117a5:	f2 0f 11 54 24 18    	movsd  QWORD PTR [rsp+0x18],xmm2
+   1400117ab:	f2 0f 11 4c 24 10    	movsd  QWORD PTR [rsp+0x10],xmm1
+   1400117b1:	f2 0f 11 44 24 08    	movsd  QWORD PTR [rsp+0x8],xmm0
+   1400117b7:	55                   	push   rbp
+   1400117b8:	57                   	push   rdi
+   1400117b9:	48 81 ec 58 01 00 00 	sub    rsp,0x158
+   1400117c0:	48 8d 6c 24 30       	lea    rbp,[rsp+0x30]
+   1400117c5:	48 8d 0d 52 f8 00 00 	lea    rcx,[rip+0xf852]        # 0x14002101e
+   1400117cc:	e8 95 fb ff ff       	call   0x140011366
+   1400117d1:	f2 0f 10 05 6f 84 00 	movsd  xmm0,QWORD PTR [rip+0x846f]        # 0x140019c48
+   1400117d8:	00 
+   1400117d9:	f2 0f 11 45 08       	movsd  QWORD PTR [rbp+0x8],xmm0
+   1400117de:	f2 0f 10 85 48 01 00 	movsd  xmm0,QWORD PTR [rbp+0x148]
+   1400117e5:	00 
+   1400117e6:	f2 0f 59 45 08       	mulsd  xmm0,QWORD PTR [rbp+0x8]
+   1400117eb:	f2 0f 11 45 28       	movsd  QWORD PTR [rbp+0x28],xmm0
+   1400117f0:	f2 0f 10 85 40 01 00 	movsd  xmm0,QWORD PTR [rbp+0x140]
+   1400117f7:	00 
+   1400117f8:	f2 0f 59 85 40 01 00 	mulsd  xmm0,QWORD PTR [rbp+0x140]
+   1400117ff:	00 
+   140011800:	f2 0f 10 0d 30 84 00 	movsd  xmm1,QWORD PTR [rip+0x8430]        # 0x140019c38
+   140011807:	00 
+   140011808:	f2 0f 59 4d 28       	mulsd  xmm1,QWORD PTR [rbp+0x28]
+   14001180d:	f2 0f 59 8d 50 01 00 	mulsd  xmm1,QWORD PTR [rbp+0x150]
+   140011814:	00 
+   140011815:	f2 0f 5c c1          	subsd  xmm0,xmm1
+   140011819:	f2 0f 11 45 48       	movsd  QWORD PTR [rbp+0x48],xmm0
+   14001181e:	f2 0f 10 45 48       	movsd  xmm0,QWORD PTR [rbp+0x48]
+   140011823:	e8 23 f8 ff ff       	call   0x14001104b
+- Because we do not change either rax or xmm0 after this call, we know
+  that the return value of that function will be the return value of this
+	function -- and that seems reasonable. Because that function returns
+	a double, it will go in xmm0. Therefore, ours will too ...
+   140011828:	48 8d a5 28 01 00 00 	lea    rsp,[rbp+0x128]
+   14001182f:	5f                   	pop    rdi
+   140011830:	5d                   	pop    rbp
+   140011831:	c3                   	ret    
+- End of "the function"
+...
+
+- Start of main
+   140011930:	40 55                	rex push rbp
+   140011932:	57                   	push   rdi
+   140011933:	48 81 ec e8 00 00 00 	sub    rsp,0xe8
+   14001193a:	48 8d 6c 24 20       	lea    rbp,[rsp+0x20]
+   14001193f:	48 8d 0d d8 f6 00 00 	lea    rcx,[rip+0xf6d8]        # 0x14002101e
+   140011946:	e8 1b fa ff ff       	call   0x140011366
+
+- Work from the last argument to the first, for no apparent reason. Load
+  up the last argument first -- r9 is the register that holds the fourth
+	parameter to a function.
+   14001194b:	41 b9 db ea 0d 00    	mov    r9d,0xdeadb
+- And now, load up the second-to-last argument (i.e., the third).
+   140011951:	f2 0f 10 15 ff 82 00 	movsd  xmm2,QWORD PTR [rip+0x82ff]        # 0x140019c58
+   140011958:	00 
+- And now, load up the third-to-last argument (i.e., the second).
+   140011959:	f2 0f 10 0d c7 82 00 	movsd  xmm1,QWORD PTR [rip+0x82c7]        # 0x140019c28
+   140011960:	00 
+- And now, load up the fourth-to-last argument (i.e., the first).
+   140011961:	f2 0f 10 05 ff 82 00 	movsd  xmm0,QWORD PTR [rip+0x82ff]        # 0x140019c68
+   140011968:	00 
+- Now that we have all the parameters loaded up, let's call the function!
+   140011969:	e8 d2 f7 ff ff       	call   0x140011140
+- The function should have returned a floating-point value in xmm0. Confirm?
+  Yes, we can confirm that this fact is true. So, let's do something we would
+	not do after optimization, and move that result to a different register ...
+   14001196e:	0f 28 c8             	movaps xmm1,xmm0
+- ... and then move it again to a different register ...
+   140011971:	66 48 0f 7e ca       	movq   rdx,xmm1
+- ... which just so happens to be the register designated to hold the second
+  argument to a function call. rcx is the first ...
+   140011976:	48 8d 0d a7 82 00 00 	lea    rcx,[rip+0x82a7]        # 0x140019c24
+- ... and we load the address of the "%f" format string into it. Convenient.
+  Finally, we call printf and away ... we ... go!
+   14001197d:	e8 13 f8 ff ff       	call   0x140011195
+   140011982:	33 c0                	xor    eax,eax
+   140011984:	48 8d a5 c8 00 00 00 	lea    rsp,[rbp+0xc8]
+   14001198b:	5f                   	pop    rdi
+   14001198c:	5d                   	pop    rbp
+   14001198d:	c3                   	ret    
+- End of main
