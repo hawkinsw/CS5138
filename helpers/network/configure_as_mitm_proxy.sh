@@ -1,5 +1,14 @@
 #!/bin/bash
 
+
+USERNAME=`whoami`
+echo "${USERNAME}"
+
+if [ "${USERNAME}" != "root" ]; then
+				echo "ERROR: You must run this script as root."
+				exit 1
+fi
+
 # A script to configure mitmproxy to run in
 # transparent mode. See
 # https://docs.mitmproxy.org/stable/howto-transparent/
@@ -15,7 +24,9 @@ sysctl -w net.ipv4.conf.all.send_redirects=0 2>&1 >/dev/null
 # afterwards). See https://wiki.wireshark.org/TLS#using-the-pre-master-secret
 # for how to configure Wireshark to take advantage of
 # this configuration.
-KEYFILE_FILE=/home/kali/keyfile.txt
+KEYFILE_FILE="/home/${SUDO_USER}/keyfile.txt"
+
+echo "INFO: The SSL keyfile is located at ${KEYFILE_FILE}. Make a note."
 
 # Use a regular expression to define which connections
 # we do not want to proxy. By default, we will accept
