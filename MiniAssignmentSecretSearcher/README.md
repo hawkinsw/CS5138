@@ -155,6 +155,8 @@ We glossed over one important detail earlier when discussing the HTTPS Proxying 
 
 MITM Proxy offers a cool piece of functionality that allows it to interact with Wireshark so that Wireshark can decrypt the packets that it snoops from the network. If properly configured, MITM Proxy will log all the [session keys](https://www.cloudflare.com/learning/ssl/what-is-a-session-key/) that it generates. 
 
+The `configure_as_mitm_proxy.sh` helper script will configure MITM Proxy to export the session keys to a file named `keyfile.txt` and it will store that file in your home directory (i.e., `/home/hawkinsw/` if your username is `hawkinsw`). The name of the keyfile is also displayed on screen before MITM Proxy displays its UI.
+
 In turn, we can configure Wireshark to read that log file and (in real time, mind you!) use the contents of the log file (i.e., session keys) to decrypt the packets that it captures from the network. 
 
 Let's do that now. Wait!! Didn't I just say that we didn't have to do anything else? Yes, but I lied. 
@@ -167,7 +169,7 @@ Next, click on Protocols and find the TLS protocol settings. You should see a sc
 
 ![Wireshark TLS protocol configuration preferences.](./images/kaliwiresharkpreferencestlspng.png)
 
-Click on the `Browse` button under the `(Pre)-Master-Secret log filename` box. Browse to `/home/kali/` and select `keyfile.txt`. This is the name and location of the file that MITM Proxy is generating -- that location and name combination is configured in `configure_as_mitm_proxy.sh` and you can customize it if you like. Press `OK`. Now that you have completed this step, you will *have to* restart Wireshark. 
+Click on the `Browse` button under the `(Pre)-Master-Secret log filename` box. Browse to the current user's home directory (i.e., `/home/hawkinsw/` if your Kali username is `hawkinsw`) and select `keyfile.txt`. This is the name and location of the file that MITM Proxy is generating -- that location and name combination is configured in `configure_as_mitm_proxy.sh` and you can customize it if you like. Press `OK`. Now that you have completed this step, you will *have to* restart Wireshark.
 
 And now, I promise this time!, the HTTPS Proxying setup is configured! Congratulations!!
 
