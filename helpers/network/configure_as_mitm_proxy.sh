@@ -1,8 +1,6 @@
 #!/bin/bash
 
-
 USERNAME=`whoami`
-echo "${USERNAME}"
 
 if [ "${USERNAME}" != "root" ]; then
 				echo "ERROR: You must run this script as root."
