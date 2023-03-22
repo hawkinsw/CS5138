@@ -96,15 +96,32 @@ Because the client thinks that the proxy server is actually `cnn.com`, the proxy
 
 ### Step 3: Configuring MITM Proxy
 
-MITM Proxy is a tool installed by default in the Kali distribution that allows us to easily perform HTTPS Proxying. The only problem is that the version installed is too old for our purposes. So, we will need to first upgrade the version on our Kali VM. 
+MITM Proxy is a tool installed by default in the Kali distribution that allows us to easily perform HTTPS Proxying. Older versions of the tool did not have support for features that we need to use. So, before proceeding, we need to make sure that we have a new version.
+
+Check the version of `mitproxy` that you have installed by
+
+```console
+$ mitmproxy --version
+```
+
+You should see output that looks like:
+```
+Mitmproxy: 8.1.1
+Python:    3.10.8
+...
+```
+
+As long as the version you are using is newer than `7.0.4`, you are good to go! If you are using an older version, there are new versions available from their website,
 
 Start by downloading the updated version of the program from [mitmproxy.org](https://mitmproxy.org/). Place the downloaded file in the `~Downloads/` directory. 
 
 Untar/zip the file: 
 
 ```console
-$ tar -xvzf mitmproxy-7.0.4-linux.tar.gz
+$ tar -xvzf mitmproxy-9.0.1-linux.tar.gz
 ```
+
+> Note: Version `9.0.1` is the newest version of MITM Proxy at the time of this writing. Your version number may be different but the command to untar/unzip the file should be roughly the same.
 
 Copy the three (3) binaries into `/usr/bin` to overwrite the outdated versions:
 
@@ -114,20 +131,9 @@ $ sudo cp mitmdump /usr/bin
 $ sudo cp mitmweb /usr/bin
 ```
 
-Verify that you have properly installed the updated version:
+> Note: The versions that the developers of MITM Proxy publish are compatible with x86 only. If you are running these experiments with an ARM-based host (and, therefore, are using an ARM-based distribution of Kali), please find updated versions of MITM Proxy at [https://archlinuxarm.org/packages/aarch64/mitmproxy](https://archlinuxarm.org/packages/aarch64/mitmproxy) under the _Download_ link.
 
-```console
-$ mitmproxy --version
-```
-
-You should see output that looks like:
-```
-Mitmproxy: 7.0.4 binary
-Python:    3.9.7
-...
-```
-
-Copy and paste the output from that command in `submission.txt` as your response to Question 4.
+No matter whether the version already installed in your Kali VM was compatible or you had to download and install a new version, copy and paste the output from the command you used to verify the version `submission.txt` as your response to Question 4.
 
 HTTPS connections operate on port 443. In order for our HTTPS Proxying setup to work, we will have to tell the router (Kali VM) to intercept all the traffic that it sees coming in on port 443 and redirect it to MITM Proxy so that it can work its magic. We will use `iptables` to do this redirection. 
 
