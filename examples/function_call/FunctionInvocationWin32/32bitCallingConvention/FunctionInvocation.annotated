@@ -1,0 +1,125 @@
+Data:
+00006730  25 66 0a 00 00 00 00 00  00 00 00 00 00 00 e8 3f  |%f.............?|
+00006740  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 40  |...............@|
+00006750  00 00 00 00 00 00 00 00  9a 99 99 99 99 99 23 40  |..............#@|
+00006760  00 00 00 00 00 00 00 00  00 00 00 00 00 00 28 40  |..............(@|
+00006770  00 00 00 00 00 00 00 00  00 00 00 00 00 00 49 40  |..............I@|
+00006780  00 00 00 00 40 7c 41 00  50 7d 41 00 a8 7e 41 00  |....@|A.P}A..~A.|
+00006790  cc 7e 41 00 0c 7f 41 00  40 7f 41 00 01 00 00 00  |.~A...A.@.A.....|
+000067a0  00 00 00 00 01 00 00 00  01 00 00 00 01 00 00 00  |................|
+
+Code:
+
+FunctionInvocation.exe:     file format pei-i386
+
+
+Disassembly of section .text:
+
+00411000 <.text>:
+  411000:	cc                   	int3   
+  411001:	cc                   	int3   
+  411002:	cc                   	int3   
+  411003:	cc                   	int3   
+  411004:	cc                   	int3   
+  411005:	e9 d1 40 00 00       	jmp    0x4150db
+
+...
+
+  411122:	e9 89 1e 00 00       	jmp    0x412fb0
+  411127:	e9 84 40 00 00       	jmp    0x4151b0
+  41112c:	e9 df 0f 00 00       	jmp    0x412110
+  411131:	e9 6a 1d 00 00       	jmp    0x412ea0
+- We will target this address in the call from the main that ultimately
+  redirects the function that we are calling. No, I'm not sure why the compiler
+	does this but I *bet* that it would be optimized away if we compiled
+	in Release mode (rather then Debug mode).
+  411136:	e9 45 06 00 00       	jmp    0x411780
+  41113b:	e9 59 3f 00 00       	jmp    0x415099
+
+...
+
+- start of the end_speed function.
+  411780:	55                   	push   ebp
+  411781:	8b ec                	mov    ebp,esp
+  411783:	81 ec f0 00 00 00    	sub    esp,0xf0
+  411789:	53                   	push   ebx
+  41178a:	56                   	push   esi
+  41178b:	57                   	push   edi
+  41178c:	8d 7d d0             	lea    edi,[ebp-0x30]
+  41178f:	b9 0c 00 00 00       	mov    ecx,0xc
+  411794:	b8 cc cc cc cc       	mov    eax,0xcccccccc
+  411799:	f3 ab                	rep stos DWORD PTR es:[edi],eax
+  41179b:	b9 1e c0 41 00       	mov    ecx,0x41c01e
+  4117a0:	e8 7b fb ff ff       	call   0x411320
+  4117a5:	f2 0f 10 05 58 7b 41 	movsd  xmm0,QWORD PTR ds:0x417b58
+  4117ac:	00 
+  4117ad:	f2 0f 11 45 f4       	movsd  QWORD PTR [ebp-0xc],xmm0
+  4117b2:	f2 0f 10 45 10       	movsd  xmm0,QWORD PTR [ebp+0x10]
+  4117b7:	f2 0f 59 45 f4       	mulsd  xmm0,QWORD PTR [ebp-0xc]
+  4117bc:	f2 0f 11 45 e4       	movsd  QWORD PTR [ebp-0x1c],xmm0
+  4117c1:	f2 0f 10 45 08       	movsd  xmm0,QWORD PTR [ebp+0x8]
+  4117c6:	f2 0f 59 45 08       	mulsd  xmm0,QWORD PTR [ebp+0x8]
+  4117cb:	f2 0f 10 0d 48 7b 41 	movsd  xmm1,QWORD PTR ds:0x417b48
+  4117d2:	00 
+  4117d3:	f2 0f 59 4d e4       	mulsd  xmm1,QWORD PTR [ebp-0x1c]
+  4117d8:	f2 0f 59 4d 18       	mulsd  xmm1,QWORD PTR [ebp+0x18]
+  4117dd:	f2 0f 5c c1          	subsd  xmm0,xmm1
+  4117e1:	f2 0f 11 45 d4       	movsd  QWORD PTR [ebp-0x2c],xmm0
+  4117e6:	83 ec 08             	sub    esp,0x8
+  4117e9:	f2 0f 10 45 d4       	movsd  xmm0,QWORD PTR [ebp-0x2c]
+  4117ee:	f2 0f 11 04 24       	movsd  QWORD PTR [esp],xmm0
+  4117f3:	e8 65 fa ff ff       	call   0x41125d
+  4117f8:	83 c4 08             	add    esp,0x8
+  4117fb:	5f                   	pop    edi
+  4117fc:	5e                   	pop    esi
+  4117fd:	5b                   	pop    ebx
+  4117fe:	81 c4 f0 00 00 00    	add    esp,0xf0
+  411804:	3b ec                	cmp    ebp,esp
+  411806:	e8 39 fa ff ff       	call   0x411244
+  41180b:	8b e5                	mov    esp,ebp
+  41180d:	5d                   	pop    ebp
+  41180e:	c3                   	ret    
+
+- start of the main function
+  411920:	55                   	push   ebp
+  411921:	8b ec                	mov    ebp,esp
+  411923:	81 ec c0 00 00 00    	sub    esp,0xc0
+  411929:	53                   	push   ebx
+  41192a:	56                   	push   esi
+  41192b:	57                   	push   edi
+  41192c:	8b fd                	mov    edi,ebp
+  41192e:	33 c9                	xor    ecx,ecx
+  411930:	b8 cc cc cc cc       	mov    eax,0xcccccccc
+  411935:	f3 ab                	rep stos DWORD PTR es:[edi],eax
+  411937:	b9 1e c0 41 00       	mov    ecx,0x41c01e
+  41193c:	e8 df f9 ff ff       	call   0x411320
+  411941:	6a 00                	push   0x0
+  411943:	68 db ea 0d 00       	push   0xdeadb
+  411948:	83 ec 08             	sub    esp,0x8
+  41194b:	f2 0f 10 05 68 7b 41 	movsd  xmm0,QWORD PTR ds:0x417b68
+  411952:	00 
+  411953:	f2 0f 11 04 24       	movsd  QWORD PTR [esp],xmm0
+  411958:	83 ec 08             	sub    esp,0x8
+  41195b:	f2 0f 10 05 38 7b 41 	movsd  xmm0,QWORD PTR ds:0x417b38
+  411962:	00 
+  411963:	f2 0f 11 04 24       	movsd  QWORD PTR [esp],xmm0
+  411968:	83 ec 08             	sub    esp,0x8
+  41196b:	f2 0f 10 05 78 7b 41 	movsd  xmm0,QWORD PTR ds:0x417b78
+  411972:	00 
+  411973:	f2 0f 11 04 24       	movsd  QWORD PTR [esp],xmm0
+  411978:	e8 b9 f7 ff ff       	call   0x411136
+  41197d:	83 c4 18             	add    esp,0x18
+  411980:	dd 1c 24             	fstp   QWORD PTR [esp]
+  411983:	68 30 7b 41 00       	push   0x417b30
+  411988:	e8 40 f7 ff ff       	call   0x4110cd
+  41198d:	83 c4 0c             	add    esp,0xc
+  411990:	33 c0                	xor    eax,eax
+  411992:	5f                   	pop    edi
+  411993:	5e                   	pop    esi
+  411994:	5b                   	pop    ebx
+  411995:	81 c4 c0 00 00 00    	add    esp,0xc0
+  41199b:	3b ec                	cmp    ebp,esp
+  41199d:	e8 a2 f8 ff ff       	call   0x411244
+  4119a2:	8b e5                	mov    esp,ebp
+  4119a4:	5d                   	pop    ebp
+  4119a5:	c3                   	ret    
