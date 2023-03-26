@@ -1,4 +1,4 @@
-## Registers Everywhere
+## Wide Load
 
 This simple program demonstrates the value of the bytes in memory that
 are subsequently `movsd`'d into the `xmm2` register. It also prints the value
