@@ -1,6 +1,6 @@
 # Decoding the `movsd` instruction
 
-In this walkthrough we will examine each of the components of a decoded x86 instruction and, ultimately, write a statement in a high-level programming language (C -- yes, in this course that does qualify as "high level"!) that might cause the compiler to emit such an instruction.
+In this walkthrough we will examine each of the components of a decoded x86 instruction.
 
 ## The Specimen
 
