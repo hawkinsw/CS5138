@@ -131,7 +131,8 @@ We have really, really learned a ton about what is going on. So, let's apply all
 
 This instruction will 
 
-1. read from memory 8 bytes of data whose contents represent a double-precision floating point value (green) and
+1. mov a scalar double-precision floating point value (gold)
+2. from memory at a specific address (green) and
 2. write that value to `xmm2` (red).
 
 Remember our assumptions above, that the effective address source operand of the instruction we are analysing is `0x48317`? Let's add another assumption that the contents in memory at that address are
@@ -143,3 +144,9 @@ Under those assumptions, the contents of register `xmm2` after the instruction h
 ![](./Images/MovsdAnalysisXmmRegisterContents.png)
 
 All that work for that little payoff? Wow!
+
+### Other Resources:
+
+1. The Intel architecture manual: [Online](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html)
+2. IEE754 Calculator: [Online](https://baseconvert.com/ieee-754-floating-point)
+3. Sample code: [Online](https://github.com/hawkinsw/CS5138/tree/main/examples/xmm)
