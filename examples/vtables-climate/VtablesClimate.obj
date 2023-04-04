@@ -1,0 +1,297 @@
+
+VtablesClimate:     file format elf64-x86-64
+
+
+Disassembly of section .init:
+
+0000000000401000 <_init>:
+  401000:	f3 0f 1e fa          	endbr64 
+  401004:	48 83 ec 08          	sub    rsp,0x8
+  401008:	48 8b 05 d1 2f 00 00 	mov    rax,QWORD PTR [rip+0x2fd1]        # 403fe0 <__gmon_start__@Base>
+  40100f:	48 85 c0             	test   rax,rax
+  401012:	74 02                	je     401016 <_init+0x16>
+  401014:	ff d0                	call   rax
+  401016:	48 83 c4 08          	add    rsp,0x8
+  40101a:	c3                   	ret    
+
+Disassembly of section .plt:
+
+0000000000401020 <memset@plt-0x10>:
+  401020:	ff 35 e2 2f 00 00    	push   QWORD PTR [rip+0x2fe2]        # 404008 <_GLOBAL_OFFSET_TABLE_+0x8>
+  401026:	ff 25 e4 2f 00 00    	jmp    QWORD PTR [rip+0x2fe4]        # 404010 <_GLOBAL_OFFSET_TABLE_+0x10>
+  40102c:	0f 1f 40 00          	nop    DWORD PTR [rax+0x0]
+
+0000000000401030 <memset@plt>:
+  401030:	ff 25 e2 2f 00 00    	jmp    QWORD PTR [rip+0x2fe2]        # 404018 <memset@GLIBC_2.2.5>
+  401036:	68 00 00 00 00       	push   0x0
+  40103b:	e9 e0 ff ff ff       	jmp    401020 <_init+0x20>
+
+0000000000401040 <__cxa_atexit@plt>:
+  401040:	ff 25 da 2f 00 00    	jmp    QWORD PTR [rip+0x2fda]        # 404020 <__cxa_atexit@GLIBC_2.2.5>
+  401046:	68 01 00 00 00       	push   0x1
+  40104b:	e9 d0 ff ff ff       	jmp    401020 <_init+0x20>
+
+0000000000401050 <_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc@plt>:
+  401050:	ff 25 d2 2f 00 00    	jmp    QWORD PTR [rip+0x2fd2]        # 404028 <_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc@GLIBCXX_3.4>
+  401056:	68 02 00 00 00       	push   0x2
+  40105b:	e9 c0 ff ff ff       	jmp    401020 <_init+0x20>
+
+0000000000401060 <_ZNSt8ios_base4InitC1Ev@plt>:
+  401060:	ff 25 ca 2f 00 00    	jmp    QWORD PTR [rip+0x2fca]        # 404030 <_ZNSt8ios_base4InitC1Ev@GLIBCXX_3.4>
+  401066:	68 03 00 00 00       	push   0x3
+  40106b:	e9 b0 ff ff ff       	jmp    401020 <_init+0x20>
+
+0000000000401070 <_ZNSt8ios_base4InitD1Ev@plt>:
+  401070:	ff 25 c2 2f 00 00    	jmp    QWORD PTR [rip+0x2fc2]        # 404038 <_ZNSt8ios_base4InitD1Ev@GLIBCXX_3.4>
+  401076:	68 04 00 00 00       	push   0x4
+  40107b:	e9 a0 ff ff ff       	jmp    401020 <_init+0x20>
+
+Disassembly of section .text:
+
+0000000000401080 <__cxx_global_var_init>:
+  401080:	55                   	push   rbp
+  401081:	48 89 e5             	mov    rbp,rsp
+  401084:	48 bf 91 41 40 00 00 	movabs rdi,0x404191
+  40108b:	00 00 00 
+  40108e:	e8 cd ff ff ff       	call   401060 <_ZNSt8ios_base4InitC1Ev@plt>
+  401093:	48 bf 70 10 40 00 00 	movabs rdi,0x401070
+  40109a:	00 00 00 
+  40109d:	48 be 91 41 40 00 00 	movabs rsi,0x404191
+  4010a4:	00 00 00 
+  4010a7:	48 ba 08 20 40 00 00 	movabs rdx,0x402008
+  4010ae:	00 00 00 
+  4010b1:	e8 8a ff ff ff       	call   401040 <__cxa_atexit@plt>
+  4010b6:	5d                   	pop    rbp
+  4010b7:	c3                   	ret    
+  4010b8:	0f 1f 84 00 00 00 00 	nop    DWORD PTR [rax+rax*1+0x0]
+  4010bf:	00 
+
+00000000004010c0 <_GLOBAL__sub_I_climate.cpp>:
+  4010c0:	55                   	push   rbp
+  4010c1:	48 89 e5             	mov    rbp,rsp
+  4010c4:	e8 b7 ff ff ff       	call   401080 <__cxx_global_var_init>
+  4010c9:	5d                   	pop    rbp
+  4010ca:	c3                   	ret    
+
+00000000004010cb <.annobin_abi_note.c.hot>:
+  4010cb:	0f 1f 44 00 00       	nop    DWORD PTR [rax+rax*1+0x0]
+
+00000000004010d0 <_start>:
+  4010d0:	f3 0f 1e fa          	endbr64 
+  4010d4:	31 ed                	xor    ebp,ebp
+  4010d6:	49 89 d1             	mov    r9,rdx
+  4010d9:	5e                   	pop    rsi
+  4010da:	48 89 e2             	mov    rdx,rsp
+  4010dd:	48 83 e4 f0          	and    rsp,0xfffffffffffffff0
+  4010e1:	50                   	push   rax
+  4010e2:	54                   	push   rsp
+  4010e3:	45 31 c0             	xor    r8d,r8d
+  4010e6:	31 c9                	xor    ecx,ecx
+  4010e8:	48 c7 c7 f0 11 40 00 	mov    rdi,0x4011f0
+  4010ef:	ff 15 e3 2e 00 00    	call   QWORD PTR [rip+0x2ee3]        # 403fd8 <__libc_start_main@GLIBC_2.34>
+  4010f5:	f4                   	hlt    
+
+00000000004010f6 <.annobin_abi_note.c>:
+  4010f6:	66 2e 0f 1f 84 00 00 	cs nop WORD PTR [rax+rax*1+0x0]
+  4010fd:	00 00 00 
+
+0000000000401100 <_dl_relocate_static_pie>:
+  401100:	f3 0f 1e fa          	endbr64 
+  401104:	c3                   	ret    
+
+0000000000401105 <.annobin__dl_relocate_static_pie.end>:
+  401105:	66 2e 0f 1f 84 00 00 	cs nop WORD PTR [rax+rax*1+0x0]
+  40110c:	00 00 00 
+  40110f:	90                   	nop
+
+0000000000401110 <deregister_tm_clones>:
+  401110:	b8 48 40 40 00       	mov    eax,0x404048
+  401115:	48 3d 48 40 40 00    	cmp    rax,0x404048
+  40111b:	74 13                	je     401130 <deregister_tm_clones+0x20>
+  40111d:	b8 00 00 00 00       	mov    eax,0x0
+  401122:	48 85 c0             	test   rax,rax
+  401125:	74 09                	je     401130 <deregister_tm_clones+0x20>
+  401127:	bf 48 40 40 00       	mov    edi,0x404048
+  40112c:	ff e0                	jmp    rax
+  40112e:	66 90                	xchg   ax,ax
+  401130:	c3                   	ret    
+  401131:	66 66 2e 0f 1f 84 00 	data16 cs nop WORD PTR [rax+rax*1+0x0]
+  401138:	00 00 00 00 
+  40113c:	0f 1f 40 00          	nop    DWORD PTR [rax+0x0]
+
+0000000000401140 <register_tm_clones>:
+  401140:	be 48 40 40 00       	mov    esi,0x404048
+  401145:	48 81 ee 48 40 40 00 	sub    rsi,0x404048
+  40114c:	48 89 f0             	mov    rax,rsi
+  40114f:	48 c1 ee 3f          	shr    rsi,0x3f
+  401153:	48 c1 f8 03          	sar    rax,0x3
+  401157:	48 01 c6             	add    rsi,rax
+  40115a:	48 d1 fe             	sar    rsi,1
+  40115d:	74 11                	je     401170 <register_tm_clones+0x30>
+  40115f:	b8 00 00 00 00       	mov    eax,0x0
+  401164:	48 85 c0             	test   rax,rax
+  401167:	74 07                	je     401170 <register_tm_clones+0x30>
+  401169:	bf 48 40 40 00       	mov    edi,0x404048
+  40116e:	ff e0                	jmp    rax
+  401170:	c3                   	ret    
+  401171:	66 66 2e 0f 1f 84 00 	data16 cs nop WORD PTR [rax+rax*1+0x0]
+  401178:	00 00 00 00 
+  40117c:	0f 1f 40 00          	nop    DWORD PTR [rax+0x0]
+
+0000000000401180 <__do_global_dtors_aux>:
+  401180:	f3 0f 1e fa          	endbr64 
+  401184:	80 3d 05 30 00 00 00 	cmp    BYTE PTR [rip+0x3005],0x0        # 404190 <completed.0>
+  40118b:	75 13                	jne    4011a0 <__do_global_dtors_aux+0x20>
+  40118d:	55                   	push   rbp
+  40118e:	48 89 e5             	mov    rbp,rsp
+  401191:	e8 7a ff ff ff       	call   401110 <deregister_tm_clones>
+  401196:	c6 05 f3 2f 00 00 01 	mov    BYTE PTR [rip+0x2ff3],0x1        # 404190 <completed.0>
+  40119d:	5d                   	pop    rbp
+  40119e:	c3                   	ret    
+  40119f:	90                   	nop
+  4011a0:	c3                   	ret    
+  4011a1:	66 66 2e 0f 1f 84 00 	data16 cs nop WORD PTR [rax+rax*1+0x0]
+  4011a8:	00 00 00 00 
+  4011ac:	0f 1f 40 00          	nop    DWORD PTR [rax+0x0]
+
+00000000004011b0 <frame_dummy>:
+  4011b0:	f3 0f 1e fa          	endbr64 
+  4011b4:	eb 8a                	jmp    401140 <register_tm_clones>
+  4011b6:	66 2e 0f 1f 84 00 00 	cs nop WORD PTR [rax+rax*1+0x0]
+  4011bd:	00 00 00 
+
+00000000004011c0 <_Z12needUmbrellaRK7Climate>:
+  4011c0:	55                   	push   rbp
+  4011c1:	48 89 e5             	mov    rbp,rsp
+  4011c4:	48 83 ec 10          	sub    rsp,0x10
+  4011c8:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+  4011cc:	48 8b 7d f8          	mov    rdi,QWORD PTR [rbp-0x8]
+  4011d0:	48 8b 07             	mov    rax,QWORD PTR [rdi]
+  4011d3:	ff 10                	call   QWORD PTR [rax]
+  4011d5:	83 f8 00             	cmp    eax,0x0
+  4011d8:	0f 95 c0             	setne  al
+  4011db:	24 01                	and    al,0x1
+  4011dd:	0f b6 c0             	movzx  eax,al
+  4011e0:	48 83 c4 10          	add    rsp,0x10
+  4011e4:	5d                   	pop    rbp
+  4011e5:	c3                   	ret    
+  4011e6:	66 2e 0f 1f 84 00 00 	cs nop WORD PTR [rax+rax*1+0x0]
+  4011ed:	00 00 00 
+
+00000000004011f0 <main>:
+  4011f0:	55                   	push   rbp
+  4011f1:	48 89 e5             	mov    rbp,rsp
+  4011f4:	48 83 ec 20          	sub    rsp,0x20
+  4011f8:	c7 45 fc 00 00 00 00 	mov    DWORD PTR [rbp-0x4],0x0
+  4011ff:	48 8d 7d f0          	lea    rdi,[rbp-0x10]
+  401203:	31 f6                	xor    esi,esi
+  401205:	ba 08 00 00 00       	mov    edx,0x8
+  40120a:	e8 21 fe ff ff       	call   401030 <memset@plt>
+  40120f:	48 8d 7d f0          	lea    rdi,[rbp-0x10]
+  401213:	e8 78 00 00 00       	call   401290 <_ZN6DesertC2Ev>
+  401218:	48 8d 7d e8          	lea    rdi,[rbp-0x18]
+  40121c:	31 f6                	xor    esi,esi
+  40121e:	ba 08 00 00 00       	mov    edx,0x8
+  401223:	e8 08 fe ff ff       	call   401030 <memset@plt>
+  401228:	48 8d 7d e8          	lea    rdi,[rbp-0x18]
+  40122c:	e8 9f 00 00 00       	call   4012d0 <_ZN8TropicalC2Ev>
+  401231:	48 8d 7d f0          	lea    rdi,[rbp-0x10]
+  401235:	e8 86 ff ff ff       	call   4011c0 <_Z12needUmbrellaRK7Climate>
+  40123a:	a8 01                	test   al,0x1
+  40123c:	0f 85 05 00 00 00    	jne    401247 <main+0x57>
+  401242:	e9 1e 00 00 00       	jmp    401265 <main+0x75>
+  401247:	48 bf 80 40 40 00 00 	movabs rdi,0x404080
+  40124e:	00 00 00 
+  401251:	48 be 10 20 40 00 00 	movabs rsi,0x402010
+  401258:	00 00 00 
+  40125b:	e8 f0 fd ff ff       	call   401050 <_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc@plt>
+  401260:	e9 19 00 00 00       	jmp    40127e <main+0x8e>
+  401265:	48 bf 80 40 40 00 00 	movabs rdi,0x404080
+  40126c:	00 00 00 
+  40126f:	48 be 33 20 40 00 00 	movabs rsi,0x402033
+  401276:	00 00 00 
+  401279:	e8 d2 fd ff ff       	call   401050 <_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc@plt>
+  40127e:	31 c0                	xor    eax,eax
+  401280:	48 83 c4 20          	add    rsp,0x20
+  401284:	5d                   	pop    rbp
+  401285:	c3                   	ret    
+  401286:	66 2e 0f 1f 84 00 00 	cs nop WORD PTR [rax+rax*1+0x0]
+  40128d:	00 00 00 
+
+0000000000401290 <_ZN6DesertC2Ev>:
+  401290:	55                   	push   rbp
+  401291:	48 89 e5             	mov    rbp,rsp
+  401294:	48 83 ec 10          	sub    rsp,0x10
+  401298:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+  40129c:	48 8b 7d f8          	mov    rdi,QWORD PTR [rbp-0x8]
+  4012a0:	48 89 7d f0          	mov    QWORD PTR [rbp-0x10],rdi
+  4012a4:	e8 67 00 00 00       	call   401310 <_ZN7ClimateC2Ev>
+  4012a9:	48 8b 45 f0          	mov    rax,QWORD PTR [rbp-0x10]
+  4012ad:	48 b9 58 20 40 00 00 	movabs rcx,0x402058
+  4012b4:	00 00 00 
+  4012b7:	48 83 c1 10          	add    rcx,0x10
+  4012bb:	48 89 08             	mov    QWORD PTR [rax],rcx
+  4012be:	48 83 c4 10          	add    rsp,0x10
+  4012c2:	5d                   	pop    rbp
+  4012c3:	c3                   	ret    
+  4012c4:	66 2e 0f 1f 84 00 00 	cs nop WORD PTR [rax+rax*1+0x0]
+  4012cb:	00 00 00 
+  4012ce:	66 90                	xchg   ax,ax
+
+00000000004012d0 <_ZN8TropicalC2Ev>:
+  4012d0:	55                   	push   rbp
+  4012d1:	48 89 e5             	mov    rbp,rsp
+  4012d4:	48 83 ec 10          	sub    rsp,0x10
+  4012d8:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+  4012dc:	48 8b 7d f8          	mov    rdi,QWORD PTR [rbp-0x8]
+  4012e0:	48 89 7d f0          	mov    QWORD PTR [rbp-0x10],rdi
+  4012e4:	e8 27 00 00 00       	call   401310 <_ZN7ClimateC2Ev>
+  4012e9:	48 8b 45 f0          	mov    rax,QWORD PTR [rbp-0x10]
+  4012ed:	48 b9 c8 20 40 00 00 	movabs rcx,0x4020c8
+  4012f4:	00 00 00 
+  4012f7:	48 83 c1 10          	add    rcx,0x10
+  4012fb:	48 89 08             	mov    QWORD PTR [rax],rcx
+  4012fe:	48 83 c4 10          	add    rsp,0x10
+  401302:	5d                   	pop    rbp
+  401303:	c3                   	ret    
+  401304:	66 2e 0f 1f 84 00 00 	cs nop WORD PTR [rax+rax*1+0x0]
+  40130b:	00 00 00 
+  40130e:	66 90                	xchg   ax,ax
+
+0000000000401310 <_ZN7ClimateC2Ev>:
+  401310:	55                   	push   rbp
+  401311:	48 89 e5             	mov    rbp,rsp
+  401314:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+  401318:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+  40131c:	48 b9 b0 20 40 00 00 	movabs rcx,0x4020b0
+  401323:	00 00 00 
+  401326:	48 83 c1 10          	add    rcx,0x10
+  40132a:	48 89 08             	mov    QWORD PTR [rax],rcx
+  40132d:	5d                   	pop    rbp
+  40132e:	c3                   	ret    
+  40132f:	90                   	nop
+
+0000000000401330 <_ZNK7Climate13getPrecipTypeEv>:
+  401330:	55                   	push   rbp
+  401331:	48 89 e5             	mov    rbp,rsp
+  401334:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+  401338:	31 c0                	xor    eax,eax
+  40133a:	5d                   	pop    rbp
+  40133b:	c3                   	ret    
+  40133c:	0f 1f 40 00          	nop    DWORD PTR [rax+0x0]
+
+0000000000401340 <_ZNK8Tropical13getPrecipTypeEv>:
+  401340:	55                   	push   rbp
+  401341:	48 89 e5             	mov    rbp,rsp
+  401344:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+  401348:	31 c0                	xor    eax,eax
+  40134a:	5d                   	pop    rbp
+  40134b:	c3                   	ret    
+
+Disassembly of section .fini:
+
+000000000040134c <_fini>:
+  40134c:	f3 0f 1e fa          	endbr64 
+  401350:	48 83 ec 08          	sub    rsp,0x8
+  401354:	48 83 c4 08          	add    rsp,0x8
+  401358:	c3                   	ret    
