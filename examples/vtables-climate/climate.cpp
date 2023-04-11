@@ -12,9 +12,8 @@ public:
     return "Reply hazy, try again.";
   };
 
-  virtual std::chrono::time_point<std::chrono::system_clock>
-  getStart() const = 0;
-  virtual std::chrono::time_point<std::chrono::system_clock> getEnd() const = 0;
+  virtual forecast_time getStart() const = 0;
+  virtual forecast_time getEnd() const = 0;
 };
 
 class OneDayForecast : public Forecast {
