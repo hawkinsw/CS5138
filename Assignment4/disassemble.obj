@@ -1,0 +1,118 @@
+00000000004011c0 <_Z16display_feedbackRK16CustomerFeedback>:
+  4011c0:	55                   	push   rbp
+  4011c1:	48 89 e5             	mov    rbp,rsp
+  4011c4:	48 83 ec 10          	sub    rsp,0x10
+  4011c8:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+  4011cc:	48 8b 7d f8          	mov    rdi,QWORD PTR [rbp-0x8]
+  4011d0:	48 8b 07             	mov    rax,QWORD PTR [rdi]
+  4011d3:	ff 10                	call   QWORD PTR [rax]
+  4011d5:	48 89 45 f0          	mov    QWORD PTR [rbp-0x10],rax
+  4011d9:	48 8b 7d f8          	mov    rdi,QWORD PTR [rbp-0x8]
+  4011dd:	48 8b 07             	mov    rax,QWORD PTR [rdi]
+  4011e0:	ff 50 08             	call   QWORD PTR [rax+0x8]
+  4011e3:	48 8b 75 f0          	mov    rsi,QWORD PTR [rbp-0x10]
+  4011e7:	48 89 c2             	mov    rdx,rax
+  4011ea:	48 bf 30 20 40 00 00 	movabs rdi,0x402030
+  4011f1:	00 00 00 
+  4011f4:	b0 00                	mov    al,0x0
+  4011f6:	e8 35 fe ff ff       	call   401030 <printf@plt>
+  4011fb:	48 83 c4 10          	add    rsp,0x10
+  4011ff:	5d                   	pop    rbp
+  401200:	c3                   	ret    
+
+0000000000401210 <main>:
+  401210:	55                   	push   rbp
+  401211:	48 89 e5             	mov    rbp,rsp
+  401214:	48 83 ec 20          	sub    rsp,0x20
+  401218:	c7 45 fc 00 00 00 00 	mov    DWORD PTR [rbp-0x4],0x0
+  40121f:	48 8d 7d e0          	lea    rdi,[rbp-0x20]
+  401223:	48 be 61 20 40 00 00 	movabs rsi,0x402061
+  40122a:	00 00 00 
+  40122d:	ba 03 00 00 00       	mov    edx,0x3
+  401232:	e8 19 00 00 00       	call   401250 <_ZN20QuantitativeFeedbackC2EPKc8Feedback>
+  401237:	48 8d 7d e0          	lea    rdi,[rbp-0x20]
+  40123b:	e8 80 ff ff ff       	call   4011c0 <_Z16display_feedbackRK16CustomerFeedback>
+  401240:	31 c0                	xor    eax,eax
+  401242:	48 83 c4 20          	add    rsp,0x20
+  401246:	5d                   	pop    rbp
+  401247:	c3                   	ret    
+
+0000000000401250 <_ZN20QuantitativeFeedbackC2EPKc8Feedback>:
+  401250:	55                   	push   rbp
+  401251:	48 89 e5             	mov    rbp,rsp
+  401254:	48 83 ec 20          	sub    rsp,0x20
+  401258:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+  40125c:	48 89 75 f0          	mov    QWORD PTR [rbp-0x10],rsi
+  401260:	89 55 ec             	mov    DWORD PTR [rbp-0x14],edx
+  401263:	48 8b 7d f8          	mov    rdi,QWORD PTR [rbp-0x8]
+  401267:	48 89 7d e0          	mov    QWORD PTR [rbp-0x20],rdi
+  40126b:	e8 30 00 00 00       	call   4012a0 <_ZN16CustomerFeedbackC2Ev>
+  401270:	48 8b 45 e0          	mov    rax,QWORD PTR [rbp-0x20]
+  401274:	48 b9 10 21 40 00 00 	movabs rcx,0x402110
+  40127b:	00 00 00 
+  40127e:	48 83 c1 10          	add    rcx,0x10
+  401282:	48 89 08             	mov    QWORD PTR [rax],rcx
+  401285:	48 8b 4d f0          	mov    rcx,QWORD PTR [rbp-0x10]
+  401289:	48 89 48 08          	mov    QWORD PTR [rax+0x8],rcx
+  40128d:	8b 4d ec             	mov    ecx,DWORD PTR [rbp-0x14]
+  401290:	89 48 10             	mov    DWORD PTR [rax+0x10],ecx
+  401293:	48 83 c4 20          	add    rsp,0x20
+  401297:	5d                   	pop    rbp
+  401298:	c3                   	ret    
+
+00000000004012a0 <_ZN16CustomerFeedbackC2Ev>:
+  4012a0:	55                   	push   rbp
+  4012a1:	48 89 e5             	mov    rbp,rsp
+  4012a4:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+  4012a8:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+  4012ac:	48 b9 30 21 40 00 00 	movabs rcx,0x402130
+  4012b3:	00 00 00 
+  4012b6:	48 83 c1 10          	add    rcx,0x10
+  4012ba:	48 89 08             	mov    QWORD PTR [rax],rcx
+  4012bd:	5d                   	pop    rbp
+  4012be:	c3                   	ret    
+
+00000000004012c0 <_ZNK20QuantitativeFeedback11GetQuestionEv>:
+  4012c0:	55                   	push   rbp
+  4012c1:	48 89 e5             	mov    rbp,rsp
+  4012c4:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+  4012c8:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+  4012cc:	48 8b 40 08          	mov    rax,QWORD PTR [rax+0x8]
+  4012d0:	5d                   	pop    rbp
+  4012d1:	c3                   	ret    
+
+00000000004012e0 <_ZNK20QuantitativeFeedback11GetResponseEv>:
+  4012e0:	55                   	push   rbp
+  4012e1:	48 89 e5             	mov    rbp,rsp
+  4012e4:	48 89 7d f0          	mov    QWORD PTR [rbp-0x10],rdi
+  4012e8:	48 8b 45 f0          	mov    rax,QWORD PTR [rbp-0x10]
+  4012ec:	8b 40 10             	mov    eax,DWORD PTR [rax+0x10]
+  4012ef:	48 89 45 e8          	mov    QWORD PTR [rbp-0x18],rax
+  4012f3:	48 83 e8 03          	sub    rax,0x3
+  4012f7:	0f 87 5a 00 00 00    	ja     401357 <_ZNK20QuantitativeFeedback11GetResponseEv+0x77>
+  4012fd:	48 8b 45 e8          	mov    rax,QWORD PTR [rbp-0x18]
+  401301:	48 8b 04 c5 10 20 40 	mov    rax,QWORD PTR [rax*8+0x402010]
+  401308:	00 
+  401309:	ff e0                	jmp    rax
+  40130b:	48 b8 7e 20 40 00 00 	movabs rax,0x40207e
+  401312:	00 00 00 
+  401315:	48 89 45 f8          	mov    QWORD PTR [rbp-0x8],rax
+  401319:	e9 47 00 00 00       	jmp    401365 <_ZNK20QuantitativeFeedback11GetResponseEv+0x85>
+  40131e:	48 b8 9a 20 40 00 00 	movabs rax,0x40209a
+  401325:	00 00 00 
+  401328:	48 89 45 f8          	mov    QWORD PTR [rbp-0x8],rax
+  40132c:	e9 34 00 00 00       	jmp    401365 <_ZNK20QuantitativeFeedback11GetResponseEv+0x85>
+  401331:	48 b8 bf 20 40 00 00 	movabs rax,0x4020bf
+  401338:	00 00 00 
+  40133b:	48 89 45 f8          	mov    QWORD PTR [rbp-0x8],rax
+  40133f:	e9 21 00 00 00       	jmp    401365 <_ZNK20QuantitativeFeedback11GetResponseEv+0x85>
+  401344:	48 b8 d8 20 40 00 00 	movabs rax,0x4020d8
+  40134b:	00 00 00 
+  40134e:	48 89 45 f8          	mov    QWORD PTR [rbp-0x8],rax
+  401352:	e9 0e 00 00 00       	jmp    401365 <_ZNK20QuantitativeFeedback11GetResponseEv+0x85>
+  401357:	48 b8 ef 20 40 00 00 	movabs rax,0x4020ef
+  40135e:	00 00 00 
+  401361:	48 89 45 f8          	mov    QWORD PTR [rbp-0x8],rax
+  401365:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+  401369:	5d                   	pop    rbp
+  40136a:	c3                   	ret    
