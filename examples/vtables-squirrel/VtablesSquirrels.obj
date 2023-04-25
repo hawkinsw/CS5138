@@ -1,0 +1,247 @@
+
+/home/hawkinsw/code/uc/CS5138/examples/vtables-squirrel/build/VtablesSquirrels:     file format elf64-x86-64
+
+
+Disassembly of section .init:
+
+0000000000401000 <_init>:
+  401000:	f3 0f 1e fa          	endbr64 
+  401004:	48 83 ec 08          	sub    rsp,0x8
+  401008:	48 8b 05 d1 2f 00 00 	mov    rax,QWORD PTR [rip+0x2fd1]        # 403fe0 <__gmon_start__@Base>
+  40100f:	48 85 c0             	test   rax,rax
+  401012:	74 02                	je     401016 <_init+0x16>
+  401014:	ff d0                	call   rax
+  401016:	48 83 c4 08          	add    rsp,0x8
+  40101a:	c3                   	ret    
+
+Disassembly of section .plt:
+
+0000000000401020 <printf@plt-0x10>:
+  401020:	ff 35 e2 2f 00 00    	push   QWORD PTR [rip+0x2fe2]        # 404008 <_GLOBAL_OFFSET_TABLE_+0x8>
+  401026:	ff 25 e4 2f 00 00    	jmp    QWORD PTR [rip+0x2fe4]        # 404010 <_GLOBAL_OFFSET_TABLE_+0x10>
+  40102c:	0f 1f 40 00          	nop    DWORD PTR [rax+0x0]
+
+0000000000401030 <printf@plt>:
+  401030:	ff 25 e2 2f 00 00    	jmp    QWORD PTR [rip+0x2fe2]        # 404018 <printf@GLIBC_2.2.5>
+  401036:	68 00 00 00 00       	push   0x0
+  40103b:	e9 e0 ff ff ff       	jmp    401020 <_init+0x20>
+
+0000000000401040 <__cxa_atexit@plt>:
+  401040:	ff 25 da 2f 00 00    	jmp    QWORD PTR [rip+0x2fda]        # 404020 <__cxa_atexit@GLIBC_2.2.5>
+  401046:	68 01 00 00 00       	push   0x1
+  40104b:	e9 d0 ff ff ff       	jmp    401020 <_init+0x20>
+
+0000000000401050 <_ZNSt8ios_base4InitC1Ev@plt>:
+  401050:	ff 25 d2 2f 00 00    	jmp    QWORD PTR [rip+0x2fd2]        # 404028 <_ZNSt8ios_base4InitC1Ev@GLIBCXX_3.4>
+  401056:	68 02 00 00 00       	push   0x2
+  40105b:	e9 c0 ff ff ff       	jmp    401020 <_init+0x20>
+
+0000000000401060 <_ZNSt8ios_base4InitD1Ev@plt>:
+  401060:	ff 25 ca 2f 00 00    	jmp    QWORD PTR [rip+0x2fca]        # 404030 <_ZNSt8ios_base4InitD1Ev@GLIBCXX_3.4>
+  401066:	68 03 00 00 00       	push   0x3
+  40106b:	e9 b0 ff ff ff       	jmp    401020 <_init+0x20>
+
+Disassembly of section .text:
+
+0000000000401070 <_start>:
+  401070:	f3 0f 1e fa          	endbr64 
+  401074:	31 ed                	xor    ebp,ebp
+  401076:	49 89 d1             	mov    r9,rdx
+  401079:	5e                   	pop    rsi
+  40107a:	48 89 e2             	mov    rdx,rsp
+  40107d:	48 83 e4 f0          	and    rsp,0xfffffffffffffff0
+  401081:	50                   	push   rax
+  401082:	54                   	push   rsp
+  401083:	45 31 c0             	xor    r8d,r8d
+  401086:	31 c9                	xor    ecx,ecx
+  401088:	48 c7 c7 56 11 40 00 	mov    rdi,0x401156
+  40108f:	ff 15 43 2f 00 00    	call   QWORD PTR [rip+0x2f43]        # 403fd8 <__libc_start_main@GLIBC_2.34>
+  401095:	f4                   	hlt    
+
+0000000000401096 <.annobin_abi_note.c>:
+  401096:	66 2e 0f 1f 84 00 00 	cs nop WORD PTR [rax+rax*1+0x0]
+  40109d:	00 00 00 
+
+00000000004010a0 <_dl_relocate_static_pie>:
+  4010a0:	f3 0f 1e fa          	endbr64 
+  4010a4:	c3                   	ret    
+
+00000000004010a5 <.annobin__dl_relocate_static_pie.end>:
+  4010a5:	66 2e 0f 1f 84 00 00 	cs nop WORD PTR [rax+rax*1+0x0]
+  4010ac:	00 00 00 
+  4010af:	90                   	nop
+
+00000000004010b0 <deregister_tm_clones>:
+  4010b0:	b8 40 40 40 00       	mov    eax,0x404040
+  4010b5:	48 3d 40 40 40 00    	cmp    rax,0x404040
+  4010bb:	74 13                	je     4010d0 <deregister_tm_clones+0x20>
+  4010bd:	b8 00 00 00 00       	mov    eax,0x0
+  4010c2:	48 85 c0             	test   rax,rax
+  4010c5:	74 09                	je     4010d0 <deregister_tm_clones+0x20>
+  4010c7:	bf 40 40 40 00       	mov    edi,0x404040
+  4010cc:	ff e0                	jmp    rax
+  4010ce:	66 90                	xchg   ax,ax
+  4010d0:	c3                   	ret    
+  4010d1:	66 66 2e 0f 1f 84 00 	data16 cs nop WORD PTR [rax+rax*1+0x0]
+  4010d8:	00 00 00 00 
+  4010dc:	0f 1f 40 00          	nop    DWORD PTR [rax+0x0]
+
+00000000004010e0 <register_tm_clones>:
+  4010e0:	be 40 40 40 00       	mov    esi,0x404040
+  4010e5:	48 81 ee 40 40 40 00 	sub    rsi,0x404040
+  4010ec:	48 89 f0             	mov    rax,rsi
+  4010ef:	48 c1 ee 3f          	shr    rsi,0x3f
+  4010f3:	48 c1 f8 03          	sar    rax,0x3
+  4010f7:	48 01 c6             	add    rsi,rax
+  4010fa:	48 d1 fe             	sar    rsi,1
+  4010fd:	74 11                	je     401110 <register_tm_clones+0x30>
+  4010ff:	b8 00 00 00 00       	mov    eax,0x0
+  401104:	48 85 c0             	test   rax,rax
+  401107:	74 07                	je     401110 <register_tm_clones+0x30>
+  401109:	bf 40 40 40 00       	mov    edi,0x404040
+  40110e:	ff e0                	jmp    rax
+  401110:	c3                   	ret    
+  401111:	66 66 2e 0f 1f 84 00 	data16 cs nop WORD PTR [rax+rax*1+0x0]
+  401118:	00 00 00 00 
+  40111c:	0f 1f 40 00          	nop    DWORD PTR [rax+0x0]
+
+0000000000401120 <__do_global_dtors_aux>:
+  401120:	f3 0f 1e fa          	endbr64 
+  401124:	80 3d 11 2f 00 00 00 	cmp    BYTE PTR [rip+0x2f11],0x0        # 40403c <completed.0>
+  40112b:	75 13                	jne    401140 <__do_global_dtors_aux+0x20>
+  40112d:	55                   	push   rbp
+  40112e:	48 89 e5             	mov    rbp,rsp
+  401131:	e8 7a ff ff ff       	call   4010b0 <deregister_tm_clones>
+  401136:	c6 05 ff 2e 00 00 01 	mov    BYTE PTR [rip+0x2eff],0x1        # 40403c <completed.0>
+  40113d:	5d                   	pop    rbp
+  40113e:	c3                   	ret    
+  40113f:	90                   	nop
+  401140:	c3                   	ret    
+  401141:	66 66 2e 0f 1f 84 00 	data16 cs nop WORD PTR [rax+rax*1+0x0]
+  401148:	00 00 00 00 
+  40114c:	0f 1f 40 00          	nop    DWORD PTR [rax+0x0]
+
+0000000000401150 <frame_dummy>:
+  401150:	f3 0f 1e fa          	endbr64 
+  401154:	eb 8a                	jmp    4010e0 <register_tm_clones>
+
+0000000000401156 <main>:
+  401156:	55                   	push   rbp
+  401157:	48 89 e5             	mov    rbp,rsp
+  40115a:	48 83 ec 20          	sub    rsp,0x20
+  40115e:	b8 68 20 40 00       	mov    eax,0x402068
+  401163:	48 89 45 f8          	mov    QWORD PTR [rbp-0x8],rax
+  401167:	b8 40 20 40 00       	mov    eax,0x402040
+  40116c:	48 89 45 f0          	mov    QWORD PTR [rbp-0x10],rax
+  401170:	b8 90 20 40 00       	mov    eax,0x402090
+  401175:	48 89 45 e8          	mov    QWORD PTR [rbp-0x18],rax
+  401179:	48 8d 45 f8          	lea    rax,[rbp-0x8]
+  40117d:	48 89 c7             	mov    rdi,rax
+  401180:	e8 9d 00 00 00       	call   401222 <_ZNK16AnimatedSquirrel8getColorEv>
+  401185:	48 89 c6             	mov    rsi,rax
+  401188:	bf 21 20 40 00       	mov    edi,0x402021
+  40118d:	b8 00 00 00 00       	mov    eax,0x0
+  401192:	e8 99 fe ff ff       	call   401030 <printf@plt>
+  401197:	b8 00 00 00 00       	mov    eax,0x0
+  40119c:	c9                   	leave  
+  40119d:	c3                   	ret    
+
+000000000040119e <_Z41__static_initialization_and_destruction_0ii>:
+  40119e:	55                   	push   rbp
+  40119f:	48 89 e5             	mov    rbp,rsp
+  4011a2:	48 83 ec 10          	sub    rsp,0x10
+  4011a6:	89 7d fc             	mov    DWORD PTR [rbp-0x4],edi
+  4011a9:	89 75 f8             	mov    DWORD PTR [rbp-0x8],esi
+  4011ac:	83 7d fc 01          	cmp    DWORD PTR [rbp-0x4],0x1
+  4011b0:	75 27                	jne    4011d9 <_Z41__static_initialization_and_destruction_0ii+0x3b>
+  4011b2:	81 7d f8 ff ff 00 00 	cmp    DWORD PTR [rbp-0x8],0xffff
+  4011b9:	75 1e                	jne    4011d9 <_Z41__static_initialization_and_destruction_0ii+0x3b>
+  4011bb:	bf 3d 40 40 00       	mov    edi,0x40403d
+  4011c0:	e8 8b fe ff ff       	call   401050 <_ZNSt8ios_base4InitC1Ev@plt>
+  4011c5:	ba 08 20 40 00       	mov    edx,0x402008
+  4011ca:	be 3d 40 40 00       	mov    esi,0x40403d
+  4011cf:	bf 60 10 40 00       	mov    edi,0x401060
+  4011d4:	e8 67 fe ff ff       	call   401040 <__cxa_atexit@plt>
+  4011d9:	90                   	nop
+  4011da:	c9                   	leave  
+  4011db:	c3                   	ret    
+
+00000000004011dc <_GLOBAL__sub_I_main>:
+  4011dc:	55                   	push   rbp
+  4011dd:	48 89 e5             	mov    rbp,rsp
+  4011e0:	be ff ff 00 00       	mov    esi,0xffff
+  4011e5:	bf 01 00 00 00       	mov    edi,0x1
+  4011ea:	e8 af ff ff ff       	call   40119e <_Z41__static_initialization_and_destruction_0ii>
+  4011ef:	5d                   	pop    rbp
+  4011f0:	c3                   	ret    
+  4011f1:	90                   	nop
+
+00000000004011f2 <_ZNK8Squirrel8getColorEv>:
+  4011f2:	55                   	push   rbp
+  4011f3:	48 89 e5             	mov    rbp,rsp
+  4011f6:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+  4011fa:	b8 10 20 40 00       	mov    eax,0x402010
+  4011ff:	5d                   	pop    rbp
+  401200:	c3                   	ret    
+  401201:	90                   	nop
+
+0000000000401202 <_ZNK8Squirrel6canFlyEv>:
+  401202:	55                   	push   rbp
+  401203:	48 89 e5             	mov    rbp,rsp
+  401206:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+  40120a:	b8 00 00 00 00       	mov    eax,0x0
+  40120f:	5d                   	pop    rbp
+  401210:	c3                   	ret    
+  401211:	90                   	nop
+
+0000000000401212 <_ZNK8Squirrel13acornCapacityEv>:
+  401212:	55                   	push   rbp
+  401213:	48 89 e5             	mov    rbp,rsp
+  401216:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+  40121a:	b8 02 00 00 00       	mov    eax,0x2
+  40121f:	5d                   	pop    rbp
+  401220:	c3                   	ret    
+  401221:	90                   	nop
+
+0000000000401222 <_ZNK16AnimatedSquirrel8getColorEv>:
+  401222:	55                   	push   rbp
+  401223:	48 89 e5             	mov    rbp,rsp
+  401226:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+  40122a:	b8 16 20 40 00       	mov    eax,0x402016
+  40122f:	5d                   	pop    rbp
+  401230:	c3                   	ret    
+  401231:	90                   	nop
+
+0000000000401232 <_ZNK16AnimatedSquirrel6canFlyEv>:
+  401232:	55                   	push   rbp
+  401233:	48 89 e5             	mov    rbp,rsp
+  401236:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+  40123a:	b8 01 00 00 00       	mov    eax,0x1
+  40123f:	5d                   	pop    rbp
+  401240:	c3                   	ret    
+  401241:	90                   	nop
+
+0000000000401242 <_ZNK16AnimatedSquirrel13acornCapacityEv>:
+  401242:	55                   	push   rbp
+  401243:	48 89 e5             	mov    rbp,rsp
+  401246:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+  40124a:	b8 ff ff ff ff       	mov    eax,0xffffffff
+  40124f:	5d                   	pop    rbp
+  401250:	c3                   	ret    
+  401251:	90                   	nop
+
+0000000000401252 <_ZNK14AlbinoSquirrel8getColorEv>:
+  401252:	55                   	push   rbp
+  401253:	48 89 e5             	mov    rbp,rsp
+  401256:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+  40125a:	b8 1b 20 40 00       	mov    eax,0x40201b
+  40125f:	5d                   	pop    rbp
+  401260:	c3                   	ret    
+
+Disassembly of section .fini:
+
+0000000000401264 <_fini>:
+  401264:	f3 0f 1e fa          	endbr64 
+  401268:	48 83 ec 08          	sub    rsp,0x8
+  40126c:	48 83 c4 08          	add    rsp,0x8
+  401270:	c3                   	ret    
