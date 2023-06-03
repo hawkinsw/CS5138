@@ -267,6 +267,7 @@ Second, notice that the `3` in the `= 3` is the same as the `3` in the `read(3 .
 Run the HBMA using `strace` and determine if (and with that parameters does) the HBMA uses the [`connect`](https://linux.die.net/man/2/connect) system call.
 
 <details>
+
 ```console
 $ strace src/install/bin/hauck
 execve("./src/install/bin/hauck-mfa", ["./src/install/bin/hauck-mfa"], 0x7ffd985defe0 /* 67 vars */) = 0
