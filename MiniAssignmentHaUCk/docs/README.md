@@ -139,7 +139,7 @@ int main() {
 }
 ```
 
-If we had access to the source code for all the potentially malicious software that we want to investigate then we could easily determine what resources a piece of software is requesting from the operating system just like we can see that the hypothetical program above is accessing a file named "myreport.docx" on the computer's harddrive.
+If we had access to the source code for all the potentially malicious software that we want to investigate then we could easily determine what resources a piece of software is requesting from the operating system just like we can see that the hypothetical program above is accessing a file named "myreport.docx" on the computer's hard drive.
 
 But that is most definitely not the case. Instead, we will have to rely on a tool that will allow us to snoop on executing programs and see what system calls they are making. 
 
@@ -262,7 +262,7 @@ and there it is! First, do you see the path of the file? How awesome!
 
 Second, notice that the `3` in the `= 3` is the same as the `3` in the `read(3 ...)` -- that is no coincidence. The `3` file descriptor is used by system calls that want to manipulate the file opened by that particular call to the `open` system call. 
 
-### Practice
+### Do
 
 Run the HBMA using `strace` and determine if (and with that parameters does) the HBMA uses the [`connect`](https://linux.die.net/man/2/connect) system call.
 
@@ -773,4 +773,72 @@ What is the IP address that the HBMA is attempting to access? On what port is it
 
 </details>
 
-## Next ...
+## Snooping on Snoopy
+
+We are in agreement that it seems like a Bad Thing (tm) that the HBMA is accessing the Internet. That said, the output from `strace` does not seem to give us even the slightest hint at what information, if any, is being sent over the Internet by this application. Perhaps it's totally inoccuous. We just don't know for sure.
+
+What we would like to be able to do is to look at the data the HBMA sends through the network *once it is in the network*. By taking advantage of that bird's eye view of the information, we are sure that the application cannot trick us. 
+
+Think about what would happen if we attempted to determine what the program was sending over the network by looking just at the application as it ran. Well, if the application were nefarious then it could potentially conceal its activity or even fake us out by leading us to believe that it is sending message $A$ when it is really sending message $B$. But, if we are looking at the data when it is in transit over the network, there is no way we are going to be fooled.
+
+There is an awesome tool named Wireshark that gives us the power to look at the contents of packets transmitted on the network by *any* application on our computer (and even some applications on computers nearby [logically] in the network, under certain circumstances)! How cool is that?
+
+Unlike the tools that we have used so far, Wireshark has a GUI. In order to launch it, 
+
+1. click on the Kali logo in the upper left-hand side of the Desktop,
+2. click on grouping named `Sniffing & Spoofing`, and, finally,
+3. click on Wireshark.
+
+![](./graphics/wireshark/kali-icon.png)
+
+![](./graphics/wireshark/launch-wireshark.png)
+
+Wireshark is a *very* powerful tool. It gives the malware analyst an incredible number of options. We are going to use a very, *very* small part of its functionality in these exercises.
+
+Our goal is to *sniff* packets in the network that are coming from our computer. Because we are sniffing on the computer that is running the HBMA that, we will be able to look at the network traffic it is generating, if there is any! In particular, we will be particularly interested in looking at DNS and HTTP traffic.
+
+> Note: See [above](#description) for information on DNS.
+
+Starting a capture is relatively straightforward when you want to use Wireshark's default settings. Simply double click on the *interface* that you want to *sniff*. An interface is the piece of hardware that connects your computer to the network. Most computers these days have multiple interfaces (e.g., a WiFi interface, a Bluetooth interface, and, perhaps, an Ethernet interface). In order to handle all those cases, we will do a sniffing capture on *any* interface. 
+
+To start a capture, double click on the *any* label.
+
+![](./graphics/wireshark/capture-wireshark.png)
+
+You will start to see a list of all the packets (bytes of data grouped together that are meant to be interpreted by a network protocol as related) sniffed from your computer appear on the screen! If you are like me, you will get overwhelmed easily. What we want is a way to narrow down the output to something reasonable.
+
+Again, we want to focus on only the DNS and HTTP traffic. Wireshark lets you filter the traffic that you see using a language that looks a little bit like C. Because we want to display DNS *or* HTTP traffic, it won't surprise you to learn that we are going to be using the `||` symbol. 
+
+![](./graphics/wireshark/display-filter-wireshark.png)
+
+Type
+
+```
+dns || http || http2 || http3
+```
+
+(Be careful: The names of the *protocols* are case sensitive.)
+
+in the `Display Filter` input box and press Enter. You will see the amount of data displayed shrink considerably.
+
+### Practice
+
+Let's practice before we attempt to decipher the network output of the HBMA. First, stop the current sniffing operation by clicking the red Stop button (right above where you typed the display filter). Restarting a sniffing operation is easier than starting the first sniffing operation -- you can simply click the Shark Fin.
+
+![](./graphics/wireshark/restart-capture-wireshark.png)
+
+Now, in the browser in the guest (*not* the browser on the host computer), type `http://www.example.org` (it is important that you type *exactly* that!). Your screen should fill up with entries that look like 
+
+![](./graphics/wireshark/capture-query-wireshark.png)
+
+How *cool* is that? You are looking at the web browser doing a DNS Query (to turn `example.org` into an IP address that it can access for the web content) followed by an HTTP request (what actually downloads the contents of the web page from the server.)
+
+If you click on the item whose `Info` is something like `Standard Query` you will see some additional information displayed in the bottom-left window. This information is the contents of the actual packet displayed nicely by Wireshark. Instead of having to piece through the 1s and 0s that make up the data in the packet, Wireshark has formatted it nicely. Explore that area and see if you can find where the actual DNS Query is listed. If you need help, you might want to research the concept of a [DNS Query]().
+
+> Bonus: Try to find the response to the query and determine what IP address corresponds to `example.org`.
+
+An HTTP *get* is an operation that, well, *get*s content from a web server. To be more precise, it is a directive that your brower issues to the client to get the data. The server will respond to that polite request with the data. Click on the item that looks like it will show a packet that contains information about a get operation. It should be fairly easy to see! Then, use your new Wireshark skills to figure out the *version* of the HTTP protocol being used. If you need help, you might want to research the [HTTP header]().
+
+### Do
+
+Display the DNS and HTTP packets that are generated by an execution of the HBMA. First, start a capture on the *any* interface. Then, once the capture is running, execute the HBMA. You will need to sniff and execute the HBMA on the same machine (the guest).
