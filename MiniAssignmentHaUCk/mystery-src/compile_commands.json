@@ -1,0 +1,14 @@
+[
+{
+  "directory": "/home/hawkinsw/code/uc/CS5138/MiniAssignmentHaUCk/mystery-src/build",
+  "command": "/usr/bin/clang++ -g -std=gnu++20 -o CMakeFiles/mystery.dir/mystery.cpp.o -c /home/hawkinsw/code/uc/CS5138/MiniAssignmentHaUCk/mystery-src/mystery.cpp",
+  "file": "/home/hawkinsw/code/uc/CS5138/MiniAssignmentHaUCk/mystery-src/mystery.cpp",
+  "output": "CMakeFiles/mystery.dir/mystery.cpp.o"
+},
+{
+  "directory": "/home/hawkinsw/code/uc/CS5138/MiniAssignmentHaUCk/mystery-src/build",
+  "command": "/usr/bin/clang++ -DW=true -g -o CMakeFiles/mysteryw.dir/mystery.cpp.o -c /home/hawkinsw/code/uc/CS5138/MiniAssignmentHaUCk/mystery-src/mystery.cpp",
+  "file": "/home/hawkinsw/code/uc/CS5138/MiniAssignmentHaUCk/mystery-src/mystery.cpp",
+  "output": "CMakeFiles/mysteryw.dir/mystery.cpp.o"
+}
+]
