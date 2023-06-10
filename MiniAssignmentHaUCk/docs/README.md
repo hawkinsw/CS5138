@@ -867,13 +867,13 @@ Does the IP address in the response to your query differ from the one shown here
 
 ## Static vs. Dynamic Analysis
 
-To this point in our analysis of the HBMA, we have been doing *dynamic* analysis. Dynamic analysis is any analysis conducted on a program while it is executing. As you can imagine, performing dynamic analysis is not always easy or even possible. For example, if we have an executable designed to run on a computer with a processor that we cannot access (e.g., we have an Intel-based computer [x86] and the executable is built for an Arm-based computer [aarch64]), then we cannot run the program. What's more, if we think that the program is malicious then we would have to be very careful and we may be so worried that we do not want to run it at all.
+To this point in our analysis of the HBMA, we have been doing *dynamic* analysis. Dynamic analysis is any analysis conducted on a program while it is executing. As you can imagine, performing dynamic analysis is not always easy or even possible. For example, if we have an executable designed to run on a computer with a processor that we cannot access (e.g., we have an Intel-based computer [x86] and the executable is built for an Arm-based computer [aarch64]), then we cannot run the program. What's more, even if we could run the program it might not be the best idea -- if the program even *might* be  malicious then we would have to be very careful as we execute it.
 
-In that case we would use *static* analysis. That is analysis performned on a program without running it. In other words, we would have to analyze the program only by looking at its contents on disk. There are a number of reasons that this analysis is more difficult than dynamic analysis. However, static analysis is safer and, if done right, static analysis is more powerful than dynamic analysis.
+In these cases we would use *static* analysis, analysis performed on a program without running it. In other words, in static analysis we study the program only by looking at its contents on disk. There are a number of reasons that this analysis is more difficult than dynamic analysis. However, static analysis is safer and, if done right, static analysis is more powerful than dynamic analysis.
 
 ## Playing With a Ball of Twine
 
-Programs that need to display information to the user or send data over the Internet that will not change when the program is run will oftentimes *embed* those strings of text in to the program file itself. By looking at these strings we can usually determine something interesting about the program. I mean, if the program contains the string "Password:" our ears will perk up -- just why does this program need a password and what is it going to do with it? Analysing the strings embedded in the file that contains a program is a very straightforward, but useful, form of static analysis.
+Programs that need to display information to the user or send the same data over the Internet *every* time that it is executed will oftentimes *embed* those data in to the program file itself. By looking at these strings we can usually determine something interesting about the program. I mean, if the program contains the string "Password:" our ears will perk up -- just why does this program need a password and what is it going to do with it? Analysing the strings embedded in the file that contains a program is a very straightforward, but useful, form of static analysis.
 
 `strings` is a program that let's us perform this analysis. It takes a single parameter (the path to a file containing a program) and outputs all the strings that are embedded in that program. 
 
@@ -881,7 +881,7 @@ Programs that need to display information to the user or send data over the Inte
 $ strings /path/to/file
 ```
 
-The `strings` application is not foolproof (e.g., it does not work very well for strings that are encoded with Unicode). But, the effort/utility ratio is still very high.
+The `strings` application is not foolproof (e.g., it does not work very well for strings that are encoded with Unicode -- see [below](#hexes-are-for-more-than-curses). But, the effort/utility ratio is still very high.
 
 ### Practice
 
@@ -893,10 +893,9 @@ Emojis make me smile.
 
 $ mysteryw
 Emojis make me smile.
-
 ```
 
-Does anything look different about their output? Nope, nothing! They are identical. Because those programs output the words `Emojis`, `make`, `me`, `smile` we should expect that those strings are embedded in the file that contains the program. Let's use `strings` to verify.
+Does anything look different about their output? Nope, nothing! They are identical. Because those programs output the words `Emojis`, `make`, `me`, `smile` we should expect that the bytes representing the characters in those strings are embedded somewhere in the file that contains the program. Let's use `strings` to verify.
 
 ```console
 $ strings mystery
@@ -942,7 +941,7 @@ There are really not that many meaningful clues that we can uncover. However, if
 clang version 15.0.7 (Fedora 15.0.7-2.fc37)
 ```
 
-seems to indicate that the HBMA was compiled using the Clang compiler.
+seems to indicate that the HBMA was compiled using the [Clang compiler](https://clang.llvm.org/).
 
 ```
 /home/hawkinsw/code/uc/CS5138/MiniAssignmentHaUCk/src/hauck-mfa.cpp
@@ -959,11 +958,11 @@ seems to indicate that the source code for the program was in a file named `hauc
 
 Well, the bytes that compose the words `Emojis`, `make`, `me`, `smile` should be somewhere in the file that makes up the program. `strings` does not seem to show them, but there *must* be a tool that *will* let us find them! 
 
-You're right, there is! It's called `hexdump` (or `hexdump`). 
+You're right, there is! It's called `hexdump`. 
 
->Note: The name `hexdump` comes from the term used for a base-16 number system. The numbers that we normally use (e.g., 0, 5, 17) are from a base-10 number system. Computers operate in binary (a base-2 number system) but that is very difficult to read and write. Instead, for numbers larger than, say, 10, many programmers use base 16, or hexadecimal. For more information about the hexadecimal number system (and practice on reading and writing numbers in hexadecimal), check out [TODO]().
+>Note: The name `hexdump` comes from the term used for a base-16 number system. The numbers that we normally use (e.g., 0, 5, 17) are from a base-10 number system (known as the decimal system after the prefix dec- which comes from the Greek for the word ten). Computers, however, have a different opinion: computers count in binary (a base-2 number system). Binary is very difficult for humans to read and write quickly. Humans and computers can comprise on base 16, or hexadecimal. For more information about the hexadecimal number system, check out [this great article](https://link.springer.com/article/10.1007/s00283-022-10206-w).
 
-Using `hexdump` is only slightly more difficult than using `strings` (and only because there is a *command-line switch* that I encourage you to use). `hd` takes a single command-line switch (`-C`) and a single command-line argument (the path to the file whose contents you want to see, represented as individual bytes).
+Using `hexdump` is only slightly more difficult than using `strings` (and only because there is a *command-line switch* that I encourage you to use). `hexdump` takes a single command-line switch (`-C`) and a single command-line argument (the path to the file whose contents you want to see, represented as individual bytes).
 
 ```console
 $ hexdump -C /path/to/file
@@ -1013,7 +1012,7 @@ $ hexdump -C mystery
 
 Fascinating! It looks like there are `00`s between each of the characters in the string that we do not see in the output. 
 
-> If you want to learn more about this mystery, read up on the Unicode character encoding protocol. Unicode is vital to computing worlwide because it allows computers to represent characters in languages other than English ... and because its how Emojis are defined. Yes, there are real computer scientists out there who spend their professional time defining emojis.
+> If you want to learn more about this mystery, read up on the [Unicode character encoding protocol](https://unicode.org/consortium/consort.html). Unicode is vital to computing worlwide because it allows computers to represent characters in languages other than English ... and because its how Emojis are defined. Yes, there are real computer scientists out there who spend their professional time defining emojis.
 
 ### Do
 
@@ -1027,7 +1026,16 @@ $ hexdump -C hauck-mfa
 00000c50  5f 65 61 73 79 5f 70 65  72 66 6f 72 6d 00 63 75  |_easy_perform.cu|
 00000c60  72 6c 5f 67 6c 6f 62 61  6c 5f 69 6e 69 74 00 5f  |rl_global_init._|
 ...
-````
-
+```
 It looks like the address is `0000c5e`.
+
 </details>
+
+## The only Difference: Bytes in Memory vs. Bytes on Disk
+An executing program must exist somewhere in the computer's *memory*. The computer's memory is different than a computer's *storage*. Storage is a place where a computer can place things that it needs to remember no matter what happens to its electrical supply. In that sense, storage is nonvolatile. Memory, on the other hand, is volatile -- its contents are wiped clean when the computer loses access to power. Another keys distinction between memory and storage is that a computer's CPU can only execute instructions that are stored in memory. 
+
+But, what? Haven't we been looking at the contents of programs *on disk*? Yes, we have! However, before the computer starts to execute those programs, the operating system loads them in to memory. In other words, the process of launching a program (double-clicking its icon, for instance) is really about reading the bytes from the program's file stored on disk and loading it to the computer's memory. After the program is loaded, the CPU can begin executing its instructions. Loading program is *not* an easy task -- there are so many details and everything is both the same and different on [every](http://newosxbook.com/toc1.html). [single](https://akkadia.org/drepper/dsohowto.pdf). [platform](https://learn.microsoft.com/en-us/sysinternals/resources/windows-internals#table-of-contents-of-the-7th-edition-part-1). 
+
+The contents of a file that contains a program as it exists on disk contains *almost* everything that will be in memory when that program executes -- it contains the data used as the source for computation and the instructions that direct the computer how to process that data. However, the data and the instructions are not always in the same order in memory (when the program is executing) as they are when the program is not executing and being stored in a file on disk. The job of the program loader is to reorganize (if necessary) the order and location and protection of program instructions' and data so that the CPU can do its job. 
+
+The reason it is important to know this is because you may be asked to distinguish between the location of a piece of data in a program *as it exists in memory when the program is executing* and the location of a piece of data in a program *is it is stored on disk and not executing*. The distinction is subtle and even seasoned professionals trip over the difference. The sooner you can train your mind to think about the values of the bytes of a program (whether those bytes are instructions or data) as having different locations depending on whether the program is executing in memory or being stored on disk then better a malware analyst you will be.
