@@ -1032,10 +1032,50 @@ It looks like the address is `0000c5e`.
 </details>
 
 ## The only Difference: Bytes in Memory vs. Bytes on Disk
-An executing program must exist somewhere in the computer's *memory*. The computer's memory is different than a computer's *storage*. Storage is a place where a computer can place things that it needs to remember no matter what happens to its electrical supply. In that sense, storage is nonvolatile. Memory, on the other hand, is volatile -- its contents are wiped clean when the computer loses access to power. Another keys distinction between memory and storage is that a computer's CPU can only execute instructions that are stored in memory. 
+A computer's CPU can only execute instructions that it can read from *memory*. Therefore, an executing program must exist somewhere in memory and memory is different than *storage*. Memory is *volatile* -- its contents are wiped clean when the computer loses access to power (e.g., when it is powered down or when there is a sudden power outage). That does not make it seem like memory is a good place to put things that you will need in the long term! Storage, on the other hand, is a place where a computer can place things that it needs to remember no matter what happens to its electrical supply. In that sense, storage is *nonvolatile*.
 
-But, what? Haven't we been looking at the contents of programs *on disk*? Yes, we have! However, before the computer starts to execute those programs, the operating system loads them in to memory. In other words, the process of launching a program (double-clicking its icon, for instance) is really about reading the bytes from the program's file stored on disk and loading it to the computer's memory. After the program is loaded, the CPU can begin executing its instructions. Loading program is *not* an easy task -- there are so many details and everything is both the same and different on [every](http://newosxbook.com/toc1.html). [single](https://akkadia.org/drepper/dsohowto.pdf). [platform](https://learn.microsoft.com/en-us/sysinternals/resources/windows-internals#table-of-contents-of-the-7th-edition-part-1). 
+But, what? Haven't we been looking at the contents of programs *on disk*? Yes, we have! However, before the computer starts to execute those programs, the operating system loads them in to memory. In other words, the process of launching a program (double-clicking its icon, for instance) is really about reading the bytes from the program's file stored on disk and loading it to the computer's memory. After the program is loaded, the CPU can begin executing its instructions. Loading programs is *not* an easy task -- there are so many details and everything is different (and yet in many ways the same!) on [every](http://newosxbook.com/toc1.html). [single](https://akkadia.org/drepper/dsohowto.pdf). [platform](https://learn.microsoft.com/en-us/sysinternals/resources/windows-internals#table-of-contents-of-the-7th-edition-part-1). 
 
-The contents of a file that contains a program as it exists on disk contains *almost* everything that will be in memory when that program executes -- it contains the data used as the source for computation and the instructions that direct the computer how to process that data. However, the data and the instructions are not always in the same order in memory (when the program is executing) as they are when the program is not executing and being stored in a file on disk. The job of the program loader is to reorganize (if necessary) the order and location and protection of program instructions' and data so that the CPU can do its job. 
+The contents of a file that contains a program has *almost* everything that will be in memory when that program executes -- it contains the data used as the source for computation and the instructions that direct the computer how to process that data. However, the data and the instructions are not always in the same order in memory (when the program is executing) as they are in the file on disk. The job of the program loader is to reorganize (if necessary) the order and location and protection of program instructions' and data so that the CPU can do its job. 
 
-The reason it is important to know this is because you may be asked to distinguish between the location of a piece of data in a program *as it exists in memory when the program is executing* and the location of a piece of data in a program *is it is stored on disk and not executing*. The distinction is subtle and even seasoned professionals trip over the difference. The sooner you can train your mind to think about the values of the bytes of a program (whether those bytes are instructions or data) as having different locations depending on whether the program is executing in memory or being stored on disk then better a malware analyst you will be.
+The reason it is important to understand this difference is because you may be asked to distinguish between the location of a piece of data in a program *as it exists in memory when the program is executing* and the location of a piece of data in a program *as it is stored on disk and not executing*. The distinction is subtle and even seasoned professionals trip over the difference. The sooner you can train your mind to think about the values of the bytes of a program (whether those bytes are instructions or data) as having different locations depending on whether the program is executing in memory or being stored on disk, the better a malware analyst you will be.
+
+## If Everything Else Is False, The Opposite Must Be True
+
+The preceding might seem too theoretical or abstract to put in to action. I assure you that it's not. In our analysis of the HBMA we are interested in determining what data the application is transmitting over the network. We have seen that our tools so far have been unable to uncover the contents of that transmission. Perhaps our tools just aren't sophisticated enough and the data really *is* somewhere in the HBM program file and we are just not looking in the proper spot.
+
+That's reasonable and there's only one to know for sure. First, let's make some assumptions:
+
+1. HBMA is transmitting some data over the network (a safe assumption given the evidence we have already gathered)
+2. The data being transmitted *is* somewhere in the contents of the HBMA program file.
+
+Given a combination of (1) and (2), there must be a function somewhere in the program that uses that data -- namely the function doing the transmission! 
+
+Because we don't have the source code of the HBMA application we do not know what the authors named that function in their source code. However, during our analysis we will call it `send`. 
+
+In order to reference the data, `send` would need to accept a *pointer* to the data to send as a parameter. Great, but (again!) we don't have the source code for the HMBA so how are we going to determine the value of that pointer?
+
+Reverse engineering, that's how! Reverse engineering is the most sophisticated form of malware analysis. It involves looking at the instructions of a program *as they are stored in the file containing that program* and attempting to recreate the program's behavior. To do reverse engineering well we have to be able to mentally act like a CPU and read the program's operations and interpret them the way that a CPU would. Crazy!
+
+Before we attempt to use reverse engineering on HBMA, let's look do some reverse engineering on a far simpler program. Along the way we will learn some very important terminology and facts that we will use later.
+
+Look at the source code of the StringSend application in the `string-send` subdirectory (`string-send.cpp`). It is reproduced here for convenience:
+
+```C
+#include <stdio.h>
+
+void send(const char *task) {
+    printf("%s\n", task);
+    return;
+}
+
+int main() {
+    const char todo[] = "Just do it.";
+    send(todo);
+    return 0;
+}
+```
+
+Notice that there is a `send` function that takes a pointer to some data. In the StringSend application, the `send` function does nothing more than print the data to the screen. However, it is easy to imagine it doing something else like, oh, I don't know, *sending it on the network.* I think you see where we are going here.
+
+We are going to analyze the `send` function in this simple application to learn tools and tricks and apply those techniques to the (hypothetically named) `send` function in HBMA. Let's get started!
