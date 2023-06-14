@@ -1065,6 +1065,7 @@ Look at the source code of the StringSend application in the `string-send` subdi
 #include <stdio.h>
 
 void send(const char *task) {
+    int t = 5;
     printf("%s\n", task);
     return;
 }
@@ -1079,3 +1080,25 @@ int main() {
 Notice that there is a `send` function that takes a pointer to some data. In the StringSend application, the `send` function does nothing more than print the data to the screen. However, it is easy to imagine it doing something else like, oh, I don't know, *sending it on the network.* I think you see where we are going here.
 
 We are going to analyze the `send` function in this simple application to learn tools and tricks and apply those techniques to the (hypothetically named) `send` function in HBMA. Let's get started!
+
+>Note: Much of what follows will be specific to Linux and something called the SystemV ABI. An ABI, an application binary interface, is like an API. You may have heard of an API before because they are popular ways to expose points of communication between interacting programs. An ABI is a way to expose and coordinate the interaction between programs that exist on the same hardware platform. The System V ABI applies to interacting pieces of code designed to run on various *NIX (e.g., Linux) operating systems. You can read more about the System V ABI at [this](https://wiki.osdev.org/System_V_ABI) wiki page.
+
+## Parameters, parameters, parameters everywhere
+
+Functions are useful ways to wrap up functionality into a nice bundle so that it can be used over and over again. Often times most of the functionality that functions bundle up does not depend on any other outside information. However, sometimes that functionality requires a little different behavior in different cases -- the differences are not big enough to motivate us to write a different function, however, so we just add a *parameter* to the function. When we want to reuse the function's, er, functionality we simply *call* the function with a particular *arguments*, values that will fill the *parameters*  during that execution of the code in the function.
+
+In `string-send` the `send` function has a parameter named `task` and we invoke the function with `todo` as the argument on the 2nd line of the `main` function. Just *how*, though, is that value conveyed between the caller (`main`) and the callee (`send`). That's where the ABI plays a role -- it defines the answer to precisely these types of questions!
+
+Every function requires a bundle of information (maybe better called context) in order to operate properly. That bundle of information goes along with the bundle of functionality and actually defines a function. Just what goes in this bundle? Well, each function needs some space to hold its local variables and the values given for its parameters during a given execution. The contents of this space will be different for each execution of the function (I mean, the computer cannot be sure that each invocation of a function will have the same value for its parameters). So, every time that a function is executed, a new bundle of information is created. When the function starts executing, the bundle of information contains the values given for the parameter by the arguments and the contents of the local variables' initial values (if there are any). But that's not all. The bundle also contains information about itself (where it exists in memory -- the so-called *base pointer*) and the point in the program to return to when it is done executing (the so-called *return-address pointer* (RA)). During the execution of the function, the contents of the bundle changes as the function performs assignment operations (etc) and, when the function is complete, the bundle is destroyed -- we don't need it any more (right?) and there's no reason to waste memory!
+
+![](./graphics/Stack%20Frame%20Layout%20and%20Registers.png)
+
+When the program is executing, a new bundle is generated every time that a function is called and placed on the program *stack*. 
+
+Play the role of the CPU for a second and think about your "mind" at the minute you are executing the code that declares and initializes the variable `t` in the execution of `send` triggered by `send(5)` in the `send-string` program. Obviously the `send` function is executing but, crucially, `main` is still executing too -- it's just frozen and waiting for `send` to finish. In other words, you need to remember two bundles -- one for the invocation of `main` that is executing and one for the invocation of `send` that is executing. If you were the computer and had to make sure that the active bundles never overlapped, how would you organize them?
+
+Well, if it were me, I would hang on bundle off the bottom of another (metaphorically) and let gravity keep them apart. The string holding them together would be really small (so small that we couldn't see it) which meant that there was no wasted space between bundles. Because each bundle has different values but *the same* structure, each bundle will keep a little reference to its place in the chain. (That statement is a slight misrepresentation but you'll see soon enough why it does not really matter.)
+
+> Remember that little point and think about why such a reference might be required! We will revisit its importance later.
+
+What do you know? This technique is *exactly* what your CPU does! The chain of bundles is stored in the computer on the stack. Every time a function is invoked, a new bundle is added to the bottom of the chain. Every time a function completes, its bundle is removed from the chain. The CPU always keeps a little reminder to itself about how to find the bottom of the chain. That reminder is known as the *stack pointer*. What's more, every bundle keeps a little reminder about the location of the bundle in the chain. This reminder is known as the *base pointer*. What's really cool about this type of design is that the CPU now only needs to remember two things -- the location of stack and the location of the base pointer!

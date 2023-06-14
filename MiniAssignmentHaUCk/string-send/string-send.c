@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 void send(const char *task) {
+    int t = 5;
     printf("%s\n", task);
     return;
 }
