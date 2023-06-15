@@ -1085,11 +1085,11 @@ We are going to analyze the `send` function in this simple application to learn 
 
 ## Parameters, parameters, parameters everywhere
 
-Functions are useful ways to wrap up functionality into a nice bundle so that it can be used over and over again. Often times most of the functionality that functions bundle up does not depend on any other outside information. However, sometimes that functionality requires a little different behavior in different cases -- the differences are not big enough to motivate us to write a different function, however, so we just add a *parameter* to the function. When we want to reuse the function's, er, functionality we simply *call* the function with a particular *arguments*, values that will fill the *parameters*  during that execution of the code in the function.
+Functions are useful ways to wrap up functionality into a nice bundle so that those calculations can be used over and over again. Oftentimes, most of the computations that functions bundle up does not depend on any other outside information (e.g., a function that generates a random number). However, sometimes we have a great candidate for wrapping up a bunch of computations in to a single function ... but there's just one problem! There's a small difference in the behavior depending on outside context. These differences are not big enough to motivate us to write a different function, however, so we just add a *parameter* to the function. When we want to reuse the function's, er, functionality we simply *call* the function with particular *arguments*, values that will fill the *parameters*  during that execution of the code in the function.
 
-In `string-send` the `send` function has a parameter named `task` and we invoke the function with `todo` as the argument on the 2nd line of the `main` function. Just *how*, though, is that value conveyed between the caller (`main`) and the callee (`send`). That's where the ABI plays a role -- it defines the answer to precisely these types of questions!
+In `string-send` the `send` function has a parameter named `task` and we invoke the function with `todo` as the argument on the 2nd line of the `main` function. Just *how*, though, is that value conveyed between the caller (`main`) and the callee (`send`)? That's where the ABI plays a role -- it defines the answer to precisely these types of questions!
 
-Every function requires a bundle of information (maybe better called context) in order to operate properly. That bundle of information goes along with the bundle of functionality and actually defines a function. Just what goes in this bundle? Well, each function needs some space to hold its local variables and the values given for its parameters during a given execution. The contents of this space will be different for each execution of the function (I mean, the computer cannot be sure that each invocation of a function will have the same value for its parameters). So, every time that a function is executed, a new bundle of information is created. When the function starts executing, the bundle of information contains the values given for the parameter by the arguments and the contents of the local variables' initial values (if there are any). But that's not all. The bundle also contains information about itself (where it exists in memory -- the so-called *base pointer*) and the point in the program to return to when it is done executing (the so-called *return-address pointer* (RA)). During the execution of the function, the contents of the bundle changes as the function performs assignment operations (etc) and, when the function is complete, the bundle is destroyed -- we don't need it any more (right?) and there's no reason to waste memory!
+Every function requires a bundle of information (maybe better called context) in order to operate properly. That bundle of information goes along with the bundle of functionality and the two things together define a function. Just what goes in this bundle? Well, each function needs some space to hold its local variables and the values given for its parameters during a given execution. That means that there cannot be a single copy of the bundle in memory -- there must be one copy of the bundle every time the function is called! (I mean, the computer cannot be sure that each invocation of a function will have the same value for its parameters). So, every time that a function is executed, a new bundle of information is created. When the function starts executing, the bundle of information contains the values given for the parameter by the arguments and the contents of the local variables' initial values (if there are any). But that's not all. The bundle also contains information about itself (where it exists in memory -- the so-called *base pointer*) and the point in the program to return to when it is done executing (the so-called *return-address pointer* (RA)). During the execution of the function, the contents of the bundle changes as the function performs assignment operations (etc) and, when the function is complete, the bundle is destroyed -- we don't need it any more (right?) and there's no reason to waste memory!
 
 ![](./graphics/Stack%20Frame%20Layout%20and%20Registers.png)
 
@@ -1102,3 +1102,60 @@ Well, if it were me, I would hang on bundle off the bottom of another (metaphori
 > Remember that little point and think about why such a reference might be required! We will revisit its importance later.
 
 What do you know? This technique is *exactly* what your CPU does! The chain of bundles is stored in the computer on the stack. Every time a function is invoked, a new bundle is added to the bottom of the chain. Every time a function completes, its bundle is removed from the chain. The CPU always keeps a little reminder to itself about how to find the bottom of the chain. That reminder is known as the *stack pointer*. What's more, every bundle keeps a little reminder about the location of the bundle in the chain. This reminder is known as the *base pointer*. What's really cool about this type of design is that the CPU now only needs to remember two things -- the location of stack and the location of the base pointer!
+
+When a function starts, the function itself is responsible for adding its bundle to the stack. The code generated by the compiler for every function contains a *prologue*, some code the gets executed before any other code in the function and is responsible for adding the function's bundle to the stack. The compiler knows the size of the bundle which means that the function can contain code in its prologue that knows how big a bundle to add to the stack without any outside help. In addition, the last item in the chain every time a function is called is the address of the place in the program where the program should continue executing upon completion. Therefore, the prologue does two things:
+
+1. it stashes away the place to continue executing upon its completion (that information will go in the Orange Slot in the image above);
+2. it simply grabs the current value of the stack pointer and updates it based on how much space it needs for its bundle (that will go in the `RSP` slot in the gold in the image above). 
+
+> In memory, as the stack grows the adddresses of the bytes of memory containing the contents of the bundle get smaller. In other words, "the stack grows down".
+
+At the other end of the timeline, when a function completes, it executes a set of compiler-generated instructions that will drop the latest bundle from the list and transfer program control back to the place in the program *just after* where the function was invoked. This code is known as the *epilogue*. Again, because the compiler knows how big the function's bundle will be, the epilogue code can perform its job without any outside information. The epilogue takes the current value of the stack pointer and adjusts it *upwards* according to the size of the bundle. Then, it finds the return address and transfers control of the program to that location.
+
+What's so amazing about that is the fact that functions' prologues and epilogues work together to do all the maintainence required for the stack! The operating system plays no role -- it's entirely self contained! How amazing! It's a self-fulfilling prophecy!
+
+Remember the `send` function:
+
+```C
+void send(const char *task) {
+    int t = 5;
+    printf("%s\n", task);
+    return;
+}
+```
+
+Although we have not yet seen any machine code let alone learned anything about how to read it, let's take a look at the instructions the compiler generates for the CPU to execute when the `send` function is compiled: 
+
+```asm
+0000000000401130 <send>:
+  401130:	55                   	push   rbp
+  401131:	48 89 e5             	mov    rbp,rsp
+  401134:	48 83 ec 10          	sub    rsp,0x10
+  401138:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+  40113c:	c7 45 f4 05 00 00 00 	mov    DWORD PTR [rbp-0xc],0x5
+  401143:	48 8b 75 f8          	mov    rsi,QWORD PTR [rbp-0x8]
+  401147:	48 bf 10 20 40 00 00 	movabs rdi,0x402010
+  40114e:	00 00 00 
+  401151:	b0 00                	mov    al,0x0
+  401153:	e8 d8 fe ff ff       	call   401030 <printf@plt>
+  401158:	48 83 c4 10          	add    rsp,0x10
+  40115c:	5d                   	pop    rbp
+  40115d:	c3                   	ret    
+  40115e:	66 90                	xchg   ax,ax
+  ```
+
+  Unlike in programming (where we call the indvidual units of code *statements* or *expressions*), the indvidual elements of logic in machine code are know as *instructions*. Again, we have not yet even started to look at how to read these instructions, but ... the first three instructions:
+  ```
+401130:	55                   	push   rbp
+401131:	48 89 e5             	mov    rbp,rsp
+401134:	48 83 ec 10          	sub    rsp,0x10
+  ```
+
+are the `send` function's prologue and the last three instructions:
+```asm
+401158:	48 83 c4 10          	add    rsp,0x10
+40115c:	5d                   	pop    rbp
+40115d:	c3                   	ret    
+```
+
+are the epilogue.
