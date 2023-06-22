@@ -1083,36 +1083,55 @@ We are going to analyze the `send` function in this simple application to learn 
 
 >Note: Much of what follows will be specific to Linux and something called the SystemV ABI. An ABI, an application binary interface, is like an API. You may have heard of an API before because they are popular ways to expose points of communication between interacting programs. An ABI is a way to expose and coordinate the interaction between programs that exist on the same hardware platform. The System V ABI applies to interacting pieces of code designed to run on various *NIX (e.g., Linux) operating systems. You can read more about the System V ABI at [this](https://wiki.osdev.org/System_V_ABI) wiki page.
 
-## Parameters, parameters, parameters everywhere
+## Functions, functions, functions.
 
 Functions are useful ways to wrap up functionality into a nice bundle so that those calculations can be used over and over again. Oftentimes, most of the computations that functions bundle up does not depend on any other outside information (e.g., a function that generates a random number). However, sometimes we have a great candidate for wrapping up a bunch of computations in to a single function ... but there's just one problem! There's a small difference in the behavior depending on outside context. These differences are not big enough to motivate us to write a different function, however, so we just add a *parameter* to the function. When we want to reuse the function's, er, functionality we simply *call* the function with particular *arguments*, values that will fill the *parameters*  during that execution of the code in the function.
 
 In `string-send` the `send` function has a parameter named `task` and we invoke the function with `todo` as the argument on the 2nd line of the `main` function. Just *how*, though, is that value conveyed between the caller (`main`) and the callee (`send`)? That's where the ABI plays a role -- it defines the answer to precisely these types of questions!
 
-Every function requires a bundle of information (maybe better called context) in order to operate properly. That bundle of information goes along with the bundle of functionality and the two things together define a function. Just what goes in this bundle? Well, each function needs some space to hold its local variables and the values given for its parameters during a given execution. That means that there cannot be a single copy of the bundle in memory -- there must be one copy of the bundle every time the function is called! (I mean, the computer cannot be sure that each invocation of a function will have the same value for its parameters). So, every time that a function is executed, a new bundle of information is created. When the function starts executing, the bundle of information contains the values given for the parameter by the arguments and the contents of the local variables' initial values (if there are any). But that's not all. The bundle also contains information about itself (where it exists in memory -- the so-called *base pointer*) and the point in the program to return to when it is done executing (the so-called *return-address pointer* (RA)). During the execution of the function, the contents of the bundle changes as the function performs assignment operations (etc) and, when the function is complete, the bundle is destroyed -- we don't need it any more (right?) and there's no reason to waste memory!
+Every function requires a bundle of information (maybe better called context) in order to operate properly. That bundle of information goes along with the bundle of functionality and the two things together constitute a function at runtime. Just what goes in this bundle? Well, each function needs some space to hold its local variables and the values of its parameters during a given execution.  that means that there cannot be a single copy of the bundle in memory, although all the bundles for a particular function have a similar structure (I mean, the computer cannot be sure that each invocation of a function will have the same value for its parameters). So, every time that a function is executed, a new bundle of information is created just for that invocation. When the invoked function starts executing, the bundle of information contains the values given for the parameter by the arguments and the contents of the local variables' initial values (if there are any). But that's not all. 
+
+(Optional) The bundle also contains information about the bundle of the function that called it (the so-called *saved base pointer* (BP)).
+
+The bundle also contains information about the point in the program to return to when it is done executing (the so-called *return-address pointer* (RA)). During the execution of the function, the contents of the bundle changes as the function performs assignment operations (etc) and, when the function is complete, the bundle is destroyed -- we don't need it any more (right?) and there's no reason to waste memory!
 
 ![](./graphics/Stack%20Frame%20Layout%20and%20Registers.png)
 
-When the program is executing, a new bundle is generated every time that a function is called and placed on the program *stack*. 
+The light green, orange, dark green (optional) and gray boxes in the image above constitute the general format of a bundle. The format of a bundle depends greatly on the which compiler is used. In technical terms, the bundle is known as a *stack frame* or an *activation record*.
 
-Play the role of the CPU for a second and think about your "mind" at the minute you are executing the code that declares and initializes the variable `t` in the execution of `send` triggered by `send(5)` in the `send-string` program. Obviously the `send` function is executing but, crucially, `main` is still executing too -- it's just frozen and waiting for `send` to finish. In other words, you need to remember two bundles -- one for the invocation of `main` that is executing and one for the invocation of `send` that is executing. If you were the computer and had to make sure that the active bundles never overlapped, how would you organize them?
+Again, a new bundle is generated every time that a function is called. All the bundles exist on the program's *stack*. 
 
-Well, if it were me, I would hang on bundle off the bottom of another (metaphorically) and let gravity keep them apart. The string holding them together would be really small (so small that we couldn't see it) which meant that there was no wasted space between bundles. Because each bundle has different values but *the same* structure, each bundle will keep a little reference to its place in the chain. (That statement is a slight misrepresentation but you'll see soon enough why it does not really matter.)
+Play the role of the CPU for a second and think about your "mind" at the minute you are executing the code that declares and initializes the variable `t` in the execution of `send` triggered by `send(5)` in the `send-string` program. Obviously the `send` function is executing but, crucially, `main` is still executing too -- it's just frozen and waiting for `send` to finish. In other words, you need to remember two bundles -- one for the invocation of `main` that is frozen but incomplete and one for the invocation of `send` that is incomplete and executing. If you were the computer and had to make sure that the active bundles never overlapped, how would you organize them?
 
-> Remember that little point and think about why such a reference might be required! We will revisit its importance later.
+Well, if it were me, I would hang one bundle off the bottom of another (metaphorically) and let gravity keep them apart. The string holding them together would be really small (so small that we couldn't see it) so that there was no wasted space between bundles.
 
-What do you know? This technique is *exactly* what your CPU does! The chain of bundles is stored in the computer on the stack. Every time a function is invoked, a new bundle is added to the bottom of the chain. Every time a function completes, its bundle is removed from the chain. The CPU always keeps a little reminder to itself about how to find the bottom of the chain. That reminder is known as the *stack pointer*. What's more, every bundle keeps a little reminder about the location of the bundle in the chain. This reminder is known as the *base pointer*. What's really cool about this type of design is that the CPU now only needs to remember two things -- the location of stack and the location of the base pointer!
+What do you know? This technique is *exactly* what your CPU does! The chain of bundles is stored in the computer on the stack. Every time a function is invoked, a new bundle is added to the bottom of the chain. Every time a function completes, its bundle is removed from the chain. The CPU always keeps a little reminder to itself about how to find the bottom of the chain. That reminder is known as the *stack pointer*. 
 
-When a function starts, the function itself is responsible for adding its bundle to the stack. The code generated by the compiler for every function contains a *prologue*, some code the gets executed before any other code in the function and is responsible for adding the function's bundle to the stack. The compiler knows the size of the bundle which means that the function can contain code in its prologue that knows how big a bundle to add to the stack without any outside help. In addition, the last item in the chain every time a function is called is the address of the place in the program where the program should continue executing upon completion. Therefore, the prologue does two things:
+(Optional) Some compilers generate code that relies on a little reminder about the address of the *center* of the bundle's contents in memory. This reminder is known as the *base pointer*. 
 
-1. it stashes away the place to continue executing upon its completion (that information will go in the Orange Slot in the image above);
-2. it simply grabs the current value of the stack pointer and updates it based on how much space it needs for its bundle (that will go in the `RSP` slot in the gold in the image above). 
+> (Optional) Remember that little point and think about why such a reference might be required! We will revisit its importance later.
+
+What's really cool about this type of design is that the CPU now only needs to remember two things -- the location of stack and (optional) the location of the base pointer!
+
+When a function starts, the function itself is responsible for adding its bundle to the stack. The code generated by the compiler for every function contains a *prologue*, some code the gets executed before any other code in the function that is responsible for adding the function's bundle to the stack. The compiler knows the size of the bundle which means that it can generate code for the prologue that does not need any outside input. 
+
+Remember that you (you *are* still the the CPU, *aren't you?*) always contain reference to the end of the chain. When the prologue generates a new bundle, it better update that reference, right? 
+
+Oh, and one other thing: The prologue needs to cooperate with the CPU and store the location in the program to continue executing after it is done! Cooperation is possible because the CPU places the address of the place in the program where the program should continue executing upon completion at the tail end of the chain right before it starts executing a new function. Therefore, the prologue does three things:
+
+1. it allocates space on the stack for the bundle;
+0. it stashes away the place to continue executing upon its completion (that information will go in the Orange Slot in the image above);
+0. (related to (1)) it simply grabs the current value of the stack pointer and updates it based on how much space it needs for its bundle (that will go in the `RSP` slot in the gold in the image above). 
 
 > In memory, as the stack grows the adddresses of the bytes of memory containing the contents of the bundle get smaller. In other words, "the stack grows down".
 
-At the other end of the timeline, when a function completes, it executes a set of compiler-generated instructions that will drop the latest bundle from the list and transfer program control back to the place in the program *just after* where the function was invoked. This code is known as the *epilogue*. Again, because the compiler knows how big the function's bundle will be, the epilogue code can perform its job without any outside information. The epilogue takes the current value of the stack pointer and adjusts it *upwards* according to the size of the bundle. Then, it finds the return address and transfers control of the program to that location.
+At the other end of the timeline, when a function completes, it executes a set of compiler-generated instructions that will drop the latest bundle from the chain and transfer program control back to the place in the program *just after* where the function was invoked. This code is known as the *epilogue*. Again, because the compiler knows how big the function's bundle will be, the epilogue code can perform its job without any outside information. The epilogue takes the current value of the stack pointer and adjusts it *upwards* according to the size of the bundle. Then, it finds the return address (remember that one of the jobs of the prologue was to stash it away in a safe place?) and transfers control of the program to that location. Therefore, the prologue does three things:
 
-What's so amazing about that is the fact that functions' prologues and epilogues work together to do all the maintainence required for the stack! The operating system plays no role -- it's entirely self contained! How amazing! It's a self-fulfilling prophecy!
+1. deallocates the space on the chain reserved for the bundle;
+1. fetches the place in the code to restart the calling function (that the prologue stashed away); and
+1. direct the CPU to continue executing there.
+
+What's so amazing about the prologue and the epilogue is that they work together to do all the maintainence required for the stack! The operating system plays no role, the CPU plays only a minor role -- it's entirely self contained! How amazing! It's a self-perpetuating system!
 
 Remember the `send` function:
 
@@ -1158,4 +1177,210 @@ are the `send` function's prologue and the last three instructions:
 40115d:	c3                   	ret    
 ```
 
-are the epilogue.
+are the `send` function's epilogue.
+
+## The Dump Truck of Disassembly
+
+Just how was it possible to extract the operations the compiler generated for the `send` function? Reverse engineering depends on the malware analyst's ability to decipher the semantics of the operations (i.e., what they do!) so it better be possible to read them.
+
+Like `host`, `file`, `strings` and `hexdump`, a command-line tool comes to the rescue. `objdump` (short for *obj*ect *dump*) will decode the contents of an *object file* (the technical term for the files that contain programs) into a list of instructions (among other things).
+
+> Note: An object file contains *more* than just a list of the operations that the program executes. It also contains information about the address of the instruction that starts a program, the location of the bytes where all the strings are stored (remember that from above), among other things. 
+
+`objdump` is no more difficult to *use* than `hexdump` (deciphering that output is, well, a little more tricky!):
+
+```console
+$ objdump -MIntel -d <filename>
+```
+
+The `-d` flag instructs `objdump` to *d*isassemble the instructions in `filename` and output those instructions in the *Intel* format (there are [two ways of formatting CPU instructions](https://imada.sdu.dk/u/kslarsen/dm546/Material/IntelnATT.htm), Intel and AT&T. For programmers, the Intel format is most aligned with the way that we think about the world.)
+
+There is one small problem ... `objdump` generates a lot of output. There are (at least) two ways around this problem:
+
+1. You can store the output in a file and look at it using a file viewer/editor; or
+2. You can direct `objdump` to disassemble only certain functions.
+
+The first solution is the easier one:
+
+```console
+$ objdump -MIntel -d <filename> > <where to store the output>
+```
+
+where the `>` between the `<filename>` and `<where to store the output>` is an actual `>`.
+
+The second solution is really no harder to use:
+
+```console
+$ objdump --disassemble=<function name> -MIntel -d <filename>
+```
+
+will instruct `objdump` to disassemble only one particular function.
+
+If that function itself is large, you can combine the two solutions:
+
+```console
+$ objdump --disassemble=<function name> -MIntel -d <filename> > <where to store the output>
+```
+
+Now that we know *how* to use `objdump`, the question becomes: how to interpret its output?
+
+Recall the output from `objdump` from above:
+```asm
+0000000000401130 <send>:
+  401130:	55                   	push   rbp
+  401131:	48 89 e5             	mov    rbp,rsp
+  401134:	48 83 ec 10          	sub    rsp,0x10
+  401138:	48 89 7d f8          	mov    QWORD PTR [rbp-0x8],rdi
+  40113c:	c7 45 f4 05 00 00 00 	mov    DWORD PTR [rbp-0xc],0x5
+  401143:	48 8b 75 f8          	mov    rsi,QWORD PTR [rbp-0x8]
+  401147:	48 bf 10 20 40 00 00 	movabs rdi,0x402010
+  40114e:	00 00 00 
+  401151:	b0 00                	mov    al,0x0
+  401153:	e8 d8 fe ff ff       	call   401030 <printf@plt>
+  401158:	48 83 c4 10          	add    rsp,0x10
+  40115c:	5d                   	pop    rbp
+  40115d:	c3                   	ret    
+  40115e:	66 90                	xchg   ax,ax
+```
+
+The first line of the output contains two pieces of information about a function in a program:
+
+1. It's address
+2. It's name
+
+Recall the discussion about the difference between the addresses of pieces of a program as they exist in memory and in storage. The address presented here is, well, neither, but it is closer to the former than the latter. Because of defensive technologies adopted by operating systems (i.e., [ALSR](https://blog.morphisec.com/aslr-what-it-is-and-what-it-isnt/)), the address of pieces of a program in memory vary from run to run. That said, it is best to consider the addresses presented by `objdump` as if they are the addresses of program elements in memory.
+
+The remaining lines of the output share a similar format. For purposes of discussion, consider this line of `objdump`'s output:
+
+```asm
+  401134:	48 83 ec 10          	sub    rsp,0x10
+```
+
+The first piece of information (before the `:`) is the *memory* address of the to-be-displayed instruction. The next piece of information is a series of values of bytes (in hexadecimal format) that constitute the instruction. Like a statement in C my contain keywords like `if` or `then` along with variables, an instruction contains special bytes (known as *opcodes*) along with variables (either as addresses in memory or the names of registers) encoded as numbers. These numbers are encoded in bytes and constitute the operation. Finally, the bytes are decoded into a *mnemonic* -- an English-like rendering of the instruction.
+
+> Note: For reference, you can find an authoritative listing of *all* the instructions supported by x86 processors [online](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html). Be warned, it is thousands of pages long!
+
+### Practice
+
+Use `objdump` to disassemble the `main` function of `string-send` and write the list of operations to `/tmp/string-send.main.obj`.
+
+<details>
+
+```console
+$ objdump -MIntel --disassemble=main string-send/build/StringSend > /tmp/string-send.main.obj
+```
+
+The contents of `/tmp/string-send.main.obj` should look like:
+
+```asm
+
+string-send/build/StringSend:     file format elf64-x86-64
+
+
+Disassembly of section .init:
+
+Disassembly of section .plt:
+
+Disassembly of section .text:
+
+0000000000401160 <main>:
+  401160: 55                    push   rbp
+  401161: 48 89 e5              mov    rbp,rsp
+  401164: 48 83 ec 10           sub    rsp,0x10
+  401168: c7 45 fc 00 00 00 00  mov    DWORD PTR [rbp-0x4],0x0
+  40116f: 48 8b 04 25 14 20 40  mov    rax,QWORD PTR ds:0x402014
+  401176: 00
+  401177: 48 89 45 f0           mov    QWORD PTR [rbp-0x10],rax
+  40117b: 8b 04 25 1c 20 40 00  mov    eax,DWORD PTR ds:0x40201c
+  401182: 89 45 f8              mov    DWORD PTR [rbp-0x8],eax
+  401185: 48 8d 7d f0           lea    rdi,[rbp-0x10]
+  401189: e8 a2 ff ff ff        call   401130 <send>
+  40118e: 31 c0                 xor    eax,eax
+  401190: 48 83 c4 10           add    rsp,0x10
+  401194: 5d                    pop    rbp
+  401195: c3                    ret
+
+Disassembly of section .fini:
+```
+
+Can you determine where the prologue and epilogue begin and end?
+
+</details>
+
+## One If By Land, Two If By Sea
+
+Prologues and epilogues play a big role in maintaining the chain of bundles, what is technically called the *run-time stack*. That said, they are necessary but not sufficient.
+
+What we said above was that stack frames contain the values of the parameters for a particular execution of function. The prologue and the epilogue don't seem to contain any instructions on how a function's caller transmits the values of the arguments to the called function so that the called function can match those with its parameters. So, how does that happen?
+
+The assignment of argument values to parameters is part of a complex coordination between the calling function and the called function. The steps to this tango are different for each hardware vendor and operating system (e.g., ARM v. Intel and Windows vs Linux). Part of what makes a compiler so special is that they handle all of these details for a programmer who writes their code in a high-level language.
+
+Each hardware/software combination specifies the conventions to follow in an ABI (in particular, a *calling convention*). The operating systems that descend from the original UNIX operating system (e.g., FreeBSD, Linux, and even macOS) all use the System V ABI. Windows uses a different ABI called the fastcall method. 
+
+> Note: Remember that we are focused on the Linux operating system in this tutorial!
+
+Even within the confines of computers running the Linux operating system, there are different calling convention. In particular, there is a different calling conventions depending on whether the CPU is a 32- or 64-bit CPU. 
+
+> Note: Again, remember that we are focused on software running on operating systems on 64-bit hardware.
+
+Under the specification of the calling convention, the caller will place the values for the arguments in a particular place in memory and the called function will retrieve those values from that location. Because we programmers rely so heavily on functions and call them so often, it is a good idea if the transmission of arguments for parameters happens as quickly as possible.
+
+What is the fastest form of memory in a computer? First, note that we are talking about *memory* (remember the difference between memory and storage that we discussed above?). At a baseline, then, the computer's RAM is *a* form of memory that we could use for transmitting arguments to parameters. However, there is something faster!
+
+On each CPU there are a very small number of variables (technically they are called *registers*) and each of them hold the same amount of memory (8 bytes on a 64-bit computer). The CPU can access the values in those registers very, very quickly (a register's value can be read about 3.4 billion times per second on modern CPUs). Each register has a fixed name -- `rdi`, `rsp`, `rip`, etc.
+
+To take advantage of this speed, the arguments that require fewer than 8 bytes for their storage (*most* of them) transmit their values through registers. The first argument goes in the `rdi` register, the second one goes in the `rsi` register, `rdx`, `rcx` ...
+
+
+As an example of how a calling convention effects the code that the compiler generates, consider the following (very small) C program:
+
+```C
+#include <stdio.h>
+#include <stdint.h>
+
+int add4(uint64_t one, uint64_t two, uint64_t three, uint64_t four) {
+    return one + two + three + four;
+}
+
+int main() {
+    int sum = add4(5, 10, 15, 20);
+    printf("sum: %d\n", sum);
+    return 0;
+}
+```
+
+`add4` is a simple function that accepts four parameters and returns their sum. Because `int`s require less than 32-bites of storage (8 bytes) we suspect that when `add4` is called from `main`, all four of those arguments will be placed in the registers. In fact, we expect that `5` will be in the register `rdi` and `10` in the register `rsi` and `15` in the register `rdx`, and `20` in the register `rdx`. Let's confirm that by looking at the code the compiler generates for the function call of `add4` in `main`:
+
+```asm
+  40115c:	b9 14 00 00 00       	mov    ecx,0x14
+  401161:	ba 0f 00 00 00       	mov    edx,0xf
+  401166:	be 0a 00 00 00       	mov    esi,0xa
+  40116b:	bf 05 00 00 00       	mov    edi,0x5
+  401170:	e8 b1 ff ff ff       	call   401126 <add4>
+```
+
+> Remind yourself of how to read the format of an assembly-code listing generated by `objdump` before continuing.
+
+First, we want to realize that all the numbers are written in hexadecimal. So, we'll convert them to decimal to see if that helps us with our confirmation task:
+
+| hexadecimal | decimal |
+| -- | -- |
+| 0x14 | 20 |
+| 0xf | 15 |
+| 0xa | 10 |
+| 0x5 | 5 |
+
+That should help us see something pretty cool:
+
+```asm
+  40115c:	b9 14 00 00 00       	mov    ecx,0x14
+```
+
+is an instruction that moves the literal value `15` into the register `ecx` -- *so* close to what we expected. Instead of moving `15` into `rcx` the instruction is moving it in to `ecx`. 
+
+But, don't worry! There's no difference here, really! `rcx` is a bigger version of the register `ecx`. Whereas `ecx` can only hold `4` bytes, `rcx` can hold 8 and `ecx` is a subset of `rcx`:
+
+START HERE WITH A DIAGRAM
+
+Wait a second, you say: In C I can write a function with *any* number of parameters (well, almost) and you said there are only a fixed (*and small*!) number of registers. What happens when there are more parameters for a function than there are available registers.
+
