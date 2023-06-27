@@ -1380,7 +1380,26 @@ is an instruction that moves the literal value `15` into the register `ecx` -- *
 
 But, don't worry! There's no difference here, really! `rcx` is a bigger version of the register `ecx`. Whereas `ecx` can only hold `4` bytes, `rcx` can hold 8 and `ecx` is a subset of `rcx`:
 
-START HERE WITH A DIAGRAM
+![](./graphics/Nesting%20Registers%20x86_64.png)
+
+Assume that each of the gray rectangles can hold 8 bytes of data. There are 8 gray boxes for a total of 64 bytes of storage. You could fit that entire, long number in a single 64-bit register. We'll pretend that the gray boxes represent, say, `rcx`. So, 
+
+
+```
+rcx = 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+```
+
+There are four gray boxes contained in the blue box -- enough to hold 32-bits. So, the 32-bit register associated with the 64-bit `rxc` register, `ecx`, 
+
+```
+ecx = 00 01 02 03 04 05 06 07
+```
+
+But wait, it gets better. There are two gray boxes contained in the green box -- enough to hold 16-bits. So, the 16-bit register associated with the 64-bit `rxc` register, `cx`, 
+
+```
+cx = 00 01 02 03
+```
 
 Wait a second, you say: In C I can write a function with *any* number of parameters (well, almost) and you said there are only a fixed (*and small*!) number of registers. What happens when there are more parameters for a function than there are available registers.
 
