@@ -1,6 +1,6 @@
 # The HaUCk Bank Malware
 
-Sometimes users' desire to follow best practices backfires on them. In our case, a user has submitted a program that they believe has lead to a compromise of their system. The user received a phone call from their bank, HaUCk Bank, and the operator needed to do some routine account checkups. The user, the bank's client, received an email with information on how to download software that would help them generate a one-time password that they could use to verify their identity with the bank and protect themselves from fraud. The operator asked them to use the HaUCk Bank Multifactor Authenticator (HBMA) to generate such a token so that the user would have peace of mind that they were talking to a legitimate bank representative. 
+Sometimes users' desire to follow best practices backfires on them. In our case, a user has submitted a program to us for analysis. They believe that the application might have led to a compromise of their system. The user received a phone call from their bank, HaUCk Bank, and the operator needed to do some routine account checkups. The user, the bank's client, received an email with information on how to download software that would help them generate a one-time password that they could use to verify their identity with the bank and protect themselves from fraud. The operator asked them to use the HaUCk Bank Multifactor Authenticator (HBMA) to generate such a token so that the user would have peace of mind that they were talking to a legitimate bank representative. 
 
 When our user ran the password-generator software, everything seemed normal ...
 
@@ -15,7 +15,9 @@ After completing the call with the bank representative, things started to get a 
 As our company's premiere cybersecurity analyst, we have been given the task of determining whether or not the password generator was legitimate or malicious.
 
 ## Using External Libraries
-Software developers don't write their code in a vacuum -- they rely on software from others! Malware writers are no different than other software engineers. Malicious hackers want to write code as easily and quickly as possible and that often requires a reliance on other people's work.
+Software developers don't write their code in a vacuum -- they work with other developers as a team and often rely on software from others. Code from others usually comes in the form of external libraries. Libraries are packages of precompiled code that can be reused to accomplish a specific task. We qualify the term *library* with *external* to distinguish libraries written by teams of developers we don't know and libraries that are written by members of our team. 
+
+Malware writers are no different than other software engineers. Malicious hackers want to write code as easily and quickly as possible and that often requires a reliance on other people's work.
 
 One of the first things to do when coming in contact with a piece of suspicious code is to determine whether the libraries that it uses are consistent with the job that the software purports to do. In the case of our password-generating application, it seems reasonable to expect that a random-number generator might be needed or even a piece of supporting code to perform encryption.
 
@@ -23,7 +25,7 @@ Just how is it possible to determine what external libraries a program uses? `ld
 
 ### Description
 
-`ldd` is a tool that understands the format of a executable Linux program and can determine which external libraries that program relies on to execute. In its default mode, `ldd` will list all the required external libraries for the particular program whose path is provided as the argument.
+`ldd` is a tool that understands the format of an executable Linux program and can determine which external libraries that program relies on to execute. In its default mode, `ldd` will list all the required external libraries for the particular program whose path is provided as the argument.
 
 ### Practice
 To practice with `ldd`, let's investigate what external libraries `host` needs from the operating system to execute. 
@@ -82,7 +84,7 @@ Part of being a good malware analyst is an expertise with Google. Take some time
 
 Investigate what external libraries the HBMA uses and determine the functionality provided by those libraries.
 
-<details>
+<details><summary>Answer</summary>
 
 ```console
 $ ldd hauck-mfa
@@ -114,7 +116,7 @@ $ ldd hauck-mfa
         libpcre2-8.so.0 => /lib64/libpcre2-8.so.0 (0x00007ff81f2ce000)
 ```
 
-The most fascinating of the libraries required by the HBMA is [`libcurl.so.4`](https://curl.se/libcurl/), a.k.a. `libcurl`. `libcurl` is an extremely popular open-source project (it was used in the [Mars Rover](https://daniel.haxx.se/blog/2021/12/03/why-curl-is-used-everywhere-even-on-mars/)!!) that makes it easy for developers to write programs that download data from the internet using the HTTP(S) protocol. Does it seem like there is a good reason for a simple program that generates a multifactor token to access the Internet? I agree ... something seems suspicious.
+The most fascinating of the libraries required by the HBMA is [`libcurl.so.4`](https://curl.se/libcurl/), a.k.a. `libcurl`. `libcurl` is an extremely popular open-source project (it was used in the [Mars Rover](https://daniel.haxx.se/blog/2021/12/03/why-curl-is-used-everywhere-even-on-mars/)!!). The project produces libraries that makes it easy for developers to write programs that download data from the internet using the HTTP(S) protocol. Does it seem like there is a good reason for a simple program that generates a multifactor token to access the Internet? I agree ... something seems suspicious.
 </details>
 
 ## System Calls
@@ -147,7 +149,7 @@ The tool is named `strace`.
 
 ### Description
 
-`strace` lets the analyst start the execution of a program and watch what system calls it makes. It takes a single command-line parameter -- the path to the program to monitor -- in its simplest mode of execution.
+`strace` lets us analysts start the execution of a program and watch what system calls it makes. It takes a single command-line parameter -- the path to the program to monitor -- in its simplest mode of execution.
 
 ```console
 $ strace /path/to/program
@@ -161,7 +163,7 @@ First, open the provided file named `whereami.txt` in the `samples` directory by
 At the best summer camp in all of Cincinnati!
 ```
 
-`cat` is a program that will allow you to display the contents of text files on the screen. Let's say that you want to display the contents of the `whereami.txt` file on the screen, you could run
+`cat` is a program that allows the user to display the contents of text files on the screen from the console. Let's say that you want to display the contents of the `whereami.txt` file on the screen, you could run
 
 ```console
 $ cat samples/whereami.txt
@@ -174,7 +176,7 @@ $ cat samples/whereami.txt
 CyberSecurity summer camp at UC is really fun!
 ```
 
-In order to be able to produce that output, the `cat` program must access the computer's hard drive and therefore has to use a system call. Let's use `strace` to determine the system calls that it does make when attempting to display the contents of the `samples/whereami.txt` file:
+In order to be able to produce that output, the `cat` program must access the computer's hard drive and therefore has to use a system call. Let's use `strace` to determine the system calls that it makes when attempting to display the contents of the `samples/whereami.txt` file:
 
 ```console
 $ strace /usr/bin/cat samples/whereami.txt
@@ -260,13 +262,13 @@ openat(AT_FDCWD, "docs/samples/whereami.txt", O_RDONLY) = 3
 
 and there it is! First, do you see the path of the file? How awesome! 
 
-Second, notice that the `3` in the `= 3` is the same as the `3` in the `read(3 ...)` -- that is no coincidence. The `3` file descriptor is used by system calls that want to manipulate the file opened by that particular call to the `open` system call. 
+Second, notice that the `3` in the `= 3` is the same as the `3` in the `read(3 ...)` -- that is no coincidence. The `3` file descriptor is used by system calls that want to manipulate the file opened by that particular call to the `open` system call. See how the file descriptor provides the logical link between the `open` and the `read` system calls? 
 
 ### Do
 
 Run the HBMA using `strace` and determine if (and with that parameters does) the HBMA uses the [`connect`](https://linux.die.net/man/2/connect) system call.
 
-<details>
+<details><summary>Answer</summary>
 
 ```console
 $ strace src/install/bin/hauck
@@ -795,7 +797,7 @@ Unlike the tools that we have used so far, Wireshark has a GUI. In order to laun
 
 Wireshark is a *very* powerful tool. It gives the malware analyst an incredible number of options. We are going to use a very, *very* small part of its functionality in these exercises.
 
-Our goal is to *sniff* packets in the network that are coming from our computer. Because we are sniffing on the computer that is running the HBMA that, we will be able to look at the network traffic it is generating, if there is any! In particular, we will be particularly interested in looking at DNS and HTTP traffic.
+Our goal is to *sniff* packets in the network that are coming from our computer. Because we are sniffing on the computer that is running the HBMA, we will be able to look at the network traffic it is generating, if there is any! In particular, we will be particularly interested in looking at DNS and HTTP traffic.
 
 > Note: See [above](#description) for information on DNS.
 
@@ -805,7 +807,7 @@ To start a capture, double click on the *any* label.
 
 ![](./graphics/wireshark/capture-wireshark.png)
 
-You will start to see a list of all the packets (bytes of data grouped together that are meant to be interpreted by a network protocol as related) sniffed from your computer appear on the screen! If you are like me, you will get overwhelmed easily. What we want is a way to narrow down the output to something reasonable.
+You will start to see a list of all the *packets*, bytes of data grouped together that are meant to be interpreted by a network protocol as related, sniffed from your computer appear on the screen! If you are like me, you will get overwhelmed easily. What we want is a way to narrow down the output to something reasonable.
 
 Again, we want to focus on only the DNS and HTTP traffic. Wireshark lets you filter the traffic that you see using a language that looks a little bit like C. Because we want to display DNS *or* HTTP traffic, it won't surprise you to learn that we are going to be using the `||` symbol. 
 
@@ -833,17 +835,17 @@ Now, in the browser in the guest (*not* the browser on the host computer), type 
 
 How *cool* is that? You are looking at the web browser doing a DNS Query (to turn `example.org` into an IP address that it can access for the web content) followed by an HTTP request (what actually downloads the contents of the web page from the server.)
 
-If you click on the item whose `Info` is something like `Standard Query` you will see some additional information displayed in the bottom-left window. This information is the contents of the actual packet displayed nicely by Wireshark. Instead of having to piece through the 1s and 0s that make up the data in the packet, Wireshark has formatted it nicely. Explore that area and see if you can find where the actual DNS Query is listed. If you need help, you might want to research the concept of a [DNS Query]().
+If you click on the item whose `Info` is something like `Standard Query` you will see some additional information displayed in the bottom-left window. This information is the contents of the actual packet transmitted on the network and Wireshark is formatting the `1`s and `0`s for nice display. Instead of having to piece through the `1`s and `0`s that make up the data in the packet, Wireshark has formatted it nicely. Explore that area and see if you can find where the actual DNS Query is listed. If you need help, you might want to research the concept of a [DNS Query](https://www.cloudns.net/wiki/article/254/).
 
 > Bonus: Try to find the response to the query and determine what IP address corresponds to `example.org`.
 
-An HTTP *get* is an operation that, well, *get*s content from a web server. To be more precise, it is a directive that your brower issues to the client to get the data. The server will respond to that polite request with the data. Click on the item that looks like it will show a packet that contains information about a get operation. It should be fairly easy to see! Then, use your new Wireshark skills to figure out the *version* of the HTTP protocol being used. If you need help, you might want to research the [HTTP header]().
+An HTTP *get* is an operation that, well, *get*s content from a web server. To be more precise, it is a directive that your brower issues to the client to get the data. The server will respond to that polite request with the data. Click on the item that looks like it will show a packet that contains information about a get operation. It should be fairly easy to see! Then, use your new Wireshark skills to figure out the *version* of the HTTP protocol being used. If you need help, you might want to research the [HTTP header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers).
 
 ### Do
 
 Display the DNS and HTTP packets that are generated by an execution of the HBMA. First, start a capture on the *any* interface. Then, once the capture is running, execute the HBMA. You will need to sniff and execute the HBMA on the same machine (the guest).
 
-<details>
+<details><summary>Answer</summary>
 
 How frustrating! We only see some DNS queries. That's really odd. (See below). However, we can derive some information from those queries.
 
@@ -869,11 +871,11 @@ Does the IP address in the response to your query differ from the one shown here
 
 To this point in our analysis of the HBMA, we have been doing *dynamic* analysis. Dynamic analysis is any analysis conducted on a program while it is executing. As you can imagine, performing dynamic analysis is not always easy or even possible. For example, if we have an executable designed to run on a computer with a processor that we cannot access (e.g., we have an Intel-based computer [x86] and the executable is built for an Arm-based computer [aarch64]), then we cannot run the program. What's more, even if we could run the program it might not be the best idea -- if the program even *might* be  malicious then we would have to be very careful as we execute it.
 
-In these cases we would use *static* analysis, analysis performed on a program without running it. In other words, in static analysis we study the program only by looking at its contents on disk. There are a number of reasons that this analysis is more difficult than dynamic analysis. However, static analysis is safer and, if done right, static analysis is more powerful than dynamic analysis.
+In these cases we would use *static* analysis, analysis performed on a program without running it. In other words, static analysis is a study of a program only by looking at its contents on disk. There are a number of reasons that this analysis is more difficult than dynamic analysis. However, static analysis is safer and, if done right, more powerful than dynamic analysis.
 
 ## Playing With a Ball of Twine
 
-Programs that need to display information to the user or send the same data over the Internet *every* time that it is executed will oftentimes *embed* those data in to the program file itself. By looking at these strings we can usually determine something interesting about the program. I mean, if the program contains the string "Password:" our ears will perk up -- just why does this program need a password and what is it going to do with it? Analysing the strings embedded in the file that contains a program is a very straightforward, but useful, form of static analysis.
+Programs that need to display information to the user or send the same data over the Internet *every* time that it is executed will oftentimes *embed* those data in the program file itself. By looking at these strings we can usually determine something interesting about the program. I mean, if the program contains the string "Password:" our ears will perk up -- just why does this program need a password and what is it going to do with it? Analysing the strings embedded in a file that contains a program is a very straightforward, but useful, form of static analysis.
 
 `strings` is a program that let's us perform this analysis. It takes a single parameter (the path to a file containing a program) and outputs all the strings that are embedded in that program. 
 
@@ -881,7 +883,7 @@ Programs that need to display information to the user or send the same data over
 $ strings /path/to/file
 ```
 
-The `strings` application is not foolproof (e.g., it does not work very well for strings that are encoded with Unicode -- see [below](#hexes-are-for-more-than-curses). But, the effort/utility ratio is still very high.
+The `strings` application is not foolproof (e.g., it does not work very well for strings that are encoded with Unicode -- see [below](#hexes-are-for-more-than-curses)). But, the effort/utility ratio is still very high.
 
 ### Practice
 
@@ -933,7 +935,7 @@ Interesting. None of the words in the program's output are listed by `strings`. 
 
 See if there are any clues that we can decipher from the output of `strings` as to the functionality of the HBMA.
 
-<details>
+<details><summary>Answer</summary>
 
 There are really not that many meaningful clues that we can uncover. However, if you are especially eagle eyed, it's possible that you picked up on a few things:
 
@@ -956,13 +958,13 @@ seems to indicate that the source code for the program was in a file named `hauc
 
 ## Hexes Are For More Than Curses
 
-Well, the bytes that compose the words `Emojis`, `make`, `me`, `smile` should be somewhere in the file that makes up the program. `strings` does not seem to show them, but there *must* be a tool that *will* let us find them! 
+Well, the bytes that compose the words `Emojis`, `make`, `me`, `smile` should be somewhere in the file that makes up the `mysteryw` program. I mean, the words somehow make it to the screen, right? `strings` does not seem to show them, but there *must* be a tool that *will* let us find them! 
 
-You're right, there is! It's called `hexdump`. 
+You're right, there is! It's called `hexdump`.
 
->Note: The name `hexdump` comes from the term used for a base-16 number system. The numbers that we normally use (e.g., 0, 5, 17) are from a base-10 number system (known as the decimal system after the prefix dec- which comes from the Greek for the word ten). Computers, however, have a different opinion: computers count in binary (a base-2 number system). Binary is very difficult for humans to read and write quickly. Humans and computers can comprise on base 16, or hexadecimal. For more information about the hexadecimal number system, check out [this great article](https://link.springer.com/article/10.1007/s00283-022-10206-w).
+>Note: The name `hexdump` comes from the term used for a base-16 number system. The numbers that we normally use (e.g., 0, 5, 17) are awesome and come from a base-10 number system (known as the decimal system after the prefix dec- which comes from the Greek for the word ten). Computers, however, have a different definition of awesome and they believe that counting in binary (a base-2 number system) is better. Binary is very difficult for humans to read and write quickly because it is so verbose. Humans and computers can compromise on base 16, or hexadecimal. For more information about the hexadecimal number system, check out [this great article](https://link.springer.com/article/10.1007/s00283-022-10206-w).
 
-Using `hexdump` is only slightly more difficult than using `strings` (and only because there is a *command-line switch* that I encourage you to use). `hexdump` takes a single command-line switch (`-C`) and a single command-line argument (the path to the file whose contents you want to see, represented as individual bytes).
+Using `hexdump` is only slightly more difficult than using `strings` (and only because there is a *command-line switch*, a thing that we type that modifies the behavior of a command-line tool, that I encourage you to use but is not required). The way that we will use it, `hexdump` takes a single command-line switch (the `-C`) and a single command-line argument (the path to the file whose contents you want to see, represented as individual bytes).
 
 ```console
 $ hexdump -C /path/to/file
@@ -975,6 +977,46 @@ Every line in the output from `hexdump` (with the `-C` command-line switch) foll
 ```
 
 The *thing* before the first two spaces (`00003190`) is the address (in bytes and written in base 16) of the leftmost byte shown on the line (`00`). Between the two spaces and the `|` are the values of the 16 bytes (again, written in base 16) starting at the address written to the left of the two spaces. Each number between the spaces represent the value of a byte at a particular address. In the line shown above, the value of the byte with address `00003195` is `05` and the value of the byte with address `00003198` is `48`. Between the two `|`s at the end of the line is the ASCII representation of those bytes (if they are sensical). The values of the last eight bytes in the row of output shown above correspond to the ASCII characters `HELP_Me!`.
+
+> Note: You can research more about the ASCII standard (which is repetitive in the same way that saying "PIN Number" is repetitive) on [Wikipedia](https://en.wikipedia.org/wiki/ASCII). You should compare the way that characters are encoded in ASCII with the way that they are encoded in Unicode (see below!).
+
+---
+<details><summary>Converting between hexadecimal and decimal</summary>
+
+Each byte contains 8 bits. A bit is a single one or zero. There are 256 different unique combinations of 8 ones and zeros. That means that it is possible to represent 256 different numbers with 8 bits (Note that does *not* necessarily mean we can *only* represent 0 through 255 -- there are other ways to map the unique combinations to decimal digits as long as we all agree on the method!). 
+
+Each of the "columns" of a number of decimal contains 10 possible values -- 0 through 9 -- and the columns, reading from right-to-left, represent an ever-increasing multiple of 10. Let's "convert" 23:
+
+$ 23 = (2*10*1) + (3*1) $
+
+Or 143:
+
+$ 143 = (1*10*10*1) + (4*10*1) + (3*1) $
+
+Or 1337:
+
+$ 1337 = (1*10*10*10*1) + (3*10*10*1) + (3*10*1) + (7*1) $
+
+Notice how the number of $10$s multiplied together continues to grow as we move from left-to-right?
+
+That same technique applies to hexadecimal numbers except that we multiply by $16$! Therefore there are $16$ different values for each column. Because using double digits would cause confusion (ie., Is $112$ `1 12` or `11  2`?) we will need to use some additional firepower! The values in each column range between `0` and `f`, as in `0`, `1`, ... `9`, `a`, `b`, `c` ... `f`. Let's convert `16` in hexadecimal to decimal:
+
+$ 16 = (1*16*1) + (6*1) = 24 $
+
+Or, how about `118`:
+
+$ 118 = (1*16*16*1) + (1*16*1) + (8*1) = 280 $
+
+Awesome! Let's add some letters and convert `f2`:
+
+$ f2 = (f * 16 *1) + (2 * 1) = (15 * 16 * 1) + (2 * 1) = 242 $
+
+Try to convert `b3` to decimal. For a real challenge, convert $5196$ to hexadecimal and then meet me at Starbucks!
+
+
+</details>
+
+---
 
 `hexdump` lets you see the actual, unvarnished values of *every* byte in a file! Amazing!
 
@@ -997,7 +1039,7 @@ $ hexdump -C mystery
 
 What is the address of the byte that represents the `l` in `Emojis make me smile.`? That's right, `00003022`.
 
-We know that `mystery` has to contain something similar but different than that -- otherwise `strings` would have shown the output we expected. But, just what is that difference? We can use `hexdump` to see the difference:
+We know that `mysteryw` has to contain something similar but different than that -- otherwise `strings` would have shown the output we expected. But, just what is that difference? We can use `hexdump` to see the difference:
 
 
 ```console
@@ -1018,7 +1060,7 @@ Fascinating! It looks like there are `00`s between each of the characters in the
 
 Use `hexdump` to determine the address of the byte representing the `c` in `curl_global_init`.
 
-<details>
+<details><summary>Answer</summary>
 
 ```console
 $ hexdump -C hauck-mfa
@@ -1264,7 +1306,7 @@ The first piece of information (before the `:`) is the *memory* address of the t
 
 Use `objdump` to disassemble the `main` function of `string-send` and write the list of operations to `/tmp/string-send.main.obj`.
 
-<details>
+<details><summary>Answer</summary>
 
 ```console
 $ objdump -MIntel --disassemble=main string-send/build/StringSend > /tmp/string-send.main.obj
