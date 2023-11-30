@@ -1,0 +1,4 @@
+{
+    "cmake.sourceDirectory": "/home/hawkinsw/code/uc/CS5138/MiniAssignmentHaUCk/src",
+    "cmake.installPrefix": "${workspaceFolder}/src/install/"
+}

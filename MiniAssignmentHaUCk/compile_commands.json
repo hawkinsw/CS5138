@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/hawkinsw/code/uc/CS5138/MiniAssignmentHaUCk/build",
+  "command": "/usr/bin/clang++ -I/home/hawkinsw/code/uc/CS5138/MiniAssignmentHaUCk/src/CURL::libcurl -g -std=gnu++20 -o CMakeFiles/hauck-mfa.dir/hauck-mfa.cpp.o -c /home/hawkinsw/code/uc/CS5138/MiniAssignmentHaUCk/src/hauck-mfa.cpp",
+  "file": "/home/hawkinsw/code/uc/CS5138/MiniAssignmentHaUCk/src/hauck-mfa.cpp",
+  "output": "CMakeFiles/hauck-mfa.dir/hauck-mfa.cpp.o"
+}
+]

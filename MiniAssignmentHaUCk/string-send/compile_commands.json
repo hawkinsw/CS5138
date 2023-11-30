@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/hawkinsw/code/uc/CS5138/MiniAssignmentHaUCk/string-send/build",
+  "command": "/usr/bin/clang -g -g -O0 -o CMakeFiles/StringSend.dir/string-send.c.o -c /home/hawkinsw/code/uc/CS5138/MiniAssignmentHaUCk/string-send/string-send.c",
+  "file": "/home/hawkinsw/code/uc/CS5138/MiniAssignmentHaUCk/string-send/string-send.c",
+  "output": "CMakeFiles/StringSend.dir/string-send.c.o"
+}
+]

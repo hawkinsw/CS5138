@@ -1,0 +1,491 @@
+execve("./src/install/bin/hauck-mfa", ["./src/install/bin/hauck-mfa"], 0x7ffd985defe0 /* 67 vars */) = 0
+brk(NULL)                               = 0x81c000
+arch_prctl(0x3001 /* ARCH_??? */, 0x7fff2724c670) = -1 EINVAL (Invalid argument)
+mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f9ee0b6e000
+access("/etc/ld.so.preload", R_OK)      = -1 ENOENT (No such file or directory)
+openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+newfstatat(3, "", {st_mode=S_IFREG|0644, st_size=96323, ...}, AT_EMPTY_PATH) = 0
+mmap(NULL, 96323, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7f9ee0b56000
+close(3)                                = 0
+openat(AT_FDCWD, "/lib64/libcurl.so.4", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\0\0\0\0\0\0\0\0"..., 832) = 832
+newfstatat(3, "", {st_mode=S_IFREG|0755, st_size=534952, ...}, AT_EMPTY_PATH) = 0
+mmap(NULL, 528784, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f9ee0ad4000
+mprotect(0x7f9ee0adf000, 466944, PROT_NONE) = 0
+mmap(0x7f9ee0adf000, 376832, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0xb000) = 0x7f9ee0adf000
+mmap(0x7f9ee0b3b000, 86016, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x67000) = 0x7f9ee0b3b000
+mmap(0x7f9ee0b51000, 16384, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x7c000) = 0x7f9ee0b51000
+mmap(0x7f9ee0b55000, 400, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f9ee0b55000
+close(3)                                = 0
+openat(AT_FDCWD, "/lib64/libstdc++.so.6", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\0\0\0\0\0\0\0\0"..., 832) = 832
+newfstatat(3, "", {st_mode=S_IFREG|0755, st_size=2360128, ...}, AT_EMPTY_PATH) = 0
+mmap(NULL, 2308096, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f9ee0800000
+mprotect(0x7f9ee089a000, 1609728, PROT_NONE) = 0
+mmap(0x7f9ee089a000, 1118208, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x9a000) = 0x7f9ee089a000
+mmap(0x7f9ee09ab000, 487424, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1ab000) = 0x7f9ee09ab000
+mmap(0x7f9ee0a23000, 57344, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x222000) = 0x7f9ee0a23000
+mmap(0x7f9ee0a31000, 10240, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f9ee0a31000
+close(3)                                = 0
+openat(AT_FDCWD, "/lib64/libm.so.6", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\0\0\0\0\0\0\0\0"..., 832) = 832
+newfstatat(3, "", {st_mode=S_IFREG|0755, st_size=928216, ...}, AT_EMPTY_PATH) = 0
+mmap(NULL, 913680, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f9ee0720000
+mmap(0x7f9ee0730000, 475136, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x10000) = 0x7f9ee0730000
+mmap(0x7f9ee07a4000, 368640, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x84000) = 0x7f9ee07a4000
+mmap(0x7f9ee07fe000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0xdd000) = 0x7f9ee07fe000
+close(3)                                = 0
+openat(AT_FDCWD, "/lib64/libgcc_s.so.1", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\0\0\0\0\0\0\0\0"..., 832) = 832
+newfstatat(3, "", {st_mode=S_IFREG|0755, st_size=128536, ...}, AT_EMPTY_PATH) = 0
+mmap(NULL, 127272, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f9ee0ab4000
+mmap(0x7f9ee0ab7000, 94208, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x3000) = 0x7f9ee0ab7000
+mmap(0x7f9ee0ace000, 16384, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1a000) = 0x7f9ee0ace000
+mmap(0x7f9ee0ad2000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1d000) = 0x7f9ee0ad2000
+mmap(0x7f9ee0ad3000, 296, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f9ee0ad3000
+close(3)                                = 0
+openat(AT_FDCWD, "/lib64/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\320v\2\0\0\0\0\0"..., 832) = 832
+pread64(3, "\6\0\0\0\4\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0"..., 784, 64) = 784
+newfstatat(3, "", {st_mode=S_IFREG|0755, st_size=2224288, ...}, AT_EMPTY_PATH) = 0
+pread64(3, "\6\0\0\0\4\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0"..., 784, 64) = 784
+mmap(NULL, 1953104, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f9ee0543000
+mmap(0x7f9ee0569000, 1400832, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x26000) = 0x7f9ee0569000
+mmap(0x7f9ee06bf000, 339968, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x17c000) = 0x7f9ee06bf000
+mmap(0x7f9ee0712000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1ce000) = 0x7f9ee0712000
+mmap(0x7f9ee0718000, 32080, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f9ee0718000
+close(3)                                = 0
+openat(AT_FDCWD, "/lib64/libnghttp2.so.14", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\0\0\0\0\0\0\0\0"..., 832) = 832
+newfstatat(3, "", {st_mode=S_IFREG|0755, st_size=173696, ...}, AT_EMPTY_PATH) = 0
+mmap(NULL, 172112, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f9ee0a89000
+mmap(0x7f9ee0a8e000, 86016, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x5000) = 0x7f9ee0a8e000
+mmap(0x7f9ee0aa3000, 53248, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1a000) = 0x7f9ee0aa3000
+mmap(0x7f9ee0ab0000, 16384, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x26000) = 0x7f9ee0ab0000
+close(3)                                = 0
+openat(AT_FDCWD, "/lib64/libidn2.so.0", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\0\0\0\0\0\0\0\0"..., 832) = 832
+newfstatat(3, "", {st_mode=S_IFREG|0755, st_size=311408, ...}, AT_EMPTY_PATH) = 0
+mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f9ee0a87000
+mmap(NULL, 311304, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f9ee0a3a000
+mmap(0x7f9ee0a3e000, 20480, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x4000) = 0x7f9ee0a3e000
+mmap(0x7f9ee0a43000, 266240, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x9000) = 0x7f9ee0a43000
+mmap(0x7f9ee0a84000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x49000) = 0x7f9ee0a84000
+mmap(0x7f9ee0a86000, 8, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f9ee0a86000
+close(3)                                = 0
+openat(AT_FDCWD, "/lib64/libssl.so.3", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\0\0\0\0\0\0\0\0"..., 832) = 832
+newfstatat(3, "", {st_mode=S_IFREG|0755, st_size=677496, ...}, AT_EMPTY_PATH) = 0
+mmap(NULL, 665584, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f9ee04a0000
+mmap(0x7f9ee04be000, 372736, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1e000) = 0x7f9ee04be000
+mmap(0x7f9ee0519000, 114688, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x79000) = 0x7f9ee0519000
+mmap(0x7f9ee0535000, 57344, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x94000) = 0x7f9ee0535000
+close(3)                                = 0
+openat(AT_FDCWD, "/lib64/libcrypto.so.3", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\0\0\0\0\0\0\0\0"..., 832) = 832
+newfstatat(3, "", {st_mode=S_IFREG|0755, st_size=4455088, ...}, AT_EMPTY_PATH) = 0
+mmap(NULL, 4367384, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f9ee0000000
+mprotect(0x7f9ee00ad000, 3284992, PROT_NONE) = 0
+mmap(0x7f9ee00ad000, 2453504, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0xad000) = 0x7f9ee00ad000
+mmap(0x7f9ee0304000, 827392, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x304000) = 0x7f9ee0304000
+mmap(0x7f9ee03cf000, 364544, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x3ce000) = 0x7f9ee03cf000
+mmap(0x7f9ee0428000, 9240, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f9ee0428000
+close(3)                                = 0
+openat(AT_FDCWD, "/lib64/libgssapi_krb5.so.2", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\0\0\0\0\0\0\0\0"..., 832) = 832
+newfstatat(3, "", {st_mode=S_IFREG|0755, st_size=359648, ...}, AT_EMPTY_PATH) = 0
+mmap(NULL, 355096, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f9ee0449000
+mprotect(0x7f9ee0455000, 294912, PROT_NONE) = 0
+mmap(0x7f9ee0455000, 241664, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0xc000) = 0x7f9ee0455000
+mmap(0x7f9ee0490000, 49152, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x47000) = 0x7f9ee0490000
+mmap(0x7f9ee049d000, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x53000) = 0x7f9ee049d000
+close(3)                                = 0
+openat(AT_FDCWD, "/lib64/libz.so.1", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\0\0\0\0\0\0\0\0"..., 832) = 832
+newfstatat(3, "", {st_mode=S_IFREG|0755, st_size=103296, ...}, AT_EMPTY_PATH) = 0
+mmap(NULL, 102408, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f9ee042f000
+mmap(0x7f9ee0432000, 57344, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x3000) = 0x7f9ee0432000
+mmap(0x7f9ee0440000, 28672, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x11000) = 0x7f9ee0440000
+mmap(0x7f9ee0447000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x17000) = 0x7f9ee0447000
+mmap(0x7f9ee0448000, 8, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f9ee0448000
+close(3)                                = 0
+openat(AT_FDCWD, "/lib64/libunistring.so.2", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\0\0\0\0\0\0\0\0"..., 832) = 832
+newfstatat(3, "", {st_mode=S_IFREG|0755, st_size=1800976, ...}, AT_EMPTY_PATH) = 0
+mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f9ee0a38000
+mmap(NULL, 1800392, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f9edfe48000
+mprotect(0x7f9edfe5a000, 1708032, PROT_NONE) = 0
+mmap(0x7f9edfe5a000, 270336, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x12000) = 0x7f9edfe5a000
+mmap(0x7f9edfe9c000, 1433600, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x54000) = 0x7f9edfe9c000
+mmap(0x7f9edfffb000, 20480, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1b2000) = 0x7f9edfffb000
+close(3)                                = 0
+openat(AT_FDCWD, "/lib64/libkrb5.so.3", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\0\0\0\0\0\0\0\0"..., 832) = 832
+newfstatat(3, "", {st_mode=S_IFREG|0755, st_size=916064, ...}, AT_EMPTY_PATH) = 0
+mmap(NULL, 902256, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f9edfd6b000
+mprotect(0x7f9edfd8e000, 696320, PROT_NONE) = 0
+mmap(0x7f9edfd8e000, 438272, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x23000) = 0x7f9edfd8e000
+mmap(0x7f9edfdf9000, 253952, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x8e000) = 0x7f9edfdf9000
+mmap(0x7f9edfe38000, 65536, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0xcc000) = 0x7f9edfe38000
+close(3)                                = 0
+openat(AT_FDCWD, "/lib64/libk5crypto.so.3", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\0\0\0\0\0\0\0\0"..., 832) = 832
+newfstatat(3, "", {st_mode=S_IFREG|0755, st_size=99976, ...}, AT_EMPTY_PATH) = 0
+mmap(NULL, 98416, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f9edfd52000
+mmap(0x7f9edfd57000, 53248, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x5000) = 0x7f9edfd57000
+mmap(0x7f9edfd64000, 16384, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x12000) = 0x7f9edfd64000
+mmap(0x7f9edfd68000, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x15000) = 0x7f9edfd68000
+close(3)                                = 0
+openat(AT_FDCWD, "/lib64/libcom_err.so.2", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\0\0\0\0\0\0\0\0"..., 832) = 832
+newfstatat(3, "", {st_mode=S_IFREG|0755, st_size=24496, ...}, AT_EMPTY_PATH) = 0
+mmap(NULL, 24640, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f9edfd4b000
+mmap(0x7f9edfd4d000, 8192, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x2000) = 0x7f9edfd4d000
+mmap(0x7f9edfd4f000, 4096, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x4000) = 0x7f9edfd4f000
+mmap(0x7f9edfd50000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x4000) = 0x7f9edfd50000
+close(3)                                = 0
+openat(AT_FDCWD, "/lib64/libkrb5support.so.0", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\0\0\0\0\0\0\0\0"..., 832) = 832
+newfstatat(3, "", {st_mode=S_IFREG|0755, st_size=67312, ...}, AT_EMPTY_PATH) = 0
+mmap(NULL, 66192, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f9edfd3a000
+mmap(0x7f9edfd3e000, 32768, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x4000) = 0x7f9edfd3e000
+mmap(0x7f9edfd46000, 12288, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0xc000) = 0x7f9edfd46000
+mmap(0x7f9edfd49000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0xe000) = 0x7f9edfd49000
+close(3)                                = 0
+openat(AT_FDCWD, "/lib64/libkeyutils.so.1", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\0\0\0\0\0\0\0\0"..., 832) = 832
+newfstatat(3, "", {st_mode=S_IFREG|0755, st_size=24704, ...}, AT_EMPTY_PATH) = 0
+mmap(NULL, 24584, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f9edfd33000
+mmap(0x7f9edfd35000, 8192, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x2000) = 0x7f9edfd35000
+mmap(0x7f9edfd37000, 4096, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x4000) = 0x7f9edfd37000
+mmap(0x7f9edfd38000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x4000) = 0x7f9edfd38000
+mmap(0x7f9edfd39000, 8, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f9edfd39000
+close(3)                                = 0
+openat(AT_FDCWD, "/lib64/libresolv.so.2", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\0\0\0\0\0\0\0\0"..., 832) = 832
+newfstatat(3, "", {st_mode=S_IFREG|0755, st_size=67824, ...}, AT_EMPTY_PATH) = 0
+mmap(NULL, 76360, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f9edfd20000
+mprotect(0x7f9edfd23000, 49152, PROT_NONE) = 0
+mmap(0x7f9edfd23000, 36864, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x3000) = 0x7f9edfd23000
+mmap(0x7f9edfd2c000, 8192, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0xc000) = 0x7f9edfd2c000
+mmap(0x7f9edfd2f000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0xe000) = 0x7f9edfd2f000
+mmap(0x7f9edfd31000, 6728, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f9edfd31000
+close(3)                                = 0
+mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f9ee0a36000
+openat(AT_FDCWD, "/lib64/libselinux.so.1", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\0\0\0\0\0\0\0\0"..., 832) = 832
+newfstatat(3, "", {st_mode=S_IFREG|0755, st_size=176816, ...}, AT_EMPTY_PATH) = 0
+mmap(NULL, 181896, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f9edfcf3000
+mprotect(0x7f9edfcf9000, 143360, PROT_NONE) = 0
+mmap(0x7f9edfcf9000, 110592, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x6000) = 0x7f9edfcf9000
+mmap(0x7f9edfd14000, 28672, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x21000) = 0x7f9edfd14000
+mmap(0x7f9edfd1c000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x28000) = 0x7f9edfd1c000
+mmap(0x7f9edfd1e000, 5768, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f9edfd1e000
+close(3)                                = 0
+openat(AT_FDCWD, "/lib64/libpcre2-8.so.0", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\0\0\0\0\0\0\0\0"..., 832) = 832
+newfstatat(3, "", {st_mode=S_IFREG|0755, st_size=642072, ...}, AT_EMPTY_PATH) = 0
+mmap(NULL, 639536, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f9edfc56000
+mprotect(0x7f9edfc59000, 622592, PROT_NONE) = 0
+mmap(0x7f9edfc59000, 442368, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x3000) = 0x7f9edfc59000
+mmap(0x7f9edfcc5000, 176128, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x6f000) = 0x7f9edfcc5000
+mmap(0x7f9edfcf1000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x9a000) = 0x7f9edfcf1000
+close(3)                                = 0
+mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f9ee0a34000
+mmap(NULL, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f9ee042c000
+arch_prctl(ARCH_SET_FS, 0x7f9ee042c840) = 0
+set_tid_address(0x7f9ee042cb10)         = 1903122
+set_robust_list(0x7f9ee042cb20, 24)     = 0
+rseq(0x7f9ee042d160, 0x20, 0, 0x53053053) = 0
+mprotect(0x7f9ee0712000, 16384, PROT_READ) = 0
+mprotect(0x7f9edfcf1000, 4096, PROT_READ) = 0
+mprotect(0x7f9edfd1c000, 4096, PROT_READ) = 0
+mprotect(0x7f9edfd2f000, 4096, PROT_READ) = 0
+mprotect(0x7f9edfd38000, 4096, PROT_READ) = 0
+mprotect(0x7f9ee0447000, 4096, PROT_READ) = 0
+mprotect(0x7f9ee03cf000, 352256, PROT_READ) = 0
+mprotect(0x7f9edfd49000, 4096, PROT_READ) = 0
+mprotect(0x7f9edfd50000, 4096, PROT_READ) = 0
+mprotect(0x7f9edfd68000, 8192, PROT_READ) = 0
+mprotect(0x7f9edfe38000, 57344, PROT_READ) = 0
+mprotect(0x7f9edfffb000, 16384, PROT_READ) = 0
+mprotect(0x7f9ee049d000, 8192, PROT_READ) = 0
+mprotect(0x7f9ee0535000, 40960, PROT_READ) = 0
+mprotect(0x7f9ee0a84000, 8192, PROT_READ) = 0
+mprotect(0x7f9ee0ab0000, 12288, PROT_READ) = 0
+mprotect(0x7f9ee0ad2000, 4096, PROT_READ) = 0
+mprotect(0x7f9ee07fe000, 4096, PROT_READ) = 0
+mprotect(0x7f9ee0a23000, 53248, PROT_READ) = 0
+mprotect(0x7f9ee0b51000, 8192, PROT_READ) = 0
+mprotect(0x407000, 4096, PROT_READ)     = 0
+mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f9edfc54000
+mprotect(0x7f9ee0ba3000, 8192, PROT_READ) = 0
+prlimit64(0, RLIMIT_STACK, NULL, {rlim_cur=8192*1024, rlim_max=RLIM64_INFINITY}) = 0
+munmap(0x7f9ee0b56000, 96323)           = 0
+statfs("/sys/fs/selinux", {f_type=SELINUX_MAGIC, f_bsize=4096, f_blocks=0, f_bfree=0, f_bavail=0, f_files=0, f_ffree=0, f_fsid={val=[0, 0]}, f_namelen=255, f_frsize=4096, f_flags=ST_VALID|ST_NOSUID|ST_NOEXEC|ST_RELATIME}) = 0
+statfs("/sys/fs/selinux", {f_type=SELINUX_MAGIC, f_bsize=4096, f_blocks=0, f_bfree=0, f_bavail=0, f_files=0, f_ffree=0, f_fsid={val=[0, 0]}, f_namelen=255, f_frsize=4096, f_flags=ST_VALID|ST_NOSUID|ST_NOEXEC|ST_RELATIME}) = 0
+getrandom("\x78\x7f\x72\xc3\x13\xf6\xd3\x72", 8, GRND_NONBLOCK) = 8
+brk(NULL)                               = 0x81c000
+brk(0x83d000)                           = 0x83d000
+access("/etc/selinux/config", F_OK)     = 0
+futex(0x7f9ee0a316bc, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+futex(0x7f9ee0427b84, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+futex(0x7f9ee0427b80, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+futex(0x7f9ee0427b7c, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+futex(0x7f9ee0427f00, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+futex(0x7f9ee0427b74, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+futex(0x7f9ee0427b70, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+futex(0x7f9ee0427888, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+futex(0x7f9ee0427a60, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+futex(0x7f9ee0427790, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+brk(0x85e000)                           = 0x85e000
+futex(0x7f9ee0427b78, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+openat(AT_FDCWD, "/etc/pki/tls/openssl.cnf", O_RDONLY) = 3
+futex(0x7f9ee0427510, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+newfstatat(3, "", {st_mode=S_IFREG|0644, st_size=12171, ...}, AT_EMPTY_PATH) = 0
+read(3, "#\n# OpenSSL example configuratio"..., 4096) = 4096
+newfstatat(AT_FDCWD, "/etc/crypto-policies/back-ends/opensslcnf.config", {st_mode=S_IFREG|0644, st_size=730, ...}, 0) = 0
+openat(AT_FDCWD, "/etc/crypto-policies/back-ends/opensslcnf.config", O_RDONLY) = 4
+newfstatat(4, "", {st_mode=S_IFREG|0644, st_size=730, ...}, AT_EMPTY_PATH) = 0
+read(4, "CipherString = @SECLEVEL=2:kEECD"..., 4096) = 730
+read(4, "", 4096)                       = 0
+close(4)                                = 0
+read(3, "ch\norganizationName\t= match\norga"..., 4096) = 4096
+read(3, "ride a supported extension:\n# ba"..., 4096) = 3979
+read(3, "", 4096)                       = 0
+close(3)                                = 0
+futex(0x7f9ee0427758, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+futex(0x7f9ee0427860, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+futex(0x7f9ee0427b60, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+futex(0x7f9ee0427b5c, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+futex(0x7f9ee0427760, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+futex(0x7f9ee0427b6c, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+futex(0x7f9ee0427724, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+futex(0x7f9ee05427c0, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+sysinfo({uptime=2291635, loads=[62176, 84224, 78176], totalram=67315396608, freeram=8233512960, sharedram=259239936, bufferram=3250176000, totalswap=8589930496, freeswap=8582328320, procs=1405, totalhigh=0, freehigh=0, mem_unit=1}) = 0
+futex(0x7f9ee05427d4, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+socket(AF_INET6, SOCK_DGRAM, IPPROTO_IP) = 3
+close(3)                                = 0
+socketpair(AF_UNIX, SOCK_STREAM, 0, [3, 4]) = 0
+fcntl(3, F_GETFL)                       = 0x2 (flags O_RDWR)
+fcntl(3, F_SETFL, O_RDWR|O_NONBLOCK)    = 0
+fcntl(4, F_GETFL)                       = 0x2 (flags O_RDWR)
+fcntl(4, F_SETFL, O_RDWR|O_NONBLOCK)    = 0
+rt_sigaction(SIGPIPE, NULL, {sa_handler=SIG_DFL, sa_mask=[], sa_flags=0}, 8) = 0
+rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, NULL, 8) = 0
+poll([{fd=3, events=POLLIN}], 1, 0)     = 0 (Timeout)
+rt_sigaction(SIGPIPE, NULL, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, 8) = 0
+rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, NULL, 8) = 0
+socketpair(AF_UNIX, SOCK_STREAM, 0, [5, 6]) = 0
+rt_sigaction(SIGRT_1, {sa_handler=0x7f9ee05cb560, sa_mask=[], sa_flags=SA_RESTORER|SA_ONSTACK|SA_RESTART|SA_SIGINFO, sa_restorer=0x7f9ee057fb20}, NULL, 8) = 0
+rt_sigprocmask(SIG_UNBLOCK, [RTMIN RT_1], NULL, 8) = 0
+mmap(NULL, 8392704, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0x7f9edf453000
+mprotect(0x7f9edf454000, 8388608, PROT_READ|PROT_WRITE) = 0
+rt_sigprocmask(SIG_BLOCK, ~[], [], 8)   = 0
+clone3({flags=CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID, child_tid=0x7f9edfc53990, parent_tid=0x7f9edfc53990, exit_signal=0, stack=0x7f9edf453000, stack_size=0x7ffe80, tls=0x7f9edfc536c0} => {parent_tid=[1903125]}, 88) = 1903125
+rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, NULL, 8) = 0
+poll([{fd=5, events=POLLIN}, {fd=3, events=POLLIN}], 2, 1) = 0 (Timeout)
+rt_sigaction(SIGPIPE, NULL, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, 8) = 0
+rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, NULL, 8) = 0
+rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, NULL, 8) = 0
+poll([{fd=5, events=POLLIN}, {fd=3, events=POLLIN}], 2, 1) = 1 ([{fd=5, revents=POLLIN}])
+rt_sigaction(SIGPIPE, NULL, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, 8) = 0
+rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, NULL, 8) = 0
+close(6)                                = 0
+close(5)                                = 0
+socket(AF_INET, SOCK_STREAM, IPPROTO_TCP) = 5
+setsockopt(5, SOL_TCP, TCP_NODELAY, [1], 4) = 0
+fcntl(5, F_GETFL)                       = 0x2 (flags O_RDWR)
+fcntl(5, F_SETFL, O_RDWR|O_NONBLOCK)    = 0
+connect(5, {sa_family=AF_INET, sin_port=htons(443), sin_addr=inet_addr("52.149.246.39")}, 16) = -1 EINPROGRESS (Operation now in progress)
+poll([{fd=5, events=POLLPRI|POLLOUT|POLLWRNORM}], 1, 0) = 0 (Timeout)
+rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, NULL, 8) = 0
+poll([{fd=5, events=POLLOUT}, {fd=3, events=POLLIN}], 2, 0) = 0 (Timeout)
+rt_sigaction(SIGPIPE, NULL, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, 8) = 0
+rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, NULL, 8) = 0
+poll([{fd=5, events=POLLPRI|POLLOUT|POLLWRNORM}], 1, 0) = 0 (Timeout)
+rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, NULL, 8) = 0
+poll([{fd=5, events=POLLOUT}, {fd=3, events=POLLIN}], 2, 199) = 1 ([{fd=5, revents=POLLOUT}])
+rt_sigaction(SIGPIPE, NULL, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, 8) = 0
+rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, NULL, 8) = 0
+poll([{fd=5, events=POLLPRI|POLLOUT|POLLWRNORM}], 1, 0) = 1 ([{fd=5, revents=POLLOUT|POLLWRNORM}])
+getsockopt(5, SOL_SOCKET, SO_ERROR, [0], [4]) = 0
+getpeername(5, {sa_family=AF_INET, sin_port=htons(443), sin_addr=inet_addr("52.149.246.39")}, [128 => 16]) = 0
+getsockname(5, {sa_family=AF_INET, sin_port=htons(35876), sin_addr=inet_addr("10.63.1.71")}, [128 => 16]) = 0
+futex(0x7f9ee0427f70, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+getpid()                                = 1903122
+brk(0x87f000)                           = 0x87f000
+getrandom("\x8e\x8f\xd3\xb6\x25\xdb\x18\x39\xf4\xed\xb7\x08\x54\xbf\xf8\xe3\xa7\x62\x0d\xcc\xc5\x35\x11\x99\x4e\x01\x5f\x35\x34\x9c\x1e\x1c"..., 48, 0) = 48
+futex(0x7f9ee05427d0, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+futex(0x7f9ee05427c8, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+brk(0x8a0000)                           = 0x8a0000
+openat(AT_FDCWD, "/etc/crypto-policies/back-ends/openssl.config", O_RDONLY) = 6
+newfstatat(6, "", {st_mode=S_IFREG|0644, st_size=151, ...}, AT_EMPTY_PATH) = 0
+read(6, "@SECLEVEL=2:kEECDH:kRSA:kEDH:kPS"..., 4096) = 151
+close(6)                                = 0
+getpid()                                = 1903122
+getpid()                                = 1903122
+getpid()                                = 1903122
+getpid()                                = 1903122
+getpid()                                = 1903122
+getpid()                                = 1903122
+getpid()                                = 1903122
+getpid()                                = 1903122
+getpid()                                = 1903122
+getpid()                                = 1903122
+openat(AT_FDCWD, "/etc/pki/tls/certs/ca-bundle.crt", O_RDONLY) = 6
+newfstatat(6, "", {st_mode=S_IFREG|0444, st_size=219276, ...}, AT_EMPTY_PATH) = 0
+read(6, "# ACCVRAIZ1\n-----BEGIN CERTIFICA"..., 4096) = 4096
+read(6, "b8EZ6WdmF/9ARP67Jpi6Yb+tmLSbkyU+"..., 4096) = 4096
+read(6, "DjAMBgNVBAcMBU1pbGFuMSMwIQYDVQQK"..., 4096) = 4096
+read(6, "4J2dHy8egBzp90SxdbBk6ZrV9/ZFvgrG"..., 4096) = 4096
+brk(0x8c1000)                           = 0x8c1000
+read(6, "pY1hp8KD+WGePhbJruKNzANBgkqhkiG9"..., 4096) = 4096
+read(6, "A1UdIAQRMA8wDQYLKwYBBAGwLQMEAQEw"..., 4096) = 4096
+read(6, "ADcAIABCAGEAcgBjAGUAbABvAG4AYQAg"..., 4096) = 4096
+read(6, "-----\nMIIFWTCCA0GgAwIBAgIBAjANBg"..., 4096) = 4096
+read(6, "zAxWjBWMQswCQYDVQQGEwJDTjEwMC4GA"..., 4096) = 4096
+read(6, "eqy3eApyt4jf/7VGFAkK+qDm\nfQjGGoe"..., 4096) = 4096
+read(6, "6XEtHWRqSsjAgMBAAGjQjBAMA4GA1UdD"..., 4096) = 4096
+read(6, "q9Emd8VRY+WCv2hikLyhF3HqgiIZd8zv"..., 4096) = 4096
+read(6, "QXLYtPU2sQ\nF/xlhMcQSZDe28cmk4gmb"..., 4096) = 4096
+brk(0x8e2000)                           = 0x8e2000
+read(6, "urDC/zXDrPbDdVCYfeU0BsWO/8tqtlbg"..., 4096) = 4096
+read(6, "jAoBgNVBAMMIUQtVFJVU1QgUm9vdCBD\n"..., 4096) = 4096
+read(6, "op5w==\n-----END CERTIFICATE-----"..., 4096) = 4096
+read(6, "X28MzQC7phW1FG\nfp4tn+6OYwwX7Adw9"..., 4096) = 4096
+read(6, "j7TG5BO6jm5qu5jF49OokYTurWGT/u4c"..., 4096) = 4096
+read(6, "A5n+KGCR\nHTAduGN8qOY1tfrTYXbm1gd"..., 4096) = 4096
+read(6, "5\nIEVudHJ1c3QubmV0IExpbWl0ZWQxMz"..., 4096) = 4096
+read(6, "E-----\n\n# Entrust Root Certifica"..., 4096) = 4096
+brk(0x903000)                           = 0x903000
+read(6, "MDAwWjA7MQsw\nCQYDVQQGEwJFUzERMA8"..., 4096) = 4096
+read(6, "FwYDVQQDExBHTE9CQUxUUlVTVCAyMDIw"..., 4096) = 4096
+read(6, "e3ah5mm5hRm9iYz+re026nO8/4Piy33B"..., 4096) = 4096
+read(6, "kwFwYDVQQKExBHbG9i\nYWxTaWduIG52L"..., 4096) = 4096
+read(6, "jvOOJckvB595yEunQtYQEgfn7R\n8k8HW"..., 4096) = 4096
+read(6, "2Tc7P\nTMozI+gciKqdi0FuFskg5YmezT"..., 4096) = 4096
+read(6, "DRzbLrLFPCU3hKTwSUQZqP\nJzLB5UkZv"..., 4096) = 4096
+read(6, "MSMwIQYDVQQKDBpDaHVuZ2h3\nYSBUZWx"..., 4096) = 4096
+read(6, "BgNVHRMBAf8EBTADAQH/MA4GA1UdDwEB"..., 4096) = 4096
+brk(0x924000)                           = 0x924000
+read(6, "w/66VQ3KZ+bVdfIrBQuExUHTRgQ18zZs"..., 4096) = 4096
+read(6, "8wXDbO/QJLVQnSKwv4cSsPsjLkkxTOTc"..., 4096) = 4096
+read(6, "MVTWljcm9zb2Z0IENvcnBvcmF0aW9uMT"..., 4096) = 4096
+read(6, "\nEwJIVTERMA8GA1UEBwwIQnVkYXBlc3Q"..., 4096) = 4096
+read(6, "KAoICAQCgvlAQjunybEC0BJyFuTHK3C3"..., 4096) = 4096
+read(6, "Vf9WVHhLL5hSEBMHfNrMW\nn4rjyduYNM"..., 4096) = 4096
+read(6, "I2MzJaMEgxCzAJBgNVBAYTAkJNMRkwFw"..., 4096) = 4096
+read(6, "QH/BAQDAgGGMA0GCSqGSIb3DQEBCwUAA"..., 4096) = 4096
+read(6, "QUZJUiBST09UIENBMjAeFw0xNTEwMTkw"..., 4096) = 4096
+brk(0x945000)                           = 0x945000
+read(6, "DwAwggEKAoIBAQCvNS7YrGxVaQZx5RNo"..., 4096) = 4096
+read(6, "+2GaR57GIgUssL8gjMunEst\n+3A7caor"..., 4096) = 4096
+read(6, "IEF1dGhvcml0eSAtIEcyMB4XDTA5MDkw"..., 4096) = 4096
+read(6, "riBIWhMIxkziWMaa5\nO1M/wySTVltpku"..., 4096) = 4096
+read(6, "obalRoot Class 3\n-----BEGIN CERT"..., 4096) = 4096
+read(6, "OBvwFItIm\n4TFRfTLcDwIDAQABoyMwIT"..., 4096) = 4096
+read(6, "WdfJ9b+euPkrL4JWwWeMA0GCSqGSIb3D"..., 4096) = 4096
+read(6, "O1CAmujIS2CNUSSUQIpid\nRtLByZ5OGy"..., 4096) = 4096
+read(6, "Qmq131BnW2hqIyE4bJ3XYsgjxroMwuRE"..., 4096) = 4096
+brk(0x966000)                           = 0x966000
+read(6, "Icb9PuISg\njwBUFfyRbVinljvrS5YnzW"..., 4096) = 4096
+read(6, "dEwEB/wQFMAMBAf8wHQYDVR0OBBYEFIH"..., 4096) = 4096
+read(6, "lY3VyaXR5LmNvbTEk\nMCIGA1UEChMbWF"..., 4096) = 4096
+read(6, "HE5r7iOZULJK2v0ZXk\nltd0ZGtxTgI8q"..., 4096) = 4096
+read(6, "wD8ofzkpf9/rdcw0Md3f76BB1UwUCAU9"..., 4096) = 4096
+read(6, "UmDnNvtiyjPeyq+GtJK97fKHbH88wDwY"..., 4096) = 2188
+read(6, "", 4096)                       = 0
+close(6)                                = 0
+setsockopt(5, SOL_TCP, TCP_ULP, [7564404], 4) = 0
+brk(0x987000)                           = 0x987000
+getpid()                                = 1903122
+getpid()                                = 1903122
+getpid()                                = 1903122
+write(5, "\26\3\1\2\0\1\0\1\374\3\3$C\312\233\1\350\240\211Oj\237J\346:\346\207@<\32*S"..., 517) = 517
+read(5, 0x9660e3, 5)                    = -1 EAGAIN (Resource temporarily unavailable)
+rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, NULL, 8) = 0
+poll([{fd=5, events=POLLIN}, {fd=3, events=POLLIN}], 2, 88) = 1 ([{fd=5, revents=POLLIN}])
+rt_sigaction(SIGPIPE, NULL, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, 8) = 0
+rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, NULL, 8) = 0
+poll([{fd=5, events=POLLIN|POLLPRI|POLLRDNORM|POLLRDBAND}], 1, 0) = 1 ([{fd=5, revents=POLLIN|POLLRDNORM}])
+read(5, "\26\3\3\0z", 5)                = 5
+read(5, "\2\0\0v\3\3\353\37\320\314\fq\301\211\10\205\200\340P\303vY\1772\tKw(\\r\371\312"..., 122) = 122
+read(5, "\24\3\3\0\1", 5)               = 5
+read(5, "\1", 1)                        = 1
+read(5, "\27\3\3\0$", 5)                = 5
+read(5, "\300E\244|zN\33\r\274`\220\376\271`\307\322\325L\36\234hpd]\346\32\243\2240\242\350\376"..., 36) = 36
+read(5, "\27\3\3\v\256", 5)             = 5
+read(5, "qK'\262vo\333\0011\205\3514\334\220Rl\212\32\352\221)\270\224\251\32q\216@\376\343\203\371"..., 2990) = 2990
+openat(AT_FDCWD, "/etc/localtime", O_RDONLY|O_CLOEXEC) = 6
+newfstatat(6, "", {st_mode=S_IFREG|0644, st_size=3552, ...}, AT_EMPTY_PATH) = 0
+newfstatat(6, "", {st_mode=S_IFREG|0644, st_size=3552, ...}, AT_EMPTY_PATH) = 0
+read(6, "TZif2\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\6\0\0\0\6\0\0\0\0"..., 4096) = 3552
+lseek(6, -2260, SEEK_CUR)               = 1292
+read(6, "TZif2\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\6\0\0\0\6\0\0\0\0"..., 4096) = 2260
+close(6)                                = 0
+read(5, "\27\3\3\1\31", 5)              = 5
+read(5, "\"O\2-\304\17!z$\241\235\331\334m\213\267\36W\327&\247\207\331e\363\226\211\361\273\337\226\363"..., 281) = 281
+read(5, "\27\3\3\0E", 5)                = 5
+read(5, "\314\254,.c\32\304\267g\377\26W\26(~wm\364\272\265\362\3\375\337AI\370W\212\274r`"..., 69) = 69
+write(5, "\24\3\3\0\1\1\27\3\3\0E\vx\321\302\354\360A|\t9\235\10\374*\262\33:\261uT\230"..., 80) = 80
+write(5, "\27\3\3\0)\247\t\314\271Z\"sn\260\225\243\33\240\221\365\342\v3@\343!\2775\5\272\36\37"..., 46) = 46
+write(5, "\27\3\3\0,\312\333\316\345N\tz\264\r\272.\22\277\1\226Ey\255&Y\7\255\362vW\35\261"..., 49) = 49
+write(5, "\27\3\3\0\36f{\244\376\230\217N%\264\6e\327\4\344\360\365\36\2\273\3652\222\271\347\243A\352"..., 35) = 35
+write(5, "\27\3\3\0@I\240\34\213-\"(\240\245\363'A\253s,\270]i\260\313\35\202\331=(#\327"..., 69) = 69
+poll([{fd=5, events=POLLIN|POLLPRI|POLLRDNORM|POLLRDBAND}], 1, 0) = 0 (Timeout)
+rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, NULL, 8) = 0
+poll([{fd=5, events=POLLIN}, {fd=3, events=POLLIN}], 2, 46) = 1 ([{fd=5, revents=POLLIN}])
+rt_sigaction(SIGPIPE, NULL, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, 8) = 0
+rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, NULL, 8) = 0
+poll([{fd=5, events=POLLIN|POLLPRI|POLLRDNORM|POLLRDBAND}], 1, 0) = 1 ([{fd=5, revents=POLLIN|POLLRDNORM}])
+read(5, "\27\3\3\1\32", 5)              = 5
+read(5, "\234\352\205\234\324\326[\375\251s\305]YU\329\336\370\313\252\262\306\301\265*8\3.\342\355\10\250"..., 282) = 282
+brk(0x9a9000)                           = 0x9a9000
+read(5, "\27\3\3\1\32", 5)              = 5
+read(5, "\3f\16k\376\177\3447\306\23(^\"\250,\241\33\2512\227\35\20\10\336\215=3\237\23\243C)"..., 282) = 282
+read(5, "\27\3\3\09", 5)                = 5
+read(5, "\340k\314\277zX\225D\353\366\5j\200\214\232<\327\222\340\370V\365\335[\1G\326\220\361EzF"..., 57) = 57
+write(5, "\27\3\3\0\32\216]\17\224\345\334\325A,\341\234#\242\256R\v\322j\212.\250<qL\317\317", 31) = 31
+poll([{fd=5, events=POLLIN|POLLPRI|POLLRDNORM|POLLRDBAND}], 1, 0) = 1 ([{fd=5, revents=POLLIN|POLLRDNORM}])
+read(5, "\27\3\3\0\32", 5)              = 5
+read(5, "\345vy\234\r\273\327N\17\t\236-\36;L\370\264!\177s$\2147\315\366x", 26) = 26
+rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, NULL, 8) = 0
+poll([{fd=5, events=POLLIN}, {fd=3, events=POLLIN}], 2, 10) = 1 ([{fd=5, revents=POLLIN}])
+rt_sigaction(SIGPIPE, NULL, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, 8) = 0
+rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, NULL, 8) = 0
+poll([{fd=5, events=POLLIN|POLLPRI|POLLRDNORM|POLLRDBAND}], 1, 0) = 1 ([{fd=5, revents=POLLIN|POLLRDNORM}])
+read(5, "\27\3\3\0250", 5)              = 5
+read(5, "8\2625\2348\274\16Z\264 \365)w\205\231\354\203\307NsX\311\365aC\371\232,Z\2772\222"..., 5424) = 5424
+read(5, "\27\3\3\20\32", 5)             = 5
+read(5, "\f\231\312P\303_\340_*P\323+\347\345\31\32\225\343\253\271\261.\337\10\37_\27n3\237\317V"..., 4122) = 4122
+read(5, "\27\3\3\r\254", 5)             = 5
+read(5, "dP\302(h[\363\263#\246\372\230\2108\221GC\264\363\255\307\256\22v\207[D3U\373\366\244"..., 3500) = 248
+read(5, 0x97c3e0, 3252)                 = -1 EAGAIN (Resource temporarily unavailable)
+rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, NULL, 8) = 0
+poll([{fd=5, events=POLLIN}, {fd=3, events=POLLIN}], 2, 8) = 0 (Timeout)
+rt_sigaction(SIGPIPE, NULL, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, 8) = 0
+rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, NULL, 8) = 0
+poll([{fd=5, events=POLLIN|POLLPRI|POLLRDNORM|POLLRDBAND}], 1, 0) = 0 (Timeout)
+rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, NULL, 8) = 0
+poll([{fd=5, events=POLLIN}, {fd=3, events=POLLIN}], 2, 0) = 0 (Timeout)
+rt_sigaction(SIGPIPE, NULL, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, 8) = 0
+rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, NULL, 8) = 0
+poll([{fd=5, events=POLLIN|POLLPRI|POLLRDNORM|POLLRDBAND}], 1, 0) = 0 (Timeout)
+rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, NULL, 8) = 0
+poll([{fd=5, events=POLLIN}, {fd=3, events=POLLIN}], 2, 1000) = 1 ([{fd=5, revents=POLLIN}])
+rt_sigaction(SIGPIPE, NULL, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, 8) = 0
+rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, NULL, 8) = 0
+poll([{fd=5, events=POLLIN|POLLPRI|POLLRDNORM|POLLRDBAND}], 1, 0) = 1 ([{fd=5, revents=POLLIN|POLLRDNORM}])
+read(5, "\372\231o\302z\235\250\r2\277`\362\314\332!\351\322L+\253\311\350F\244\2453!\204\354\210\237\345"..., 3252) = 3252
+read(5, "\27\3\3\0\32", 5)              = 5
+read(5, "\33{\323\340(\332n\10^\236~\371\305\374\365U\340\255\325\244W\363O\337\36\355", 26) = 26
+rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, NULL, 8) = 0
+rt_sigaction(SIGPIPE, {sa_handler=SIG_DFL, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7f9ee057fb20}, NULL, 8) = 0
+newfstatat(1, "", {st_mode=S_IFIFO|0600, st_size=0, ...}, AT_EMPTY_PATH) = 0
+write(1, "HaUCk Bank: Securing financial f"..., 146HaUCk Bank: Securing financial freedom since 1982.
+Your one-time token/MFA key is 5025. Please provide it to the customer service representative.
+) = 146
+exit_group(0)                           = ?
++++ exited with 0 +++
